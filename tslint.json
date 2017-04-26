@@ -1,0 +1,21 @@
+{
+	"extends": [
+		"tslint:latest"
+	],
+	"rules": {
+		"quotemark": [
+			"single"
+		],
+		"indent": [
+			"tabs"
+		],
+		"forin": false,
+		"arrow-parens": [
+			false
+		],
+		"object-literal-sort-keys": false,
+		"max-line-length": [
+			150
+		]
+	}
+}
