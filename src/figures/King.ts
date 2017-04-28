@@ -11,14 +11,14 @@ interface IKingMoves {
 type KingMoveType = 'normal' | 'capture' | 'o-o' | 'o-o-o';
 
 export default class King extends ChessFigure {
-	public type: 'king' = 'king';
+	public readonly type: 'king' = 'king';
 
 	public getAvailableMoves( chessboard: Chessboard ): IKingMoves[] {
 		const moves: IKingMoves[] = [];
 
-		for ( const move of movesArray ) {
-			const x = this._x + move[ 0 ];
-			const y = this._y + move[ 1 ];
+		for ( const translation of availableKingTranslations ) {
+			const x = this._x + translation[ 0 ];
+			const y = this._y + translation[ 1 ];
 
 			if ( !isCorrectPosition( x, y ) ) {
 				continue;
@@ -37,7 +37,7 @@ export default class King extends ChessFigure {
 	}
 }
 
-const movesArray = [
+const availableKingTranslations = [
 	[ -1, -1 ],
 	[ -1, 0 ],
 	[ -1, 1 ],

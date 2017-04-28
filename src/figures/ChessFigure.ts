@@ -8,7 +8,7 @@ interface IMove {
 }
 
 abstract class ChessFigure {
-    public abstract type: 'king' | 'knight' | 'pawn' | 'queen' | 'rook' | 'bishop';
+    public readonly abstract type: 'king' | 'knight' | 'pawn' | 'queen' | 'rook' | 'bishop';
 
     constructor(
         protected _x: number,

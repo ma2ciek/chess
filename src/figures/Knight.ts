@@ -11,7 +11,7 @@ interface IKnightMove {
 export type KnightMoveType = 'normal' | 'capture';
 
 export default class Knight extends ChessFigure {
-	public type: 'knight' = 'knight';
+	public readonly type: 'knight' = 'knight';
 
 	public getAvailableMoves( chessboard: Chessboard ): IKnightMove[] {
 		const moves: IKnightMove[] = [];

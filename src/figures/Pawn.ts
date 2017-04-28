@@ -10,7 +10,7 @@ interface IPawnMove {
 export type PawnMoveType = 'long-move' | 'normal-move' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture';
 
 export default class Pawn extends ChessFigure {
-	public type: 'pawn' = 'pawn';
+	public readonly type: 'pawn' = 'pawn';
 
     public getAvailableMoves( chessboard: Chessboard ) {
         const dir = chessboard.getTurnDir();

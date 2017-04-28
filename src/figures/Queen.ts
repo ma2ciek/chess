@@ -2,7 +2,7 @@ import Chessboard from '../Chessboard';
 import ChessFigure from './ChessFigure';
 
 export default class Queen extends ChessFigure {
-	public type: 'queen' = 'queen';
+	public readonly type: 'queen' = 'queen';
 
 	public getAvailableMoves( chessboard: Chessboard ) {
 		return [
