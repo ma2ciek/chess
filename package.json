@@ -6,14 +6,14 @@
 		"coverage": "istanbul cover -e .ts _mocha -- --compilers ts:ts-node/register"
 	},
 	"devDependencies": {
-		"@types/chai": "^3.4.35",
-		"@types/mocha": "^2.2.40",
-		"@types/sinon": "^2.1.2",
-		"chai": "^3.5.0",
+		"@types/chai": "^4.0.1",
+		"@types/mocha": "^2.2.41",
+		"@types/sinon": "^2.3.2",
+		"chai": "^4.1.0",
 		"istanbul": "^0.4.5",
-		"mocha": "^3.2.0",
-		"sinon": "^2.1.0",
-		"ts-node": "^3.0.2",
-		"typescript": "^2.2.2"
+		"mocha": "^3.4.2",
+		"sinon": "^2.3.8",
+		"ts-node": "^3.2.0",
+		"typescript": "^2.4.1"
 	}
 }
