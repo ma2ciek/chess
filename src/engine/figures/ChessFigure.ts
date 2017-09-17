@@ -1,11 +1,5 @@
 import Chessboard from '../Chessboard';
-import { ICommonMove, isCorrectPosition } from '../utils';
-
-interface IMove {
-    x: number;
-    y: number;
-    type: string;
-}
+import { ICommonMove, IMove, isCorrectPosition, JSONFigure } from '../utils';
 
 abstract class ChessFigure {
     public readonly abstract type: 'king' | 'knight' | 'pawn' | 'queen' | 'rook' | 'bishop';
@@ -16,7 +10,22 @@ abstract class ChessFigure {
         protected _color: number,
     ) { }
 
+    public toString() {
+        const humanColor = this.color === 0 ? 'White' : 'Black';
+
+        return humanColor + ' ' + this.type + ', ' + this.getHumanPosition();
+    }
+
     public abstract getAvailableMoves( chessboard: Chessboard ): IMove[];
+
+    // TODO: Move.
+    public getHumanPosition() {
+        const charCodeA = 'A'.charCodeAt( 0 );
+        const humanX = String.fromCharCode( charCodeA + this._x );
+        const humanY = ( this._y + 1 ).toString();
+
+        return humanX + humanY;
+    }
 
     public get x() {
         return this._x;
@@ -35,7 +44,7 @@ abstract class ChessFigure {
         this._y = y;
     }
 
-    public toJSON() {
+    public toJSON(): JSONFigure {
         return { x: this._x, y: this._y, type: this.type, color: this._color };
     }
 
@@ -71,14 +80,22 @@ abstract class ChessFigure {
         }
 
         if ( chessboard.IsOpponentAt( x, y ) ) {
-            return { x, y, type: 'capture' };
+            return {
+                dest: { x, y },
+                type: 'capture',
+                figure: this,
+            };
         }
 
         if ( !chessboard.isEmptyAt( x, y ) ) {
             return null;
         }
 
-        return { x, y, type: 'normal-move' };
+        return {
+            dest: { x, y },
+            type: 'normal',
+            figure: this,
+        };
     }
 }
 

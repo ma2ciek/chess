@@ -1,21 +1,23 @@
 import Chessboard from './Chessboard';
+import IPlayer from './IPlayer';
 import Node from './Node';
-import RandomMover from './RandomMover';
+// import RandomMover from './RandomMover';
+import { IMove } from './utils';
 
 interface INodeData {
 	value: number;
 	hits: number;
 }
 
-export default class AIPlayer {
+export default class AIPlayer implements IPlayer {
 	private tree: Node<INodeData>;
 
-	constructor() {
-
+	public isHuman() {
+		return false;
 	}
 
 	public move( board: Chessboard ) {
-		return new Promise(( res, rej ) => {
+		return new Promise<IMove>( ( res, rej ) => {
 			this.createMoveTree();
 
 			const t = Date.now();
@@ -30,11 +32,11 @@ export default class AIPlayer {
 		} );
 	}
 
-	public makeRandomMoves( board: Chessboard ) {
-		new RandomMover(
-			this.tree,
-			board.clone(),
-		).move();
+	private makeRandomMoves( board: Chessboard ) {
+		// new RandomMover(
+		// 	this.tree,
+		// 	board.clone(),
+		// ).move();
 	}
 
 	private createMoveTree() {

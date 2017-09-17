@@ -1,5 +1,5 @@
-import Node from '../src/Node';
 import { expect } from 'chai';
+import Node from '../../src/engine/Node';
 
 interface IPoint {
 	x: number;

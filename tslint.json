@@ -16,6 +16,14 @@
 		"object-literal-sort-keys": false,
 		"max-line-length": [
 			150
-		]
+		],
+		"no-unused-variable": true,
+		"interface-name": [
+			false
+		],
+		"no-console": [
+			"log"
+		],
+		"variable-name": false
 	}
 }

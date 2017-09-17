@@ -1,12 +1,16 @@
 {
     "compilerOptions": {
+        "jsx": "react",
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "target": "es6",
         "moduleResolution": "node",
         "lib": [
             "es5",
-            "es6"
-        ]
+            "es6",
+            "es7",
+            "dom"
+        ],
+        "noUnusedLocals": true
     }
 }

@@ -1,0 +1,112 @@
+$white: #fff9f0;
+$black: #beb2a6;
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	// background: #eee;
+	background: #333;
+}
+
+.board-container {
+	display: flex;
+}
+
+.chessboard {
+	position: relative;
+	margin: 30px auto 0;
+}
+
+.figure {
+	position: absolute;
+	background-image: url('../assets/chess.png');
+	background-repeat: no-repeat;
+}
+
+.figure.king {
+	background-position-x: 4px;
+}
+
+.figure.queen {
+	background-position-x: -106px;
+}
+
+.figure.rook {
+	background-position-x: -218px;
+}
+
+.figure.bishop {
+	background-position-x: -328px;
+}
+
+.figure.knight {
+	background-position-x: -440px;
+}
+
+.figure.pawn {
+	background-position-x: -550px;
+}
+
+.figure.white {
+	background-position-y: -92px;
+}
+
+.field {
+	position: absolute;
+	&.white {
+		background-color: $white;
+		&.highlighted {
+			background-color: darken($color: $white, $amount: 20%);
+		}
+		&.selected {
+			background-color: rgb(153, 235, 255);
+		}
+	}
+	&.black {
+		background-color: $black;
+		&.highlighted {
+			background-color: darken($color: $black, $amount: 20%);
+		}
+		&.selected {
+			background-color: rgb(153, 235, 255);
+		}
+	}
+}
+
+.message-container {
+	position: fixed;
+	top: calc( 50vh - 100px );
+	left: calc( 50vw - 200px );
+	width: 400px;
+	height: 200px;
+	background: white;
+	border: 6px solid #eee;
+	border-radius: 5px;
+	display: flex;
+    justify-items: center;
+	align-items: center;
+	
+	h1 {
+		font-family: Calibri;
+		text-align: center;
+		flex: 1;
+	}
+}
+
+.move-list { 
+	display: flex;
+	min-width: 100px;
+	max-height: 100vh;
+	overflow: scroll;
+
+	div {
+		flex: 1;
+	}
+}
+
+.button-section {
+	margin-top: 5px;
+	text-align: center;
+}

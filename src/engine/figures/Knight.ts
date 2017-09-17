@@ -1,10 +1,8 @@
 import Chessboard from '../Chessboard';
-import { isCorrectPosition } from '../utils';
+import { IMove, isCorrectPosition } from '../utils';
 import ChessFigure from './ChessFigure';
 
-interface IKnightMove {
-	x: number;
-	y: number;
+interface IKnightMove extends IMove {
 	type: KnightMoveType;
 }
 
@@ -25,9 +23,17 @@ export default class Knight extends ChessFigure {
 			}
 
 			if ( chessboard.isEmptyAt( x, y ) ) {
-				moves.push( { x, y, type: 'normal' } );
+				moves.push( {
+					dest: { x, y },
+					type: 'normal',
+					figure: this,
+				} );
 			} else if ( chessboard.IsOpponentAt( x, y ) ) {
-				moves.push( { x, y, type: 'capture' } );
+				moves.push( {
+					dest: { x, y },
+					type: 'capture',
+					figure: this,
+				} );
 			}
 		}
 
