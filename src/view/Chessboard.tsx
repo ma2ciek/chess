@@ -1,6 +1,6 @@
 import { times } from 'lodash';
 import * as React from 'react';
-import { Chessboard as ChessboardEngine, ChessFigure, HumanPlayer } from '../engine/Engine';
+import { Chessboard as ChessboardEngine, ChessFigure, HumanPlayer, Move } from '../engine/Engine';
 import Field from './Field';
 import Figure from './Figure';
 
@@ -11,7 +11,7 @@ interface ChessboardProps {
 
 interface ChessboardState {
 	tileSize: number;
-	lastSelectedFigure: ChessFigure;
+	lastSelectedFigure: ChessFigure | null;
 }
 
 export default class Chessboard extends React.Component<ChessboardProps, ChessboardState> {
@@ -107,7 +107,7 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 		}
 	}
 
-	private getAvailableMoves() {
+	private getAvailableMoves(): ReadonlyArray<Move> {
 		const { board } = this.props;
 		const { lastSelectedFigure } = this.state;
 

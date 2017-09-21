@@ -5,7 +5,8 @@ const BUILD_DIR = path.join( __dirname, 'build' ) + path.sep;
 
 module.exports = {
 	entry: {
-		app: path.join( __dirname, 'src', 'app.tsx' )
+		app: path.join( __dirname, 'src', 'app.tsx' ),
+		SimpleAIPlayerWorker: path.join( __dirname, 'src', 'engine', 'ai', 'SimpleAIPlayerWorker.ts' )
 	},
 
 	output: {
@@ -30,7 +31,7 @@ module.exports = {
 			test: /\.(png|jpeg|ttf)$/,
 			loader: 'file-loader',
 			options: {
-				publicPath: BUILD_DIR,
+				publicPath: 'build' + path.sep,
 			}
 		} ],
 	},

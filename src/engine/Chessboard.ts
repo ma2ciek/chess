@@ -3,29 +3,31 @@ import Board from './Board';
 import BoardHistory from './BoardHistory';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
-import IJsonFigure from './figures/JSONFigure';
+import JSONFigure from './figures/JSONFigure';
+import King from './figures/King';
 import MoveController from './MoveController';
-import { IMove } from './utils';
+import { Move } from './utils';
 
 export default class Chessboard {
     public static createInitialPosition() {
         // TODO
         const figures = FigureFactory.createInitialPosition();
-        return new Chessboard( figures, [] );
+        return new Chessboard( figures );
     }
 
     public readonly id = Math.random();
     public readonly history: BoardHistory;
-    public readonly figures: ChessFigure[];
+    public readonly figures: ReadonlyArray<ChessFigure>;
 
     // For speed up methods.
-    private _currentKing: ChessFigure;
-    private _opponentKing: ChessFigure;
-    private _possibleMoves: IMove[];
-    private _availableMoves: IMove[];
+    private _currentKing: King;
+    private _opponentKing: King;
+    private _possibleMoves: ReadonlyArray<Move>;
+    private _availableMoves: ReadonlyArray<Move>;
     private _board: Board;
 
-    constructor( figures: IJsonFigure[], moves: IMove[] ) {
+    constructor( figures: ReadonlyArray<JSONFigure>, moves: ReadonlyArray<Move> = [] ) {
+        // TODO - optimization.
         this.figures = figures.map( f => FigureFactory.createFigureFromJSON( f ) );
         this.history = new BoardHistory( moves );
     }
@@ -39,7 +41,7 @@ export default class Chessboard {
         return !this._board.get( x, y );
     }
 
-    public getClonedFigures() {
+    public getClonedFigures(): ReadonlyArray<JSONFigure> {
         return this.figures.map( f => f.toJSON() );
     }
 
@@ -85,9 +87,9 @@ export default class Chessboard {
         if ( this.getAvailableMoves().length !== 0 ) {
             return false;
         }
-        const emptyMove: IMove = {
+        const emptyMove: Move = {
             type: 'fake', dest: { x: 0, y: 0 },
-            figure: this.figures.find( f => f.color === this.turnColor ),
+            figure: this.figures.find( f => f.color === this.turnColor ) as ChessFigure,
         };
         const cb = new MoveController().applyMove( this, emptyMove );
 
@@ -136,14 +138,14 @@ export default class Chessboard {
         } );
     }
 
-    public isCorrectMove( move: IMove ): boolean {
+    public isCorrectMove( move: Move ): boolean {
         return this.getAvailableMoves().some( avMove => isEqual( move, avMove ) );
     }
 
     /**
      * Takes care about check mates, draws, etc.
      */
-    public getAvailableMoves(): IMove[] {
+    public getAvailableMoves(): ReadonlyArray<Move> {
         if ( this._availableMoves ) {
             return this._availableMoves;
         }
@@ -156,7 +158,7 @@ export default class Chessboard {
     /**
      * Sums all figures possible moves.
      */
-    public getPossibleMoves() {
+    public getPossibleMoves(): ReadonlyArray<Move> {
         if ( this._possibleMoves ) {
             return this._possibleMoves;
         }
@@ -170,7 +172,7 @@ export default class Chessboard {
         return this._possibleMoves = moves;
     }
 
-    public isCurrentKingCheckedAfterMove( move: IMove ): boolean {
+    public isCurrentKingCheckedAfterMove( move: Move ): boolean {
         // We virtually move king to the target position and check whether some figure can move to that place.
 
         // TODO: static method.
@@ -220,7 +222,7 @@ export default class Chessboard {
 
         return this._currentKing = this.figures.find( figure => {
             return figure.type === 'king' && figure.color === this.turnColor;
-        } );
+        } ) as King;
     }
 
     private getOpponentKing() {
@@ -230,6 +232,6 @@ export default class Chessboard {
 
         return this._opponentKing = this.figures.find( figure => {
             return figure.type === 'king' && figure.color !== this.turnColor;
-        } );
+        } ) as King;
     }
 }

@@ -1,13 +1,13 @@
 import Chessboard from '../Chessboard';
-import { ICommonMove, IMove, isCorrectPosition, JSONFigure } from '../utils';
+import { CommonMove, isCorrectPosition, JSONFigure, Move } from '../utils';
 
 abstract class ChessFigure {
     public readonly abstract type: 'king' | 'knight' | 'pawn' | 'queen' | 'rook' | 'bishop';
 
     constructor(
-        protected _x: number,
-        protected _y: number,
-        protected _color: number,
+        public readonly x: number,
+        public readonly y: number,
+        public readonly color: number,
     ) { }
 
     public toString() {
@@ -16,43 +16,26 @@ abstract class ChessFigure {
         return humanColor + ' ' + this.type + ', ' + this.getHumanPosition();
     }
 
-    public abstract getAvailableMoves( chessboard: Chessboard ): IMove[];
+    public abstract getAvailableMoves( chessboard: Chessboard ): Move[];
 
     // TODO: Move.
     public getHumanPosition() {
         const charCodeA = 'A'.charCodeAt( 0 );
-        const humanX = String.fromCharCode( charCodeA + this._x );
-        const humanY = ( this._y + 1 ).toString();
+        const humanX = String.fromCharCode( charCodeA + this.x );
+        const humanY = ( this.y + 1 ).toString();
 
         return humanX + humanY;
     }
 
-    public get x() {
-        return this._x;
-    }
-
-    public get y() {
-        return this._y;
-    }
-
-    public get color() {
-        return this._color;
-    }
-
-    public moveTo( x: number, y: number ) {
-        this._x = x;
-        this._y = y;
-    }
-
     public toJSON(): JSONFigure {
-        return { x: this._x, y: this._y, type: this.type, color: this._color };
+        return { x: this.x, y: this.y, type: this.type, color: this.color };
     }
 
     protected getMovesInDirection( chessboard: Chessboard, dirX: number, dirY: number ) {
-        let x = this._x;
-        let y = this._y;
+        let x = this.x;
+        let y = this.y;
 
-        const moves: ICommonMove[] = [];
+        const moves: CommonMove[] = [];
 
         while ( true ) {
             x += dirX;
@@ -74,7 +57,7 @@ abstract class ChessFigure {
         return moves;
     }
 
-    protected getCommonMove( chessboard: Chessboard, x: number, y: number ): ICommonMove {
+    protected getCommonMove( chessboard: Chessboard, x: number, y: number ): CommonMove | null {
         if ( !isCorrectPosition( x, y ) ) {
             return null;
         }

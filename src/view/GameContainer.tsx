@@ -3,7 +3,7 @@ import * as Engine from '../engine/Engine';
 import { getColor } from '../engine/utils';
 import Chessboard from './Chessboard';
 
-// import MoveList from './MoveList';
+import MoveList from './MoveList';
 
 interface GameContainerState {
 	game: Engine.Game;
@@ -14,8 +14,8 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 	constructor() {
 		super();
 
-		const whitePlayer = new Engine.SimpleAIPlayer();
-		const blackPlayer = new Engine.SimpleAIPlayer();
+		const whitePlayer = new Engine.Players.SimpleAIPlayerMultiThread();
+		const blackPlayer = new Engine.Players.SimpleAIPlayerMultiThread();
 
 		const game = new Engine.Game( [ whitePlayer, blackPlayer ] );
 		game.changeEmitter.subscribe( () => this.forceUpdate() );
@@ -33,23 +33,20 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		const info = game.getInfo();
 		const color = getColor( info.lastPlayer );
 
-		// TODO: buttons
-		// TODO: <MoveList history={ board.history } />
-
 		return (
 			<div className='game-container'>
 				<div className='board-container'>
 					<Chessboard board={ board } activePlayer={ activePlayer } />
-					{/* <MoveList history={ board.history } /> */ }
+					<MoveList history={ board.history } />
 				</div>
 
 				<div className='button-section'>
-					<select defaultValue='SimpleAIPlayer' onChange={ evt => this.setWhitePlayer( evt.target.value ) }>
+					<select defaultValue='SimpleAIPlayerMultiThread' onChange={ evt => this.setWhitePlayer( evt.target.value ) }>
 						{ Object.keys( Engine.Players ).map( name =>
 							<option key={ name } value={ name }>{ name }</option>,
 						) }
 					</select>
-					<select defaultValue='SimpleAIPlayer' onChange={ evt => this.setBlackPlayer( evt.target.value ) }>
+					<select defaultValue='SimpleAIPlayerMultiThread' onChange={ evt => this.setBlackPlayer( evt.target.value ) }>
 						{ Object.keys( Engine.Players ).map( name =>
 							<option key={ name } value={ name }>{ name }</option>,
 						) }

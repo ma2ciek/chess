@@ -1,19 +1,19 @@
 import Chessboard from './Chessboard';
 import IPlayer from './IPlayer';
-import { IMove } from './utils';
+import { Move } from './utils';
 
 export default class HumanPlayer implements IPlayer {
-	public tryMove: ( move: IMove ) => boolean;
+	public tryMove: ( move: Move ) => boolean;
 	private myTurn = false;
 
 	public move( board: Chessboard ) {
 		this.myTurn = true;
 		this.addEventListeners();
 
-		return new Promise<IMove>( ( res, rej ) => {
+		return new Promise<Move>( ( res, rej ) => {
 			this.tryMove = ( move: any ) => {
 				if ( !board.isCorrectMove( move ) ) {
-					console.log( 'incorrect' );
+					console.log( 'incorrect move' );
 					return false;
 				}
 

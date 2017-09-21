@@ -1,9 +1,9 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { IMove, isCorrectPosition } from '../utils';
+import { isCorrectPosition, Move } from '../utils';
 import ChessFigure from './ChessFigure';
 
-interface IKingMoves extends IMove {
+interface KingMove extends Move {
 	type: KingMoveType;
 }
 
@@ -12,12 +12,12 @@ type KingMoveType = 'normal' | 'capture' | 'o-o' | 'o-o-o';
 export default class King extends ChessFigure {
 	public readonly type: 'king' = 'king';
 
-	public getAvailableMoves( chessboard: Chessboard ): IKingMoves[] {
-		const moves: IKingMoves[] = [];
+	public getAvailableMoves( chessboard: Chessboard ): KingMove[] {
+		const moves: KingMove[] = [];
 
 		for ( const translation of availableKingTranslations ) {
-			const x = this._x + translation[ 0 ];
-			const y = this._y + translation[ 1 ];
+			const x = this.x + translation[ 0 ];
+			const y = this.y + translation[ 1 ];
 
 			if ( !isCorrectPosition( x, y ) ) {
 				continue;
@@ -38,34 +38,53 @@ export default class King extends ChessFigure {
 			}
 		}
 
+		const row = this.color === 0 ? 0 : 7;
 		const myMoves = chessboard.history.getMyMoves();
+		const figureAtKingPosition = chessboard.getFigureFrom( 4, row );
 
-		if ( myMoves.some( move => move.figure.type === 'king' ) ) {
+		if (
+			myMoves.some( move => move.figure.type === 'king' ) ||
+			!figureAtKingPosition ||
+			figureAtKingPosition.type !== 'king'
+		) {
 			return moves;
 		}
 
 		const castleQueenSide = this.castleQueenSide( chessboard );
 		const castleKingSide = this.castleKingSide( chessboard );
 
-		return [
+		const kingMoves = [
 			...moves,
 			castleQueenSide,
 			castleKingSide,
-		].filter( x => !!x );
+		];
+
+		return kingMoves.filter( move => !!move ) as KingMove[];
 	}
 
-	private castleQueenSide( chessboard: Chessboard ): IKingMoves {
+	private castleQueenSide( chessboard: Chessboard ): KingMove | null {
 		const row = this.color === 0 ? 0 : 7;
-		const aFigure = chessboard.getFigureFrom( 0, row );
+
+		const aRookMoved = chessboard.history.moves.some( m => {
+			return (
+				m.figure.type === 'rook' &&
+				m.figure.color === this.color &&
+				m.figure.x === 0 &&
+				m.figure.y === row
+			);
+		} );
+
+		const figureAtFirstCol = chessboard.getFigureFrom( 0, row );
 
 		if (
 			chessboard.isEmptyAt( 1, row ) &&
 			chessboard.isEmptyAt( 2, row ) &&
 			chessboard.isEmptyAt( 3, row ) &&
-			!!aFigure &&
-			aFigure.type === 'rook'
+			!aRookMoved &&
+			figureAtFirstCol &&
+			figureAtFirstCol.type === 'rook'
 		) {
-			const move: IKingMoves = {
+			const move: KingMove = {
 				dest: { x: 2, y: row },
 				type: 'o-o-o',
 				figure: this,
@@ -77,7 +96,8 @@ export default class King extends ChessFigure {
 			const isUnderCheck = pMoves.some( m => {
 				return (
 					m.dest.x === 2 && m.dest.y === row ||
-					m.dest.x === 3 && m.dest.y === row
+					m.dest.x === 3 && m.dest.y === row ||
+					m.dest.x === 4 && m.dest.y === row
 				);
 			} );
 
@@ -89,17 +109,29 @@ export default class King extends ChessFigure {
 		return null;
 	}
 
-	private castleKingSide( chessboard: Chessboard ): IKingMoves {
+	private castleKingSide( chessboard: Chessboard ): KingMove | null {
 		const row = this.color === 0 ? 0 : 7;
-		const hFigure = chessboard.getFigureFrom( 7, row );
+		const history = chessboard.history;
+
+		const hRookMoved = history.moves.some( m => {
+			return (
+				m.figure.type === 'rook' &&
+				m.figure.color === this.color &&
+				m.figure.x === 7 &&
+				m.figure.y === row
+			);
+		} );
+
+		const figureAtLastCol = chessboard.getFigureFrom( 7, row );
 
 		if (
 			chessboard.isEmptyAt( 5, row ) &&
 			chessboard.isEmptyAt( 6, row ) &&
-			!!hFigure &&
-			hFigure.type === 'rook'
+			!hRookMoved &&
+			figureAtLastCol &&
+			figureAtLastCol.type === 'rook'
 		) {
-			const move: IKingMoves = {
+			const move: KingMove = {
 				dest: { x: 6, y: row },
 				type: 'o-o',
 				figure: this,
@@ -110,6 +142,7 @@ export default class King extends ChessFigure {
 
 			const isUnderCheck = pMoves.some( m => {
 				return (
+					m.dest.x === 4 && m.dest.y === row ||
 					m.dest.x === 5 && m.dest.y === row ||
 					m.dest.x === 6 && m.dest.y === row
 				);
@@ -124,7 +157,7 @@ export default class King extends ChessFigure {
 	}
 }
 
-const availableKingTranslations = [
+const availableKingTranslations: ReadonlyArray<ReadonlyArray<number>> = [
 	[ -1, -1 ],
 	[ -1, 0 ],
 	[ -1, 1 ],

@@ -8,13 +8,13 @@ export function getColor( color: Color ) {
 	return color === 0 ? 'White' : 'Black';
 }
 
-export type IMove = Readonly<{
+export type Move = Readonly<{
 	figure: JSONFigure;
 	dest: Vector;
 	type: 'long-move' | 'normal' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture' | 'o-o' | 'o-o-o' | 'fake';
 }>;
 
-export type ICommonMove = Readonly<{
+export type CommonMove = Readonly<{
 	figure: JSONFigure;
 	dest: Vector;
 	type: 'capture' | 'normal';

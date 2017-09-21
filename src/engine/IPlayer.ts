@@ -1,5 +1,5 @@
 import Chessboard from './Chessboard';
-import { IMove } from './utils';
+import { Move } from './utils';
 
 export interface PlayerConstructor {
 	new(): IPlayer;
@@ -7,7 +7,7 @@ export interface PlayerConstructor {
 
 interface IPlayer {
 	isHuman(): boolean;
-	move( board: Chessboard ): Promise<IMove>;
+	move( board: Chessboard ): Promise<Move>;
 }
 
 export default IPlayer;

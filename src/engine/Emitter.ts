@@ -1,5 +1,5 @@
 export default class Emitter<T = void> {
-	private listeners: Array<(value?: T) => void> = [];
+	private readonly listeners: Array<(value?: T) => void> = [];
 
 	public emit( value?: T ): void {
 		this.listeners.forEach( l => l( value ) );
@@ -10,6 +10,6 @@ export default class Emitter<T = void> {
 	}
 
 	public unsubscribeAll() {
-		this.listeners = [];
+		this.listeners.length = 0;
 	}
 }

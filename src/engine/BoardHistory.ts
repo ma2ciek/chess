@@ -1,8 +1,8 @@
-import { IMove } from './utils';
+import { Move } from './utils';
 
 export default class BoardHistory {
 	constructor(
-		public readonly moves: IMove[] = [],
+		public readonly moves: ReadonlyArray<Move> = [],
 	) { }
 
 	public getMoves( playerColor: number ) {

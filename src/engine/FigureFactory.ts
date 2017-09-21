@@ -8,7 +8,7 @@ import Queen from './figures/Queen';
 import Rook from './figures/Rook';
 
 export default class FigureFactory {
-	public static createFromJSON( jsonFigures: JSONFigure[] ) {
+	public static createFromJSON( jsonFigures: ReadonlyArray<JSONFigure> ) {
 		return jsonFigures.map( f => this.createFigureFromJSON( f ) );
 	}
 

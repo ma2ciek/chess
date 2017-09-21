@@ -2,8 +2,11 @@
   "name": "chess",
   "version": "0.0.1",
   "scripts": {
-    "test": "mocha --compilers ts:ts-node/register",
-    "coverage": "istanbul cover -e .ts _mocha -- --compilers ts:ts-node/register"
+    "test": "mocha --compilers ts:ts-node/register --recursive",
+    "start": "http-server .",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "count-loc": "cloc src test" 
   },
   "dependencies": {
     "lodash": "^4.17.4",

@@ -3,12 +3,19 @@ import Emitter from './Emitter';
 import IPlayer from './IPlayer';
 import MoveController from './MoveController';
 
+type GameInfo = Readonly<{
+	draw: boolean;
+	type: '' | 'CHECK_MATE' | 'NO_MOVE_AVAILABLE';
+	win: boolean;
+	lastPlayer: number; // -1 - none | 0 - white | 1 - black.
+}>;
+
 export default class Game {
 	public readonly changeEmitter = new Emitter();
 
 	private readonly moveCtrl = new MoveController();
 	private isPaused = true;
-	private info = {
+	private info: GameInfo = {
 		draw: false,
 		type: '',
 		win: false,
@@ -30,6 +37,10 @@ export default class Game {
 			lastPlayer: -1,
 		};
 		this.changeEmitter.emit();
+	}
+
+	public getPlayers(): ReadonlyArray<IPlayer> {
+		return this.players;
 	}
 
 	public setWhitePlayer( player: IPlayer ) {
@@ -84,15 +95,22 @@ export default class Game {
 			this.board = this.moveCtrl.applyMove( this.board, move );
 
 			if ( this.board.isCheckMate() ) {
-				this.info.win = true;
-				this.info.type = 'CHECK_MATE';
-				this.info.lastPlayer = turnColor;
+				this.info = {
+					win: true,
+					type: 'CHECK_MATE',
+					lastPlayer: turnColor,
+					draw: false,
+				};
 			}
 
 			if ( this.board.isDraw() ) {
-				this.info.draw = true;
-				this.info.type = 'NO_MOVE_AVAILABLE';
-				this.info.lastPlayer = turnColor;
+				// TODO - handle other draws.
+				this.info = {
+					win: false,
+					type: 'NO_MOVE_AVAILABLE',
+					lastPlayer: turnColor,
+					draw: true,
+				};
 			}
 
 			this.changeEmitter.emit();

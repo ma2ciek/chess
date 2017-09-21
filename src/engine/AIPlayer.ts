@@ -2,7 +2,7 @@ import Chessboard from './Chessboard';
 import IPlayer from './IPlayer';
 import Node from './Node';
 // import RandomMover from './RandomMover';
-import { IMove } from './utils';
+import { Move } from './utils';
 
 interface INodeData {
 	value: number;
@@ -17,7 +17,7 @@ export default class AIPlayer implements IPlayer {
 	}
 
 	public move( board: Chessboard ) {
-		return new Promise<IMove>( ( res, rej ) => {
+		return new Promise<Move>( ( res, rej ) => {
 			this.createMoveTree();
 
 			const t = Date.now();
@@ -50,7 +50,7 @@ export default class AIPlayer implements IPlayer {
 		const moves = board.getAvailableMoves();
 
 		let bestMove = -Infinity;
-		let bestIndex: number;
+		let bestIndex = 0;
 
 		for ( const moveIndex in this.tree.children ) {
 			const node = this.tree.children[ moveIndex ];

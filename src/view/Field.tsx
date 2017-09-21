@@ -13,7 +13,7 @@ export default class Field extends React.Component<FieldProps, {}> {
 		const { x, y, tileSize, highlighted, selected, ...props } = this.props;
 		const odd = ( x + y ) % 2 === 1;
 
-		const color = odd ? 'black' : 'white';
+		const color = odd ? 'white' : 'black';
 		const highlightedClass = highlighted ? 'highlighted' : '';
 		const selectedClass = selected ? 'selected' : '';
 

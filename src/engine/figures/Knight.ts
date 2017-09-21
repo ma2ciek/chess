@@ -1,8 +1,8 @@
 import Chessboard from '../Chessboard';
-import { IMove, isCorrectPosition } from '../utils';
+import { isCorrectPosition, Move } from '../utils';
 import ChessFigure from './ChessFigure';
 
-interface IKnightMove extends IMove {
+interface IKnightMove extends Move {
 	type: KnightMoveType;
 }
 
@@ -15,8 +15,8 @@ export default class Knight extends ChessFigure {
 		const moves: IKnightMove[] = [];
 
 		for ( const move of movesArray ) {
-			const x = this._x + move[ 0 ];
-			const y = this._y + move[ 1 ];
+			const x = this.x + move[ 0 ];
+			const y = this.y + move[ 1 ];
 
 			if ( !isCorrectPosition( x, y ) ) {
 				continue;
@@ -41,7 +41,7 @@ export default class Knight extends ChessFigure {
 	}
 }
 
-const movesArray = [
+const movesArray: ReadonlyArray<ReadonlyArray<number>> = [
 	[ 1, 2 ],
 	[ 1, -2 ],
 	[ 2, -1 ],

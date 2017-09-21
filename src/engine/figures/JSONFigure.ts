@@ -2,8 +2,10 @@ import { Color } from '../utils';
 
 export default JSONFigure;
 
+export type FigureType = 'bishop' | 'king' | 'knight' | 'pawn' | 'queen' | 'rook';
+
 interface JSONFigure {
-	type: 'bishop' | 'king' | 'knight' | 'pawn' | 'queen' | 'rook';
+	type: FigureType;
 	color: Color;
 	x: number;
 	y: number;
