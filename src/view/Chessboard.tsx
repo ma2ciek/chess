@@ -115,6 +115,6 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 			return [];
 		}
 
-		return lastSelectedFigure.getAvailableMoves( board ).filter( move => board.isCorrectMove( move ) );
+		return lastSelectedFigure.getPossibleMoves( board ).filter( move => board.isCorrectMove( move ) );
 	}
 }

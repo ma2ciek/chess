@@ -1,39 +1,12 @@
 import Chessboard from '../Chessboard';
-import getMoveSymbol from '../getMoveSymbol';
-import IPlayer from '../IPlayer';
 import MoveController from '../MoveController';
 import { Move } from '../utils';
+import AIPlayer, { MoveInfo } from './AIPlayer';
 import estimateBoardValue from './estimateBoardValue';
-import { shuffle, wait } from './utils';
+import { shuffle } from './utils';
 
-export default class SimpleAIPlayer implements IPlayer {
-	public isHuman() {
-		return false;
-	}
-
-	public move( board: Chessboard ): Promise<Move> {
-		// make it async to do not kill the UI.
-		return wait( 0 ).then( () => {
-			const d = Date.now();
-
-			const { bestMove, counted } = this.moveSync( board );
-
-			if ( !bestMove ) {
-				debugger;
-				throw new Error( 'Can not find any move for this position' );
-			}
-
-			const timeDiff = Date.now() - d;
-
-			console.log( Math.round( counted / timeDiff * 1000 ) + ' moves/s', getMoveSymbol( bestMove ) );
-
-			// Prevent moving too fast.
-			const waitingTime = Math.max( 0, 500 - 1000 * timeDiff );
-			return wait( waitingTime ).then( () => bestMove );
-		} );
-	}
-
-	private moveSync( board: Chessboard ): Readonly<{ bestMove: Move | null, counted: number }> {
+export default class SimpleAIPlayer extends AIPlayer {
+	protected async _move( board: Chessboard ): Promise<MoveInfo> {
 		const board1moves = board.getAvailableMoves();
 		const mc = new MoveController();
 		let bestValueForBoard2 = -Infinity;
@@ -106,6 +79,7 @@ export default class SimpleAIPlayer implements IPlayer {
 		return {
 			bestMove,
 			counted,
+			bestMoveValue: bestValueForBoard2,
 		};
 	}
 }

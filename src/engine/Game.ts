@@ -44,11 +44,15 @@ export default class Game {
 	}
 
 	public setWhitePlayer( player: IPlayer ) {
+		const p = this.players[ 0 ];
+		if ( p.destroy ) { p.destroy(); }
 		this.players[ 0 ] = player;
 		this.changeEmitter.emit();
 	}
 
 	public setBlackPlayer( player: IPlayer ) {
+		const p = this.players[ 1 ];
+		if ( p.destroy ) { p.destroy(); }
 		this.players[ 1 ] = player;
 		this.changeEmitter.emit();
 	}

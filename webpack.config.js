@@ -1,13 +1,23 @@
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
+const glob = require( 'glob' );
 
 const BUILD_DIR = path.join( __dirname, 'build' ) + path.sep;
 
+// TODO - src/engine/ai/workers/*.js
+const workers = glob.sync( 'src/engine/ai/*Worker.ts' );
+
+const entry = {
+	app: path.join( __dirname, 'src', 'app.tsx' )
+};
+
+for ( const workerPath of workers ) {
+	const workerName = path.parse( workerPath ).name;
+	entry[ workerName ] = path.join( __dirname, workerPath );
+}
+
 module.exports = {
-	entry: {
-		app: path.join( __dirname, 'src', 'app.tsx' ),
-		SimpleAIPlayerWorker: path.join( __dirname, 'src', 'engine', 'ai', 'SimpleAIPlayerWorker.ts' )
-	},
+	entry,
 
 	output: {
 		path: BUILD_DIR,

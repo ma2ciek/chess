@@ -16,7 +16,7 @@ abstract class ChessFigure {
         return humanColor + ' ' + this.type + ', ' + this.getHumanPosition();
     }
 
-    public abstract getAvailableMoves( chessboard: Chessboard ): Move[];
+    public abstract getPossibleMoves( chessboard: Chessboard ): Move[];
 
     // TODO: Move.
     public getHumanPosition() {

@@ -12,6 +12,8 @@ export type Move = Readonly<{
 	figure: JSONFigure;
 	dest: Vector;
 	type: 'long-move' | 'normal' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture' | 'o-o' | 'o-o-o' | 'fake';
+	check?: true;
+	mate?: true;
 }>;
 
 export type CommonMove = Readonly<{

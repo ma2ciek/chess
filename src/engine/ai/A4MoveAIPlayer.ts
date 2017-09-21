@@ -2,8 +2,8 @@ import Chessboard from '../Chessboard';
 import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 
-export default class SimpleAIPlayerMultiThread extends AIPlayer {
-	public static readonly workerName = 'SimpleAIPlayerWorker.js';
+export default class A4MovesAIPlayer extends AIPlayer {
+	public static readonly workerName = 'A4MovesAIPlayerWorker.js';
 
 	private readonly numberOfThreads = window.navigator.hardwareConcurrency || 4;
 	private readonly workers: Worker[] = [];
@@ -11,7 +11,7 @@ export default class SimpleAIPlayerMultiThread extends AIPlayer {
 	constructor() {
 		super();
 		for ( let i = 0; i < this.numberOfThreads; i++ ) {
-			this.workers[ i ] = new Worker( 'build/' + ( this.constructor as typeof SimpleAIPlayerMultiThread ).workerName );
+			this.workers[ i ] = new Worker( 'build/' + ( this.constructor as typeof A4MovesAIPlayer ).workerName );
 		}
 	}
 

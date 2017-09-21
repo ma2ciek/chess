@@ -9,6 +9,7 @@ export { default as SimpleAIPlayer } from './ai/SimpleAIPlayer';
 export { Move } from './utils';
 
 // import AIPlayer from './AIPlayer';
+import A4MoveAIPlayer from './ai/A4MoveAIPlayer';
 import SimpleAIPlayer from './ai/SimpleAIPlayer';
 import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
 import HumanPlayer from './HumanPlayer';
@@ -22,6 +23,7 @@ export interface PlayerConstructorDictionary {
 export const Players: PlayerConstructorDictionary = {
 	HumanPlayer,
 	// AIPlayer,
+	A4MoveAIPlayer,
 	SimpleAIPlayer,
 	SimpleAIPlayerMultiThread,
 };

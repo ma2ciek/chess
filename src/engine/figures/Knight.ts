@@ -11,7 +11,7 @@ export type KnightMoveType = 'normal' | 'capture';
 export default class Knight extends ChessFigure {
 	public readonly type: 'knight' = 'knight';
 
-	public getAvailableMoves( chessboard: Chessboard ): IKnightMove[] {
+	public getPossibleMoves( chessboard: Chessboard ): IKnightMove[] {
 		const moves: IKnightMove[] = [];
 
 		for ( const move of movesArray ) {

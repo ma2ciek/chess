@@ -11,7 +11,7 @@ describe( 'King', () => {
 
 			const cb = new Chessboard( [ whiteKing ] );
 
-			const am = whiteKing.getAvailableMoves( cb );
+			const am = whiteKing.getPossibleMoves( cb );
 
 			expect( am.length ).to.equal( 8 );
 
@@ -52,7 +52,7 @@ describe( 'King', () => {
 
 			const cb = new Chessboard( [ whiteKing, whiteRook ] );
 
-			const am = whiteKing.getAvailableMoves( cb );
+			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
 
 			expect( am.length ).to.equal( 6 );
@@ -71,7 +71,7 @@ describe( 'King', () => {
 
 			const cb = new Chessboard( [ whiteKing, whiteRook ] );
 
-			const am = whiteKing.getAvailableMoves( cb );
+			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
 
 			expect( am.length ).to.equal( 6 );
@@ -91,7 +91,7 @@ describe( 'King', () => {
 
 			const cb = new Chessboard( [ whiteKing, whiteRook1, whiteRook2 ] );
 
-			const am = whiteKing.getAvailableMoves( cb );
+			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
 
 			expect( am.length ).to.equal( 7 );
@@ -118,7 +118,7 @@ describe( 'King', () => {
 
 			const cb = new Chessboard( [ whiteKing, whiteRook, blackKing, blackRook ] );
 
-			const am = whiteKing.getAvailableMoves( cb );
+			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
 
 			expect( am.length ).to.equal( 5 );
@@ -139,7 +139,7 @@ describe( 'King', () => {
 
 			const cb = new Chessboard( [ whiteKing, whiteRook, blackKing, blackRook ] );
 
-			const am = whiteKing.getAvailableMoves( cb );
+			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
 
 			expect( am.length ).to.equal( 5 );

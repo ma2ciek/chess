@@ -4,7 +4,7 @@ import ChessFigure from './ChessFigure';
 export default class Queen extends ChessFigure {
 	public readonly type: 'queen' = 'queen';
 
-	public getAvailableMoves( chessboard: Chessboard ) {
+	public getPossibleMoves( chessboard: Chessboard ) {
 		return [
 			...this.getMovesInDirection( chessboard, -1, -1 ),
 			...this.getMovesInDirection( chessboard, -1, 0 ),

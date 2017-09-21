@@ -9,7 +9,7 @@ describe( 'Rook', () => {
 			const whiteRook = new Rook( 0, 0, 0 );
 			const cb = new Chessboard( [ whiteRook ] );
 
-			const am = whiteRook.getAvailableMoves( cb );
+			const am = whiteRook.getPossibleMoves( cb );
 
 			expect( am.length ).to.equal( 14 );
 
@@ -50,7 +50,7 @@ describe( 'Rook', () => {
 
 			const cb = new Chessboard( [ whiteRook, whiteKing ] );
 
-			const am = whiteRook.getAvailableMoves( cb );
+			const am = whiteRook.getPossibleMoves( cb );
 
 			expect( am.length ).to.equal( 11 );
 

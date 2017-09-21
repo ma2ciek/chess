@@ -12,7 +12,7 @@ type KingMoveType = 'normal' | 'capture' | 'o-o' | 'o-o-o';
 export default class King extends ChessFigure {
 	public readonly type: 'king' = 'king';
 
-	public getAvailableMoves( chessboard: Chessboard ): KingMove[] {
+	public getPossibleMoves( chessboard: Chessboard ): KingMove[] {
 		const moves: KingMove[] = [];
 
 		for ( const translation of availableKingTranslations ) {

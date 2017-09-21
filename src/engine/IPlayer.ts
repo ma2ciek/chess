@@ -6,6 +6,7 @@ export interface PlayerConstructor {
 }
 
 interface IPlayer {
+	destroy?(): void;
 	isHuman(): boolean;
 	move( board: Chessboard ): Promise<Move>;
 }

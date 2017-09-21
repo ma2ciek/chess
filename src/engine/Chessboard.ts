@@ -127,11 +127,11 @@ export default class Chessboard {
     }
 
     public isNoCaptureDraw() {
-        if ( this.history.moves.length < 20 ) {
+        if ( this.history.moves.length < 100 ) {
             return false;
         }
 
-        const lastMoves = this.history.moves.slice( -20 );
+        const lastMoves = this.history.moves.slice( -100 );
 
         return !lastMoves.some( move => {
             return [ 'capture', 'en-passant', 'promotion-capture' ].includes( move.type );
@@ -166,7 +166,7 @@ export default class Chessboard {
         const moves = [];
 
         for ( const figure of this.figures.filter( f => f.color === this.turnColor ) ) {
-            moves.push( ...figure.getAvailableMoves( this ) );
+            moves.push( ...figure.getPossibleMoves( this ) );
         }
 
         return this._possibleMoves = moves;

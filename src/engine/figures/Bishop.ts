@@ -4,7 +4,7 @@ import ChessFigure from './ChessFigure';
 export default class Bishop extends ChessFigure {
 	public readonly type: 'bishop' = 'bishop';
 
-	public getAvailableMoves( chessboard: Chessboard ) {
+	public getPossibleMoves( chessboard: Chessboard ) {
 		return [
 			...this.getMovesInDirection( chessboard, 1, 1 ),
 			...this.getMovesInDirection( chessboard, -1, -1 ),

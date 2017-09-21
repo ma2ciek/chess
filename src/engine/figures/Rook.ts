@@ -4,7 +4,7 @@ import ChessFigure from './ChessFigure';
 export default class Rook extends ChessFigure {
 	public readonly type: 'rook' = 'rook';
 
-	public getAvailableMoves( chessboard: Chessboard ) {
+	public getPossibleMoves( chessboard: Chessboard ) {
 		return [
 			...this.getMovesInDirection( chessboard, 1, 0 ),
 			...this.getMovesInDirection( chessboard, -1, 0 ),

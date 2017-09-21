@@ -11,7 +11,7 @@ export type PawnMoveType = 'long-move' | 'normal' | 'en-passant' | 'capture' | '
 export default class Pawn extends ChessFigure {
     public readonly type: 'pawn' = 'pawn';
 
-    public getAvailableMoves( chessboard: Chessboard ) {
+    public getPossibleMoves( chessboard: Chessboard ) {
         const dir = chessboard.getTurnDir();
         const moves: IPawnMove[] = [];
 
