@@ -14,10 +14,9 @@ npm install
 ```
 
 
-Run:
+Compile, run and watch for changes:
 
 ```bash
-npm run build # Run `npm run build:watch` to compile after each change.
 npm run start
 ```
 
