@@ -27,7 +27,7 @@ export default class Chessboard {
     private _board: Board;
 
     constructor( figures: ReadonlyArray<JSONFigure>, moves: ReadonlyArray<Move> = [] ) {
-        // TODO - optimization.
+        // TODO: optimization.
         this.figures = figures.map( f => FigureFactory.createFigureFromJSON( f ) );
         this.history = new BoardHistory( moves );
     }

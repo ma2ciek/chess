@@ -9,6 +9,7 @@ interface IPlayer {
 	destroy?(): void;
 	isHuman(): boolean;
 	move( board: Chessboard ): Promise<Move>;
+	tryMove?( move: Move ): boolean;
 }
 
 export default IPlayer;

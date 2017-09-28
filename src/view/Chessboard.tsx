@@ -1,12 +1,13 @@
 import { times } from 'lodash';
 import * as React from 'react';
-import { Chessboard as ChessboardEngine, ChessFigure, HumanPlayer, Move } from '../engine/Engine';
+import { Chessboard as ChessboardEngine, ChessFigure, IPlayer, Move } from '../engine/Engine';
 import Field from './Field';
 import Figure from './Figure';
 
 interface ChessboardProps {
+	paused: boolean;
 	board: ChessboardEngine;
-	activePlayer: HumanPlayer;
+	activePlayer: IPlayer;
 }
 
 interface ChessboardState {
@@ -22,7 +23,7 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 	}
 
 	public componentDidMount() {
-		// TODO - keydown handler.
+		// TODO: keydown handler.
 		window.addEventListener( 'keydown', e => {
 			if ( e.keyCode === 187 ) {
 				this.setState( { tileSize: this.state.tileSize + 4 } );
@@ -74,7 +75,7 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 	}
 
 	private handleClickedFigure( figure: ChessFigure ) {
-		if ( !this.props.activePlayer.isHuman() ) {
+		if ( !this.props.activePlayer.isHuman() || this.props.paused ) {
 			return;
 		}
 
@@ -89,7 +90,7 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 	}
 
 	private handleClickedField( x: number, y: number ) {
-		if ( !this.props.activePlayer.isHuman() ) {
+		if ( !this.props.activePlayer.isHuman() || this.props.paused ) {
 			return;
 		}
 
@@ -99,6 +100,11 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 		const availableMove = availableMoves.find( m => m.dest.x === x && m.dest.y === y );
 
 		if ( availableMove ) {
+			if ( !activePlayer.tryMove ) {
+				// TODO: Handle this in some other way.
+				return;
+			}
+
 			const isCorrect = activePlayer.tryMove( availableMove );
 
 			if ( isCorrect ) {

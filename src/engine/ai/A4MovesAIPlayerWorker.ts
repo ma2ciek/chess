@@ -57,32 +57,32 @@ self.onmessage = e => {
 				// After my move and opponent's move.
 				const board4 = mc.applyMove( board3, board3move );
 				const board4moves = board4.getAvailableMoves();
-	
+
 				// This should be initialized with higher value than the bestValueForBoard2.
 				let worstValueForBoard5 = 1000;
-	
+
 				if ( board4.isCheckMate() ) {
 					bestValueForBoard4 = 1000;
 					break;
 				}
-	
+
 				if ( board4.isDraw() ) {
 					bestValueForBoard4 = 0;
 					continue;
 				}
-	
+
 				for ( const board4move of shuffle( board4moves ) ) {
 					// After my move and opponent's move and my second move.
 					const board5 = mc.applyMove( board4, board4move );
-	
+
 					// Now is opponent's turn
-					// TODO - something is wrong with the logic here.
-	
+					// TODO: something is wrong with the logic here.
+
 					const board5value = estimateBoardValue( board5, board4move, board.turnColor );
 					worstValueForBoard5 = Math.min( board5value, worstValueForBoard5 );
 					counted++;
 				}
-	
+
 				bestValueForBoard4 = Math.max( bestValueForBoard4, worstValueForBoard5 );
 				counted++;
 			}
@@ -99,9 +99,9 @@ self.onmessage = e => {
 		counted++;
 	}
 
-	(self as any).postMessage( [ {
+	( self as any ).postMessage( [ {
 		bestMove,
 		counted,
 		bestMoveValue: bestValueForBoard2,
-	} ] );
+	}] );
 };

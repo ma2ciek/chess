@@ -57,7 +57,7 @@ export default class SimpleAIPlayer extends AIPlayer {
 					const board4 = mc.applyMove( board3, board3move );
 
 					// Now is opponent's turn
-					// TODO - something is wrong with the logic here.
+					// TODO: something is wrong with the logic here.
 
 					const board4value = estimateBoardValue( board4, board3move, board.turnColor );
 					bestValueForBoard4 = Math.max( board4value, bestValueForBoard4 );

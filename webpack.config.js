@@ -1,10 +1,11 @@
 const fs = require( 'fs-extra' );
 const path = require( 'path' );
 const glob = require( 'glob' );
+const webpack = require( 'webpack' );
 
 const BUILD_DIR = path.join( __dirname, 'build' ) + path.sep;
 
-// TODO - src/engine/ai/workers/*.js
+// TODO: src/engine/ai/workers/*.js
 const workers = glob.sync( 'src/engine/ai/*Worker.ts' );
 
 const entry = {
@@ -48,5 +49,11 @@ module.exports = {
 
 	resolve: {
 		extensions: [ '.ts', '.tsx', '.jsx', '.js' ]
-	}
+	},
+
+	plugins: [
+		new webpack.DefinePlugin( { 
+			DEVELOPMENT: process.env.DEVELOPMENT === 'true' || process.argv.includes( '--dev' )
+		} )
+	]
 }

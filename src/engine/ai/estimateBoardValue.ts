@@ -13,7 +13,7 @@ const figureValueMap = {
 export default function estimateValue( board: Chessboard, lastMove: Move, playerColor: number ) {
 	let sum = 0;
 
-	// TODO - optimization
+	// TODO: optimization
 	// if ( board.isDraw() ) {
 	// 	return 0;
 	// }

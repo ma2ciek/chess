@@ -13,3 +13,11 @@ export function shuffle<T>( arr: ReadonlyArray<T> ) {
 	}
 	return result;
 }
+
+export function applyFunctionDuringPeriod( fn: () => void, time: number ) {
+	const d = Date.now();
+
+	while ( Date.now() - d < time ) {
+		fn();
+	}
+}

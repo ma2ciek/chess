@@ -6,10 +6,11 @@ import { JSONFigure, Move } from './utils';
  */
 export default class MoveController {
 	public applyMove( chessboard: Chessboard, move: Move ) {
+		// TODO: optimization.
 		const originalFigures = chessboard.getClonedFigures();
 		const movedFigure = originalFigures.find( f => f.x === move.figure.x && f.y === move.figure.y ) as JSONFigure;
 
-		// TODO - move to static figure methods.
+		// TODO: move to static figure methods.
 
 		switch ( move.type ) {
 			// For easy checkmate checks.
@@ -41,7 +42,7 @@ export default class MoveController {
 				return new Chessboard( newFigures, [ ...chessboard.history.moves, move ] );
 			}
 
-			// TODO - enable other figures.
+			// TODO: enable other figures.
 			case 'promotion-move': {
 				const figure: JSONFigure = { ...movedFigure, x: move.dest.x, y: move.dest.y, type: 'queen' };
 				const newFigures: ReadonlyArray<JSONFigure> = [ ...originalFigures.filter( f => f !== movedFigure ), figure ];
@@ -49,7 +50,7 @@ export default class MoveController {
 				return new Chessboard( newFigures, [ ...chessboard.history.moves, move ] );
 			}
 
-			// TODO - enable other figures.
+			// TODO: enable other figures.
 			case 'promotion-capture': {
 				const capturedFigure: JSONFigure = originalFigures.find( f => f.x === move.dest.x && f.y === move.dest.y ) as JSONFigure;
 				const figure: JSONFigure = { ...movedFigure, x: move.dest.x, y: move.dest.y, type: 'queen' };

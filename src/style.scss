@@ -77,21 +77,32 @@ body {
 }
 
 .message-container {
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 	position: fixed;
 	top: calc( 50vh - 100px);
-	left: calc( 50vw - 200px);
+	left: calc( 50vw - 260px);
 	width: 400px;
 	height: 200px;
 	background: white;
 	border: 6px solid #eee;
 	border-radius: 5px;
 	display: flex;
-	justify-items: center;
 	align-items: center;
-	h1 {
-		font-family: Calibri;
-		text-align: center;
-		flex: 1;
+	flex-direction: column;
+	justify-content: center;
+
+	div {
+		margin-bottom: 5px;
+	
+		select {
+			padding: 5px 10px;
+			line-height: 20px;
+			height: 20px;
+		}
+	}
+
+	button {
+		cursor: pointer;
 	}
 }
 

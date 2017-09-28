@@ -2,11 +2,11 @@
   "name": "chess",
   "version": "0.0.1",
   "scripts": {
-    "test": "mocha --compilers ts:ts-node/register --recursive",
-    "start": "http-server .",
-    "build": "webpack",
-    "watch": "webpack --watch",
-    "count-loc": "cloc src test" 
+    "test": "./node_modules/.bin/mocha --compilers ts:ts-node/register --recursive",
+    "start": "./node_modules/.bin/http-server .",
+    "build": "./node_modules/.bin/webpack",
+    "watch": "./node_modules/.bin/webpack --watch",
+    "count-loc": "./node_modules/.bin/cloc src test"
   },
   "dependencies": {
     "lodash": "^4.17.4",
@@ -21,9 +21,12 @@
     "@types/react-dom": "^15.5.4",
     "@types/sinon": "^2.3.2",
     "chai": "^4.1.0",
+    "cloc": "^2.2.0",
     "css-loader": "^0.28.7",
     "file-loader": "^0.11.2",
     "fs-extra": "^4.0.1",
+    "glob": "^7.1.2",
+    "http-server": "^0.10.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.4.2",
     "node-sass": "^4.5.3",
@@ -34,6 +37,6 @@
     "ts-node": "^3.2.0",
     "typescript": "^2.4.1",
     "url-loader": "^0.5.9",
-    "webpack": "^3.5.5"
+    "webpack": "^3.6.0"
   }
 }

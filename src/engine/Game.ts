@@ -43,6 +43,14 @@ export default class Game {
 		return this.players;
 	}
 
+	public getPlayerNames() {
+		// TODO: Constructor name -> class property.
+		return {
+			white: this.players[ 0 ].constructor.name,
+			black: this.players[ 1 ].constructor.name,
+		};
+	}
+
 	public setWhitePlayer( player: IPlayer ) {
 		const p = this.players[ 0 ];
 		if ( p.destroy ) { p.destroy(); }
@@ -73,13 +81,22 @@ export default class Game {
 		if ( this.isPaused ) {
 			this.isPaused = false;
 			this.play();
-			// TODO - handling pending move.
+			this.changeEmitter.emit();
+			// TODO: handling pending move.
 		}
 	}
 
+	public get paused() {
+		return this.isPaused;
+	}
+
 	public pause() {
-		this.isPaused = true;
-		// TODO - handling pending move.
+		if ( !this.isPaused ) {
+			this.isPaused = true;
+			this.changeEmitter.emit();
+		}
+
+		// TODO: handling pending move.
 	}
 
 	private play() {
@@ -108,7 +125,7 @@ export default class Game {
 			}
 
 			if ( this.board.isDraw() ) {
-				// TODO - handle other draws.
+				// TODO: handle other draws.
 				this.info = {
 					win: false,
 					type: 'NO_MOVE_AVAILABLE',
