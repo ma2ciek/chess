@@ -45,14 +45,9 @@ export default class Chessboard {
         return this.figures.map( f => f.toJSON() );
     }
 
-    public IsOpponentAt( x: number, y: number ) {
+    public isOpponentAt( x: number, y: number ) {
         const f = this.getFigureFrom( x, y );
         return f ? f.color !== this.turnColor : false;
-    }
-
-    public IsMyFigureAt( x: number, y: number ) {
-        const f = this.getFigureFrom( x, y );
-        return f ? f.color === this.turnColor : false;
     }
 
     public getFigureFrom( x: number, y: number ) {

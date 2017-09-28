@@ -62,7 +62,7 @@ abstract class ChessFigure {
             return null;
         }
 
-        if ( chessboard.IsOpponentAt( x, y ) ) {
+        if ( chessboard.isOpponentAt( x, y ) ) {
             return {
                 dest: { x, y },
                 type: 'capture',

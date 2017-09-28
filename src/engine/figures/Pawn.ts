@@ -24,7 +24,7 @@ export default class Pawn extends ChessFigure {
                 } );
             }
 
-            if ( chessboard.IsOpponentAt( this.x + 1, this.y + dir ) ) {
+            if ( chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
                 moves.push( {
                     dest: { x: this.x + 1, y: this.y + dir },
                     type: 'promotion-capture',
@@ -32,7 +32,7 @@ export default class Pawn extends ChessFigure {
                 } );
             }
 
-            if ( chessboard.IsOpponentAt( this.x - 1, this.y + dir ) ) {
+            if ( chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
                 moves.push( {
                     dest: { x: this.x - 1, y: this.y + dir },
                     type: 'promotion-capture',
@@ -86,7 +86,7 @@ export default class Pawn extends ChessFigure {
             } );
         }
 
-        if ( chessboard.IsOpponentAt( this.x + 1, this.y + dir ) ) {
+        if ( chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
             moves.push( {
                 dest: { x: this.x + 1, y: this.y + dir },
                 type: 'capture',
@@ -94,7 +94,7 @@ export default class Pawn extends ChessFigure {
             } );
         }
 
-        if ( chessboard.IsOpponentAt( this.x - 1, this.y + dir ) ) {
+        if ( chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
             moves.push( {
                 dest: { x: this.x - 1, y: this.y + dir },
                 type: 'capture',

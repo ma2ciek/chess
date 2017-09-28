@@ -34,7 +34,7 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		};
 
 		const WhitePlayer = Engine.Players[ players.white ] || Engine.Players[ firstPlayerName ];
-		const BlackPlayer = Engine.Players[ players.white ] || Engine.Players[ firstPlayerName ];
+		const BlackPlayer = Engine.Players[ players.black ] || Engine.Players[ firstPlayerName ];
 
 		const whitePlayer = new WhitePlayer();
 		const blackPlayer = new BlackPlayer();

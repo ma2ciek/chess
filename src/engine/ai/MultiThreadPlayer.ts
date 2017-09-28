@@ -75,7 +75,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 	private initializeWorkers() {
 		const workers = [];
 		for ( let i = 0; i < this.numberOfThreads; i++ ) {
-			workers.push( new Worker( 'build/' + this.workerName ) );
+			workers.push( new Worker( 'public/' + this.workerName ) );
 		}
 		this.workers = workers;
 	}

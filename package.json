@@ -6,12 +6,11 @@
     "start": "./node_modules/.bin/webpack --watch & node server.js",
     "count-loc": "./node_modules/.bin/cloc src test"
   },
-  "dependencies": {
-    "lodash": "^4.17.4",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+  "engines": {
+    "npm": "^4.6.1",
+    "node": "^6.10.3"
   },
-  "devDependencies": {
+  "dependencies": {
     "@types/chai": "^4.0.1",
     "@types/lodash": "^4.14.74",
     "@types/mocha": "^2.2.41",
@@ -26,8 +25,11 @@
     "fs-extra": "^4.0.1",
     "glob": "^7.1.2",
     "istanbul": "^0.4.5",
+    "lodash": "^4.17.4",
     "mocha": "^3.4.2",
     "node-sass": "^4.5.3",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "sass-loader": "^6.0.6",
     "sinon": "^2.3.8",
     "style-loader": "^0.18.2",

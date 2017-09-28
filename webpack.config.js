@@ -42,7 +42,7 @@ module.exports = {
 			test: /\.(png|jpeg|ttf)$/,
 			loader: 'file-loader',
 			options: {
-				publicPath: 'build' + path.sep,
+				publicPath: 'public' + path.sep,
 			}
 		} ],
 	},

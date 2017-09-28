@@ -29,7 +29,7 @@ export default class King extends ChessFigure {
 					type: 'normal',
 					figure: this,
 				} );
-			} else if ( chessboard.IsOpponentAt( x, y ) ) {
+			} else if ( chessboard.isOpponentAt( x, y ) ) {
 				moves.push( {
 					dest: { x, y },
 					type: 'capture',

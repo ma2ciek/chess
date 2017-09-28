@@ -11,6 +11,11 @@ npm install
 Compile, run and watch for changes:
 
 ```bash
-npm run start
+npm start
 ```
 
+Test:
+
+```bash
+npm test
+```
