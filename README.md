@@ -1,4 +1,4 @@
-Chess engine + GUI + simple AI.
+## Chess engine + GUI + simple AI
 
 
 Install via yarn:
@@ -7,7 +7,7 @@ yarn install
 
 ```
 
-Install with npm:
+Install via npm:
 
 ```bash
 npm install
@@ -17,7 +17,7 @@ npm install
 Run:
 
 ```bash
-npm run build #or `npm run build:watch` to compile after each change.
+npm run build # Run `npm run build:watch` to compile after each change.
 npm run start
 ```
 
