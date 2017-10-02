@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ChessFigure } from '../engine/Engine';
+import { FigureTypes } from '../engine/utils';
 
 interface FigureProps extends React.HTMLAttributes<HTMLDivElement> {
 	figure: ChessFigure;
@@ -11,7 +12,7 @@ export default class Figure extends React.Component<FigureProps, {}> {
 		const { figure, tileSize, ...props } = this.props;
 		const color = figure.color === 0 ? 'white' : 'black';
 
-		const className = `figure ${ figure.type } ${ color }`;
+		const className = `figure ${ FigureTypes[ figure.type ].toLowerCase() } ${ color }`;
 		const style = {
 			top: tileSize * 7 - figure.y * tileSize,
 			left: figure.x * tileSize,

@@ -1,4 +1,4 @@
-import { JSONFigure, Move, Vector } from './utils';
+import { FigureTypes, JSONFigure, Move, Vector } from './utils';
 
 /**
  * https://en.wikipedia.org/wiki/Chess_notation
@@ -11,7 +11,7 @@ export default function getMoveSymbol( move: Move ): string {
 	const position = getPosition( move.dest );
 
 	if ( move.type === 'o-o' || move.type === 'o-o-o' ) {
-		return move.type.replace( /o/g , '0' );
+		return move.type.replace( /o/g, '0' );
 	}
 
 	let sep = '';
@@ -20,24 +20,24 @@ export default function getMoveSymbol( move: Move ): string {
 		sep = 'x';
 	}
 
-	if ( move.figure.type === 'pawn' && ( move.type === 'normal' || move.type === 'long-move' ) ) {
+	if ( move.figure.type === FigureTypes.PAWN && ( move.type === 'normal' || move.type === 'long-move' ) ) {
 		return position;
 	}
 
-	if ( move.figure.type === 'pawn' && move.type === 'capture' ) {
+	if ( move.figure.type === FigureTypes.PAWN && move.type === 'capture' ) {
 		return getColumnName( move.figure.x ) + sep + position;
 	}
 
 	return symbol + sep + position;
 }
 
-const figureSymbolMap = {
-	king: 'K',
-	knight: 'N',
-	bishop: 'B',
-	pawn: 'P',
-	queen: 'Q',
-	rook: 'R',
+const figureSymbolMap: { [ index: number ]: string } = {
+	0: 'P',
+	1: 'N',
+	2: 'B',
+	3: 'R',
+	4: 'Q',
+	5: 'K',
 };
 
 function getFigureSymbol( figure: JSONFigure ): string {

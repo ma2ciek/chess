@@ -1,5 +1,5 @@
 import Chessboard from '../Chessboard';
-import { isCorrectPosition, Move } from '../utils';
+import { FigureTypes, isCorrectPosition, Move } from '../utils';
 import ChessFigure from './ChessFigure';
 
 interface IKnightMove extends Move {
@@ -9,7 +9,11 @@ interface IKnightMove extends Move {
 export type KnightMoveType = 'normal' | 'capture';
 
 export default class Knight extends ChessFigure {
-	public readonly type: 'knight' = 'knight';
+	public readonly type= FigureTypes.KNIGHT;
+
+	public get shortName() {
+		return this.color ? 'n' : 'N';
+	}
 
 	public getPossibleMoves( chessboard: Chessboard ): IKnightMove[] {
 		const moves: IKnightMove[] = [];

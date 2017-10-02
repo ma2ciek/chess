@@ -2,16 +2,24 @@ import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
 import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
-import estimateBoardValue from './estimateBoardValue';
+import BoardValueEstimator from './BoardValueEstimator';
 import { shuffle } from './utils';
 
 export default class SimpleAIPlayer extends AIPlayer {
+	private bve = new BoardValueEstimator();
+
+	public destroy() {
+		this.bve.clearAll();
+	}
+
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
 		const board1moves = board.getAvailableMoves();
 		const mc = new MoveController();
 		let bestValueForBoard2 = -Infinity;
 		let bestMove: Move | null = null;
 		let counted = 0;
+
+		this.bve.clear( board.turn );
 
 		for ( const board1move of shuffle( board1moves ) ) {
 			// After my move.
@@ -59,7 +67,7 @@ export default class SimpleAIPlayer extends AIPlayer {
 					// Now is opponent's turn
 					// TODO: something is wrong with the logic here.
 
-					const board4value = estimateBoardValue( board4, board3move, board.turnColor );
+					const board4value = this.bve.estimateValue( board4, board.turnColor );
 					bestValueForBoard4 = Math.max( board4value, bestValueForBoard4 );
 					counted++;
 				}
@@ -82,4 +90,5 @@ export default class SimpleAIPlayer extends AIPlayer {
 			bestMoveValue: bestValueForBoard2,
 		};
 	}
+
 }

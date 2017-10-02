@@ -1,7 +1,8 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { Move } from '../utils';
+import { FigureTypes, Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
+import { figureValueMap } from './BoardValueEstimator';
 import Node from './Node';
 import { applyFunctionDuringPeriod } from './utils';
 
@@ -159,15 +160,6 @@ export default class TreePlayer extends AIPlayer {
 	}
 }
 
-const figureValueMap = {
-	king: 1000, // Can't be removed from board. Should be handled as an error.
-	queen: 9,
-	pawn: 1,
-	rook: 5,
-	bishop: 3,
-	knight: 3,
-};
-
 function estimateBoardValue( board: Chessboard, playerColor: number ) {
 	const m = playerColor === 0 ? 1 : -1;
 	let ebv = 0;
@@ -196,7 +188,7 @@ function estimateBoardValue( board: Chessboard, playerColor: number ) {
 	const lastMove = board.history.getLastMove();
 
 	// TODO: castles instead of moving king
-	if ( lastMove.figure.type === 'king' ) {
+	if ( lastMove.figure.type === FigureTypes.KING ) {
 		ebv -= 0.3 * m;
 	}
 

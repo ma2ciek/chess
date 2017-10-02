@@ -1,8 +1,9 @@
 import Chessboard from '../Chessboard';
-import { CommonMove, isCorrectPosition, JSONFigure, Move } from '../utils';
+import { CommonMove, FigureTypes, isCorrectPosition, JSONFigure, Move } from '../utils';
 
 abstract class ChessFigure {
-    public readonly abstract type: 'king' | 'knight' | 'pawn' | 'queen' | 'rook' | 'bishop';
+    public readonly abstract type: FigureTypes;
+    public abstract get shortName(): string;
 
     constructor(
         public readonly x: number,

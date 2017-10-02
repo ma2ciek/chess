@@ -1,6 +1,6 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { isCorrectPosition, Move } from '../utils';
+import { FigureTypes, isCorrectPosition, Move } from '../utils';
 import ChessFigure from './ChessFigure';
 
 interface KingMove extends Move {
@@ -10,7 +10,11 @@ interface KingMove extends Move {
 type KingMoveType = 'normal' | 'capture' | 'o-o' | 'o-o-o';
 
 export default class King extends ChessFigure {
-	public readonly type: 'king' = 'king';
+	public readonly type = FigureTypes.KING;
+
+	public get shortName() {
+		return this.color ? 'k' : 'K';
+	}
 
 	public getPossibleMoves( chessboard: Chessboard ): KingMove[] {
 		const moves: KingMove[] = [];
@@ -43,9 +47,9 @@ export default class King extends ChessFigure {
 		const figureAtKingPosition = chessboard.getFigureFrom( 4, row );
 
 		if (
-			myMoves.some( move => move.figure.type === 'king' ) ||
+			myMoves.some( move => move.figure.type === FigureTypes.KING ) ||
 			!figureAtKingPosition ||
-			figureAtKingPosition.type !== 'king'
+			figureAtKingPosition.type !== FigureTypes.KING
 		) {
 			return moves;
 		}
@@ -67,7 +71,7 @@ export default class King extends ChessFigure {
 
 		const aRookMoved = chessboard.history.moves.some( m => {
 			return (
-				m.figure.type === 'rook' &&
+				m.figure.type === FigureTypes.ROOK &&
 				m.figure.color === this.color &&
 				m.figure.x === 0 &&
 				m.figure.y === row
@@ -82,7 +86,7 @@ export default class King extends ChessFigure {
 			chessboard.isEmptyAt( 3, row ) &&
 			!aRookMoved &&
 			figureAtFirstCol &&
-			figureAtFirstCol.type === 'rook'
+			figureAtFirstCol.type === FigureTypes.ROOK
 		) {
 			const move: KingMove = {
 				dest: { x: 2, y: row },
@@ -115,7 +119,7 @@ export default class King extends ChessFigure {
 
 		const hRookMoved = history.moves.some( m => {
 			return (
-				m.figure.type === 'rook' &&
+				m.figure.type === FigureTypes.ROOK &&
 				m.figure.color === this.color &&
 				m.figure.x === 7 &&
 				m.figure.y === row
@@ -129,7 +133,7 @@ export default class King extends ChessFigure {
 			chessboard.isEmptyAt( 6, row ) &&
 			!hRookMoved &&
 			figureAtLastCol &&
-			figureAtLastCol.type === 'rook'
+			figureAtLastCol.type === FigureTypes.ROOK
 		) {
 			const move: KingMove = {
 				dest: { x: 6, y: row },

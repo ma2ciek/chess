@@ -9,7 +9,7 @@ describe( 'King', () => {
 		it( 'getAvailableMoves()', () => {
 			const whiteKing = new King( 3, 5, Color.White );
 
-			const cb = new Chessboard( [ whiteKing ] );
+			const cb = Chessboard.fromJSON( [ whiteKing ] );
 
 			const am = whiteKing.getPossibleMoves( cb );
 
@@ -28,7 +28,7 @@ describe( 'King', () => {
 		it( 'chessboard getAvailableMoves()', () => {
 			const whiteKing = new King( 3, 5, Color.White );
 			const blackKing = new King( 7, 7, Color.Black );
-			const cb = new Chessboard( [ blackKing, whiteKing ] );
+			const cb = Chessboard.fromJSON( [ blackKing, whiteKing ] );
 
 			const am = cb.getAvailableMoves();
 
@@ -50,7 +50,7 @@ describe( 'King', () => {
 			const whiteKing = new King( 4, 0, Color.White );
 			const whiteRook = new Rook( 0, 0, Color.White );
 
-			const cb = new Chessboard( [ whiteKing, whiteRook ] );
+			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook ] );
 
 			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
@@ -69,7 +69,7 @@ describe( 'King', () => {
 			const whiteKing = new King( 4, 0, Color.White );
 			const whiteRook = new Rook( 7, 0, Color.White );
 
-			const cb = new Chessboard( [ whiteKing, whiteRook ] );
+			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook ] );
 
 			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
@@ -89,7 +89,7 @@ describe( 'King', () => {
 			const whiteRook1 = new Rook( 0, 0, Color.White );
 			const whiteRook2 = new Rook( 7, 0, Color.White );
 
-			const cb = new Chessboard( [ whiteKing, whiteRook1, whiteRook2 ] );
+			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook1, whiteRook2 ] );
 
 			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
@@ -116,7 +116,7 @@ describe( 'King', () => {
 			const whiteRook = new Rook( 0, 0, Color.White );
 			const blackRook = new Rook( 4, 7, Color.Black );
 
-			const cb = new Chessboard( [ whiteKing, whiteRook, blackKing, blackRook ] );
+			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook, blackKing, blackRook ] );
 
 			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();
@@ -137,7 +137,7 @@ describe( 'King', () => {
 			const whiteRook = new Rook( 0, 0, Color.White );
 			const blackRook = new Rook( 3, 7, Color.Black );
 
-			const cb = new Chessboard( [ whiteKing, whiteRook, blackKing, blackRook ] );
+			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook, blackKing, blackRook ] );
 
 			const am = whiteKing.getPossibleMoves( cb );
 			const cam = cb.getAvailableMoves();

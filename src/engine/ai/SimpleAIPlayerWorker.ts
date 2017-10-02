@@ -1,13 +1,15 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
 import { JSONFigure, Move } from '../utils';
-import estimateBoardValue from './estimateBoardValue';
+import BoardValueEstimator from './BoardValueEstimator';
 import { shuffle } from './utils';
+
+const bve = new BoardValueEstimator();
 
 self.onmessage = e => {
 	const [ figures, historyMoves, board1moves ] = e.data as [ JSONFigure[], Move[], Move[] ];
 
-	const board: Chessboard = new Chessboard( figures, historyMoves );
+	const board: Chessboard = Chessboard.fromJSON( figures, historyMoves );
 
 	const mc = new MoveController();
 	let bestValueForBoard2 = -Infinity;
@@ -60,7 +62,7 @@ self.onmessage = e => {
 				// Now is opponent's turn
 				// TODO: something is wrong with the logic here.
 
-				const board4value = estimateBoardValue( board4, board3move, board.turnColor );
+				const board4value = bve.estimateValue( board4, board.turnColor );
 				bestValueForBoard4 = Math.max( board4value, bestValueForBoard4 );
 				counted++;
 			}
@@ -82,4 +84,6 @@ self.onmessage = e => {
 		counted,
 		bestMoveValue: bestValueForBoard2,
 	} ] );
+
+	bve.clear( board.turn );
 };

@@ -5,7 +5,7 @@ import { Color } from '../../src/engine/utils';
 
 describe( 'Chessboard', () => {
 	it( 'constructor()', () => {
-		const cb = new Chessboard( [] );
+		const cb = Chessboard.fromJSON( [] );
 
 		expect( cb ).to.be.an( 'object' );
 	} );

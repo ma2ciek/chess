@@ -1,5 +1,3 @@
-import JSONFigure from './figures/JSONFigure';
-
 export function isCorrectPosition( x: number, y: number ) {
 	return x >= 0 && y >= 0 && x < 8 && y < 8;
 }
@@ -10,11 +8,24 @@ export function getColor( color: Color ) {
 
 export type Move = Readonly<{
 	figure: JSONFigure;
-	dest: Vector;
+	dest: Vector; // TODO: change vector to position's index.
 	type: 'long-move' | 'normal' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture' | 'o-o' | 'o-o-o' | 'fake';
 	check?: true;
 	mate?: true;
 }>;
+
+// TODO: Convert move types to this enum.
+export enum MoveTypes {
+	LONG_MOVE,
+	NORMAL,
+	EN_PASSANT,
+	CAPTURE,
+	PROMOTION,
+	PROMOTION_CAPTURE,
+	CASTLE_KINGSIDE,
+	CASTLE_QUEENSIDE,
+	FAKE,
+}
 
 export type CommonMove = Readonly<{
 	figure: JSONFigure;
@@ -22,6 +33,7 @@ export type CommonMove = Readonly<{
 	type: 'capture' | 'normal';
 }>;
 
+// TODO: Use this enum everywhere.
 export enum Color {
 	White,
 	Black,
@@ -32,9 +44,19 @@ export interface Vector {
 	y: number;
 }
 
+export enum FigureTypes {
+	PAWN,
+	KNIGHT,
+	BISHOP,
+	ROOK,
+	QUEEN,
+	KING,
+}
+
+// TODO: change x and y to position's index.
 export type JSONFigure = Readonly<{
-    x: number;
-    y: number;
-    color: number;
-    type: 'king' | 'knight' | 'pawn' | 'queen' | 'rook' | 'bishop';
+	x: number;
+	y: number;
+	color: Color;
+	type: FigureTypes;
 }>;

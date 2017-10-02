@@ -5,7 +5,7 @@ import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
 
-export function parse( position: string ) {
+export function parse( position: string ): ReadonlyArray<Bishop | Pawn | King | Queen | Rook | Knight> {
 	let x = 0;
 	let y = 7;
 	const figures: Array<Bishop | King | Knight | Pawn | Queen | Rook> = [];

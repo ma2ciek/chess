@@ -3,21 +3,27 @@ import Board from './Board';
 import BoardHistory from './BoardHistory';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
-import JSONFigure from './figures/JSONFigure';
 import King from './figures/King';
 import MoveController from './MoveController';
-import { Move } from './utils';
+import { FigureTypes, JSONFigure, Move } from './utils';
 
 export default class Chessboard {
     public static createInitialPosition() {
-        // TODO
         const figures = FigureFactory.createInitialPosition();
-        return new Chessboard( figures );
+        return Chessboard.fromExistingFigures( figures, [] );
     }
 
-    public readonly id = Math.random();
-    public readonly history: BoardHistory;
-    public readonly figures: ReadonlyArray<ChessFigure>;
+    public static fromExistingFigures( figures: ReadonlyArray<ChessFigure>, moves: ReadonlyArray<Move> ) {
+        const board = new BoardHistory( moves );
+        return new Chessboard( figures, board );
+    }
+
+    public static fromJSON( jsonFigures: ReadonlyArray<JSONFigure>, moves: ReadonlyArray<Move> = [] ) {
+        const figures = FigureFactory.createFromJSON( jsonFigures );
+        const board = new BoardHistory( moves );
+
+        return new Chessboard( figures, board );
+    }
 
     // For speed up methods.
     private _currentKing: King;
@@ -26,11 +32,10 @@ export default class Chessboard {
     private _availableMoves: ReadonlyArray<Move>;
     private _board: Board;
 
-    constructor( figures: ReadonlyArray<JSONFigure>, moves: ReadonlyArray<Move> = [] ) {
-        // TODO: optimization.
-        this.figures = figures.map( f => FigureFactory.createFigureFromJSON( f ) );
-        this.history = new BoardHistory( moves );
-    }
+    constructor(
+        public readonly figures: ReadonlyArray<ChessFigure>,
+        public readonly history: BoardHistory,
+    ) { }
 
     public get turnColor() {
         return this.history.getTurn() % 2;
@@ -204,6 +209,15 @@ export default class Chessboard {
         } );
     }
 
+    public getBoardSymbol() {
+        this.assertBoardExistence();
+        return this.history.moves.length + this._board.toString();
+    }
+
+    public get turn() {
+        return this.history.moves.length;
+    }
+
     private assertBoardExistence() {
         if ( !this._board ) {
             this._board = new Board( this.figures );
@@ -216,7 +230,7 @@ export default class Chessboard {
         }
 
         return this._currentKing = this.figures.find( figure => {
-            return figure.type === 'king' && figure.color === this.turnColor;
+            return figure.type === FigureTypes.KING && figure.color === this.turnColor;
         } ) as King;
     }
 
@@ -226,7 +240,7 @@ export default class Chessboard {
         }
 
         return this._opponentKing = this.figures.find( figure => {
-            return figure.type === 'king' && figure.color !== this.turnColor;
+            return figure.type === FigureTypes.KING && figure.color !== this.turnColor;
         } ) as King;
     }
 }

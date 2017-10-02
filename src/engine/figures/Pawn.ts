@@ -1,5 +1,5 @@
 import Chessboard from '../Chessboard';
-import { Move } from '../utils';
+import { FigureTypes, Move } from '../utils';
 import ChessFigure from './ChessFigure';
 
 interface IPawnMove extends Move {
@@ -9,7 +9,11 @@ interface IPawnMove extends Move {
 export type PawnMoveType = 'long-move' | 'normal' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture';
 
 export default class Pawn extends ChessFigure {
-    public readonly type: 'pawn' = 'pawn';
+    public readonly type = FigureTypes.PAWN;
+
+    public get shortName() {
+        return this.color ? 'p' : 'P';
+    }
 
     public getPossibleMoves( chessboard: Chessboard ) {
         const dir = chessboard.getTurnDir();

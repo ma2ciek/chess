@@ -1,11 +1,11 @@
 import { parse } from './fenParser';
 import Bishop from './figures/Bishop';
-import JSONFigure from './figures/JSONFigure';
 import King from './figures/King';
 import Knight from './figures/Knight';
 import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
+import { FigureTypes, JSONFigure } from './utils';
 
 export default class FigureFactory {
 	public static createFromJSON( jsonFigures: ReadonlyArray<JSONFigure> ) {
@@ -13,13 +13,15 @@ export default class FigureFactory {
 	}
 
 	public static createFigureFromJSON( json: JSONFigure ) {
+		// TODO: Move it outside
+
 		const types = {
-			bishop: Bishop,
-			king: King,
-			knight: Knight,
-			pawn: Pawn,
-			queen: Queen,
-			rook: Rook,
+			[ FigureTypes.BISHOP ]: Bishop,
+			[ FigureTypes.KING ]: King,
+			[ FigureTypes.KNIGHT ]: Knight,
+			[ FigureTypes.PAWN ]: Pawn,
+			[ FigureTypes.QUEEN ]: Queen,
+			[ FigureTypes.ROOK ]: Rook,
 		};
 
 		const correctClass = types[ json.type ];

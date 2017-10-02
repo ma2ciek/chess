@@ -2,12 +2,13 @@ import { expect } from 'chai';
 import Chessboard from '../../../src/engine/Chessboard';
 import King from '../../../src/engine/figures/King';
 import Rook from '../../../src/engine/figures/Rook';
+import { FigureTypes } from '../../../src/engine/utils';
 
 describe( 'Rook', () => {
 	describe( 'getAvailableMoves case #1', () => {
 		it( 'getAvailableMoves()', () => {
 			const whiteRook = new Rook( 0, 0, 0 );
-			const cb = new Chessboard( [ whiteRook ] );
+			const cb = Chessboard.fromJSON( [ whiteRook ] );
 
 			const am = whiteRook.getPossibleMoves( cb );
 
@@ -29,7 +30,7 @@ describe( 'Rook', () => {
 			const whiteRook = new Rook( 0, 0, 0 );
 			const whiteKing = new King( 4, 4, 0 );
 			const blackKing = new King( 7, 7, 1 );
-			const cb = new Chessboard( [ whiteRook, blackKing, whiteKing ] );
+			const cb = Chessboard.fromJSON( [ whiteRook, blackKing, whiteKing ] );
 
 			const am = cb.getAvailableMoves();
 
@@ -48,7 +49,7 @@ describe( 'Rook', () => {
 			const whiteRook = new Rook( 3, 3, 0 );
 			const whiteKing = new King( 3, 5, 0 );
 
-			const cb = new Chessboard( [ whiteRook, whiteKing ] );
+			const cb = Chessboard.fromJSON( [ whiteRook, whiteKing ] );
 
 			const am = whiteRook.getPossibleMoves( cb );
 
@@ -63,7 +64,7 @@ describe( 'Rook', () => {
 			const whiteRook = new Rook( 3, 3, 0 );
 			const whiteKing = new King( 3, 5, 0 );
 			const blackKing = new King( 7, 7, 1 );
-			const cb = new Chessboard( [ whiteRook, blackKing, whiteKing ] );
+			const cb = Chessboard.fromJSON( [ whiteRook, blackKing, whiteKing ] );
 
 			const am = cb.getAvailableMoves();
 
@@ -71,7 +72,7 @@ describe( 'Rook', () => {
 
 			expect( am.map( m => m.dest ) ).to.deep.include( { x: 0, y: 3 } );
 			expect( am.map( m => m.dest ) ).to.not.deep.include( { x: 3, y: 5 } );
-			expect( am.filter( m => m.figure.type === 'rook' ).map( m => m.dest ) ).to.not.deep.include( { x: 3, y: 6 } );
+			expect( am.filter( m => m.figure.type === FigureTypes.ROOK ).map( m => m.dest ) ).to.not.deep.include( { x: 3, y: 6 } );
 		} );
 	} );
 } );
