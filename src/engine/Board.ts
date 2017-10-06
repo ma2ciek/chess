@@ -1,20 +1,23 @@
 import ChessFigure from './figures/ChessFigure';
 
 export default class Board {
-	private _board: ChessFigure[] = new Array( 64 );
+	public static fromFigures( figures: ReadonlyArray<ChessFigure> ) {
+		const rawBoard = new Array( 64 );
 
-	constructor( figures: ReadonlyArray<ChessFigure> ) {
 		for ( const figure of figures ) {
-			this._board[ figure.y * 8 + figure.x ] = figure;
+			rawBoard[ figure.y * 8 + figure.x ] = figure;
 		}
+
+		return new Board( rawBoard );
 	}
+
+	constructor( public readonly rawBoard: ReadonlyArray<ChessFigure|undefined> ) { }
 
 	public get( x: number, y: number ): ChessFigure | undefined {
 		if ( x < 0 || y < 0 || x > 7 || y > 7 ) {
 			return undefined;
 		}
-		const index = y * 8 + x;
-		return this._board[ index ];
+		return this.rawBoard[ y * 8 + x ];
 	}
 
 	public toString() {

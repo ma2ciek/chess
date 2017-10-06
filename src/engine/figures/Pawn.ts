@@ -1,12 +1,6 @@
 import Chessboard from '../Chessboard';
-import { FigureTypes, Move } from '../utils';
+import { FigureTypes, Move, MoveTypes } from '../utils';
 import ChessFigure from './ChessFigure';
-
-interface IPawnMove extends Move {
-    type: PawnMoveType;
-}
-
-export type PawnMoveType = 'long-move' | 'normal' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture';
 
 export default class Pawn extends ChessFigure {
     public readonly type = FigureTypes.PAWN;
@@ -17,13 +11,13 @@ export default class Pawn extends ChessFigure {
 
     public getPossibleMoves( chessboard: Chessboard ) {
         const dir = chessboard.getTurnDir();
-        const moves: IPawnMove[] = [];
+        const moves: Move[] = [];
 
         if ( this.isPromotionMove( dir ) ) {
             if ( chessboard.isEmptyAt( this.x, this.y + dir ) ) {
                 moves.push( {
                     dest: { x: this.x, y: this.y + dir },
-                    type: 'promotion-move',
+                    type: MoveTypes.PROMOTION,
                     figure: this,
                 } );
             }
@@ -31,7 +25,7 @@ export default class Pawn extends ChessFigure {
             if ( chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
                 moves.push( {
                     dest: { x: this.x + 1, y: this.y + dir },
-                    type: 'promotion-capture',
+                    type: MoveTypes.PROMOTION_CAPTURE,
                     figure: this,
                 } );
             }
@@ -39,7 +33,7 @@ export default class Pawn extends ChessFigure {
             if ( chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
                 moves.push( {
                     dest: { x: this.x - 1, y: this.y + dir },
-                    type: 'promotion-capture',
+                    type: MoveTypes.PROMOTION_CAPTURE,
                     figure: this,
                 } );
             }
@@ -52,7 +46,7 @@ export default class Pawn extends ChessFigure {
                 if ( chessboard.isEmptyAt( this.x, this.y + dir * 2 ) ) {
                     moves.push( {
                         dest: { x: this.x, y: this.y + dir * 2 },
-                        type: 'long-move',
+                        type: MoveTypes.LONG_MOVE,
                         figure: this,
                     } );
                 }
@@ -60,23 +54,23 @@ export default class Pawn extends ChessFigure {
         } else {
             const lastMove = chessboard.getLastMove();
             if (
-                lastMove.type === 'long-move' &&
+                lastMove.type === MoveTypes.LONG_MOVE &&
                 lastMove.dest.x === this.x - 1 && lastMove.dest.y === this.y
             ) {
                 moves.push( {
                     dest: { x: this.x - 1, y: this.y + dir },
-                    type: 'en-passant',
+                    type: MoveTypes.EN_PASSANT,
                     figure: this,
                 } );
             }
 
             if (
-                lastMove.type === 'long-move' &&
+                lastMove.type === MoveTypes.LONG_MOVE &&
                 lastMove.dest.x === this.x + 1 && lastMove.dest.y === this.y
             ) {
                 moves.push( {
                     dest: { x: this.x + 1, y: this.y + dir },
-                    type: 'en-passant',
+                    type: MoveTypes.EN_PASSANT,
                     figure: this,
                 } );
             }
@@ -85,7 +79,7 @@ export default class Pawn extends ChessFigure {
         if ( chessboard.isEmptyAt( this.x, this.y + dir ) ) {
             moves.push( {
                 dest: { x: this.x, y: this.y + dir },
-                type: 'normal',
+                type: MoveTypes.NORMAL,
                 figure: this,
             } );
         }
@@ -93,7 +87,7 @@ export default class Pawn extends ChessFigure {
         if ( chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
             moves.push( {
                 dest: { x: this.x + 1, y: this.y + dir },
-                type: 'capture',
+                type: MoveTypes.CAPTURE,
                 figure: this,
             } );
         }
@@ -101,7 +95,7 @@ export default class Pawn extends ChessFigure {
         if ( chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
             moves.push( {
                 dest: { x: this.x - 1, y: this.y + dir },
-                type: 'capture',
+                type: MoveTypes.CAPTURE,
                 figure: this,
             } );
         }

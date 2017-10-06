@@ -1,13 +1,7 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { FigureTypes, isCorrectPosition, Move } from '../utils';
+import { FigureTypes, isCorrectPosition, Move, MoveTypes } from '../utils';
 import ChessFigure from './ChessFigure';
-
-interface KingMove extends Move {
-	type: KingMoveType;
-}
-
-type KingMoveType = 'normal' | 'capture' | 'o-o' | 'o-o-o';
 
 export default class King extends ChessFigure {
 	public readonly type = FigureTypes.KING;
@@ -16,8 +10,8 @@ export default class King extends ChessFigure {
 		return this.color ? 'k' : 'K';
 	}
 
-	public getPossibleMoves( chessboard: Chessboard ): KingMove[] {
-		const moves: KingMove[] = [];
+	public getPossibleMoves( chessboard: Chessboard ): Move[] {
+		const moves: Move[] = [];
 
 		for ( const translation of availableKingTranslations ) {
 			const x = this.x + translation[ 0 ];
@@ -30,13 +24,13 @@ export default class King extends ChessFigure {
 			if ( chessboard.isEmptyAt( x, y ) ) {
 				moves.push( {
 					dest: { x, y },
-					type: 'normal',
+					type: MoveTypes.NORMAL,
 					figure: this,
 				} );
 			} else if ( chessboard.isOpponentAt( x, y ) ) {
 				moves.push( {
 					dest: { x, y },
-					type: 'capture',
+					type: MoveTypes.CAPTURE,
 					figure: this,
 				} );
 			}
@@ -57,16 +51,16 @@ export default class King extends ChessFigure {
 		const castleQueenSide = this.castleQueenSide( chessboard );
 		const castleKingSide = this.castleKingSide( chessboard );
 
-		const kingMoves = [
+		const Moves = [
 			...moves,
 			castleQueenSide,
 			castleKingSide,
 		];
 
-		return kingMoves.filter( move => !!move ) as KingMove[];
+		return Moves.filter( move => !!move ) as Move[];
 	}
 
-	private castleQueenSide( chessboard: Chessboard ): KingMove | null {
+	private castleQueenSide( chessboard: Chessboard ): Move | null {
 		const row = this.color === 0 ? 0 : 7;
 
 		const aRookMoved = chessboard.history.moves.some( m => {
@@ -88,13 +82,13 @@ export default class King extends ChessFigure {
 			figureAtFirstCol &&
 			figureAtFirstCol.type === FigureTypes.ROOK
 		) {
-			const move: KingMove = {
+			const move: Move = {
 				dest: { x: 2, y: row },
-				type: 'o-o-o',
+				type: MoveTypes.CASTLE_QUEENSIDE,
 				figure: this,
 			};
 
-			const cb = new MoveController().applyMove( chessboard, move );
+			const cb = MoveController.applyMove( chessboard, move );
 			const pMoves = cb.getPossibleMoves();
 
 			const isUnderCheck = pMoves.some( m => {
@@ -113,7 +107,7 @@ export default class King extends ChessFigure {
 		return null;
 	}
 
-	private castleKingSide( chessboard: Chessboard ): KingMove | null {
+	private castleKingSide( chessboard: Chessboard ): Move | null {
 		const row = this.color === 0 ? 0 : 7;
 		const history = chessboard.history;
 
@@ -135,13 +129,13 @@ export default class King extends ChessFigure {
 			figureAtLastCol &&
 			figureAtLastCol.type === FigureTypes.ROOK
 		) {
-			const move: KingMove = {
+			const move: Move = {
 				dest: { x: 6, y: row },
-				type: 'o-o',
+				type: MoveTypes.CASTLE_KINGSIDE,
 				figure: this,
 			};
 
-			const cb = new MoveController().applyMove( chessboard, move );
+			const cb = MoveController.applyMove( chessboard, move );
 			const pMoves = cb.getPossibleMoves();
 
 			const isUnderCheck = pMoves.some( m => {

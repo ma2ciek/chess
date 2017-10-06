@@ -1,12 +1,6 @@
 import Chessboard from '../Chessboard';
-import { FigureTypes, isCorrectPosition, Move } from '../utils';
+import { FigureTypes, isCorrectPosition, Move, MoveTypes } from '../utils';
 import ChessFigure from './ChessFigure';
-
-interface IKnightMove extends Move {
-	type: KnightMoveType;
-}
-
-export type KnightMoveType = 'normal' | 'capture';
 
 export default class Knight extends ChessFigure {
 	public readonly type= FigureTypes.KNIGHT;
@@ -15,8 +9,8 @@ export default class Knight extends ChessFigure {
 		return this.color ? 'n' : 'N';
 	}
 
-	public getPossibleMoves( chessboard: Chessboard ): IKnightMove[] {
-		const moves: IKnightMove[] = [];
+	public getPossibleMoves( chessboard: Chessboard ): Move[] {
+		const moves: Move[] = [];
 
 		for ( const move of movesArray ) {
 			const x = this.x + move[ 0 ];
@@ -29,13 +23,13 @@ export default class Knight extends ChessFigure {
 			if ( chessboard.isEmptyAt( x, y ) ) {
 				moves.push( {
 					dest: { x, y },
-					type: 'normal',
+					type: MoveTypes.NORMAL,
 					figure: this,
 				} );
 			} else if ( chessboard.isOpponentAt( x, y ) ) {
 				moves.push( {
 					dest: { x, y },
-					type: 'capture',
+					type: MoveTypes.CAPTURE,
 					figure: this,
 				} );
 			}

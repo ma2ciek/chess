@@ -8,18 +8,19 @@ import { shuffle } from './utils';
 const bve = new BoardValueEstimator();
 
 self.onmessage = e => {
+	const d = Date.now();
+	console.log( d );
 	const [ figures, historyMoves, board1moves ] = e.data as [ JSONFigure[], Move[], Move[] ];
 
 	const board: Chessboard = Chessboard.fromJSON( figures, historyMoves );
 
-	const mc = new MoveController();
 	let bestValueForBoard2 = -Infinity;
 	let bestMove: Move | null = null;
 	let counted = 0;
 
 	for ( const board1move of shuffle( board1moves ) ) {
 		// After my move.
-		const board2 = mc.applyMove( board, board1move );
+		const board2 = MoveController.applyMove( board, board1move );
 		const board2moves = board2.getAvailableMoves();
 		let worstValueForBoard3 = 1000;
 
@@ -40,7 +41,7 @@ self.onmessage = e => {
 
 		for ( const board2move of shuffle( board2moves ) ) {
 			// After my move and opponent's move.
-			const board3 = mc.applyMove( board2, board2move );
+			const board3 = MoveController.applyMove( board2, board2move );
 			const board3moves = board3.getAvailableMoves();
 
 			// This should be initialized with higher value than the bestValueForBoard2.
@@ -58,7 +59,7 @@ self.onmessage = e => {
 
 			for ( const board3move of shuffle( board3moves ) ) {
 				// After my move and opponent's move.
-				const board4 = mc.applyMove( board3, board3move );
+				const board4 = MoveController.applyMove( board3, board3move );
 				const board4moves = board4.getAvailableMoves();
 
 				// This should be initialized with higher value than the bestValueForBoard2.
@@ -76,7 +77,7 @@ self.onmessage = e => {
 
 				for ( const board4move of shuffle( board4moves ) ) {
 					// After my move and opponent's move and my second move.
-					const board5 = mc.applyMove( board4, board4move );
+					const board5 = MoveController.applyMove( board4, board4move );
 
 					// Now is opponent's turn
 					// TODO: something is wrong with the logic here.
@@ -109,4 +110,6 @@ self.onmessage = e => {
 	}] );
 
 	bve.clear( board.turn );
+
+	console.log( Date.now() - d );
 };

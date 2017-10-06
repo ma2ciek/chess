@@ -9,7 +9,7 @@ export function getColor( color: Color ) {
 export type Move = Readonly<{
 	figure: JSONFigure;
 	dest: Vector; // TODO: change vector to position's index.
-	type: 'long-move' | 'normal' | 'en-passant' | 'capture' | 'promotion-move' | 'promotion-capture' | 'o-o' | 'o-o-o' | 'fake';
+	type: MoveTypes;
 	check?: true;
 	mate?: true;
 }>;
@@ -26,12 +26,6 @@ export enum MoveTypes {
 	CASTLE_QUEENSIDE,
 	FAKE,
 }
-
-export type CommonMove = Readonly<{
-	figure: JSONFigure;
-	dest: Vector;
-	type: 'capture' | 'normal';
-}>;
 
 // TODO: Use this enum everywhere.
 export enum Color {

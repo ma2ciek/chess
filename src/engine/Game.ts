@@ -13,7 +13,6 @@ type GameInfo = Readonly<{
 export default class Game {
 	public readonly changeEmitter = new Emitter();
 
-	private readonly moveCtrl = new MoveController();
 	private isPaused = true;
 	private info: GameInfo = {
 		draw: false,
@@ -113,7 +112,7 @@ export default class Game {
 
 			// Save player color before switch.
 			const turnColor = this.board.turnColor;
-			this.board = this.moveCtrl.applyMove( this.board, move );
+			this.board = MoveController.applyMove( this.board, move );
 
 			if ( this.board.isCheckMate() ) {
 				this.info = {

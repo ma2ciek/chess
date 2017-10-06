@@ -1,5 +1,5 @@
 import Chessboard from '../Chessboard';
-import { CommonMove, FigureTypes, isCorrectPosition, JSONFigure, Move } from '../utils';
+import { FigureTypes, JSONFigure, Move, MoveTypes } from '../utils';
 
 abstract class ChessFigure {
     public readonly abstract type: FigureTypes;
@@ -36,50 +36,39 @@ abstract class ChessFigure {
         let x = this.x;
         let y = this.y;
 
-        const moves: CommonMove[] = [];
+        const moves: Move[] = [];
 
         while ( true ) {
             x += dirX;
             y += dirY;
 
-            const move = this.getCommonMove( chessboard, x, y );
-
-            if ( !move ) {
+            if ( x < 0 || y < 0 || x > 7 || y > 7 ) {
                 break;
             }
 
-            moves.push( move );
+            const f = chessboard.board.rawBoard[ y * 8 + x ];
 
-            if ( move.type === 'capture' ) {
+            if ( f ) {
+                // Opponent found.
+                if ( f.color !== chessboard.turnColor ) {
+                    moves.push( {
+                        dest: { x, y },
+                        type: MoveTypes.CAPTURE,
+                        figure: this,
+                    } );
+                }
+
                 break;
             }
+
+            moves.push( {
+                dest: { x, y },
+                type: MoveTypes.NORMAL,
+                figure: this,
+            } );
         }
 
         return moves;
-    }
-
-    protected getCommonMove( chessboard: Chessboard, x: number, y: number ): CommonMove | null {
-        if ( !isCorrectPosition( x, y ) ) {
-            return null;
-        }
-
-        if ( chessboard.isOpponentAt( x, y ) ) {
-            return {
-                dest: { x, y },
-                type: 'capture',
-                figure: this,
-            };
-        }
-
-        if ( !chessboard.isEmptyAt( x, y ) ) {
-            return null;
-        }
-
-        return {
-            dest: { x, y },
-            type: 'normal',
-            figure: this,
-        };
     }
 }
 

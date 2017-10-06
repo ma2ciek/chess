@@ -13,7 +13,6 @@ type MoveNode = Node<{
 }>;
 
 export default class TreePlayer extends AIPlayer {
-	private mc = new MoveController();
 	private root: MoveNode;
 	private color: number;
 
@@ -65,7 +64,7 @@ export default class TreePlayer extends AIPlayer {
 		let valueSum = 0;
 
 		for ( const move of moves ) {
-			const nextBoard = this.mc.applyMove( board, move );
+			const nextBoard = MoveController.applyMove( board, move );
 			const value = estimateBoardValue( nextBoard, this.color );
 
 			node.children.push(
@@ -104,7 +103,7 @@ export default class TreePlayer extends AIPlayer {
 
 		while ( true ) {
 			node = this.pickNodeFromCurrentNode( node, turn );
-			board = this.mc.applyMove( board, node.data.move as Move );
+			board = MoveController.applyMove( board, node.data.move as Move );
 
 			if ( node.children.length === 0 ) {
 				break;

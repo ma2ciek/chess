@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import Chessboard from '../../../src/engine/Chessboard';
 import King from '../../../src/engine/figures/King';
 import Rook from '../../../src/engine/figures/Rook';
-import { Color } from '../../../src/engine/utils';
+import { Color, MoveTypes } from '../../../src/engine/utils';
 
 describe( 'King', () => {
 	describe( 'case #1', () => {
@@ -60,7 +60,7 @@ describe( 'King', () => {
 
 			expect( am ).to.deep.include( {
 				figure: whiteKing,
-				type: 'o-o-o',
+				type: MoveTypes.CASTLE_QUEENSIDE,
 				dest: { x: 2, y: 0 },
 			} );
 		} );
@@ -79,7 +79,7 @@ describe( 'King', () => {
 
 			expect( am ).to.deep.include( {
 				figure: whiteKing,
-				type: 'o-o',
+				type: MoveTypes.CASTLE_KINGSIDE,
 				dest: { x: 6, y: 0 },
 			} );
 		} );
@@ -99,13 +99,13 @@ describe( 'King', () => {
 
 			expect( am ).to.deep.include( {
 				figure: whiteKing,
-				type: 'o-o',
+				type: MoveTypes.CASTLE_KINGSIDE,
 				dest: { x: 6, y: 0 },
 			} );
 
 			expect( am ).to.deep.include( {
 				figure: whiteKing,
-				type: 'o-o-o',
+				type: MoveTypes.CASTLE_QUEENSIDE,
 				dest: { x: 2, y: 0 },
 			} );
 		} );
@@ -126,7 +126,7 @@ describe( 'King', () => {
 
 			expect( am ).to.not.deep.include( {
 				figure: whiteKing,
-				type: 'o-o-o',
+				type: MoveTypes.CASTLE_QUEENSIDE,
 				dest: { x: 2, y: 0 },
 			} );
 		} );
@@ -147,7 +147,7 @@ describe( 'King', () => {
 
 			expect( am ).to.not.deep.include( {
 				figure: whiteKing,
-				type: 'o-o-o',
+				type: MoveTypes.CASTLE_QUEENSIDE,
 				dest: { x: 2, y: 0 },
 			} );
 		} );

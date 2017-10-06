@@ -1,93 +1,139 @@
+import Board from './Board';
 import Chessboard from './Chessboard';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
 import King from './figures/King';
+import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
-import { Move } from './utils';
+import { Move, MoveTypes } from './utils';
 
 /**
  * TODO: UndoMoveController
  */
 export default class MoveController {
-	public applyMove( chessboard: Chessboard, move: Move ) {
+	public static applyMove( chessboard: Chessboard, move: Move ) {
 		// TODO: optimization.
 		const originalFigures = chessboard.figures;
-		const movedFigure = originalFigures.find( f => f.x === move.figure.x && f.y === move.figure.y ) as ChessFigure;
+		const movedFigure = chessboard.board.get( move.figure.x, move.figure.y ) as ChessFigure;
 
 		// TODO: move to static figure methods.
 
 		switch ( move.type ) {
 			// For easy checkmate checks.
-			case 'fake':
-				return Chessboard.fromExistingFigures( originalFigures, [ ...chessboard.history.moves, move ] );
+			case MoveTypes.FAKE:
+				return Chessboard.fromExistingFiguresAndBoard( originalFigures, chessboard.board, chessboard.history.moves.concat( move ) );
 
-			case 'normal':
-			case 'long-move': {
-				const figure = FigureFactory.createFigureFromJSON( { ...movedFigure.toJSON(), x: move.dest.x, y: move.dest.y } );
+			case MoveTypes.NORMAL:
+			case MoveTypes.LONG_MOVE: {
+				const figure = FigureFactory.createFigureFromJSON( {
+					x: move.dest.x,
+					y: move.dest.y,
+					color: movedFigure.color,
+					type: movedFigure.type,
+				} );
 				const newFigures = [ ...originalFigures.filter( f => f !== movedFigure ), figure ];
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ move.dest.y * 8 + move.dest.x ] = figure;
+				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
-			case 'capture': {
-				const capturedFigure = originalFigures.find( f => f.x === move.dest.x && f.y === move.dest.y );
-				const figure = FigureFactory.createFigureFromJSON( { ...movedFigure.toJSON(), x: move.dest.x, y: move.dest.y } );
-				const newFigures: ReadonlyArray<ChessFigure> = [ ...originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ), figure ];
+			case MoveTypes.CAPTURE: {
+				const capturedFigure = chessboard.board.get( move.dest.x, move.dest.y );
+				const figure = FigureFactory.createFigureFromJSON( {
+					x: move.dest.x,
+					y: move.dest.y,
+					color: movedFigure.color,
+					type: movedFigure.type,
+				} );
+				const newFigures = originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ).concat( figure );
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ move.dest.y * 8 + move.dest.x ] = figure;
+				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
+
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
-			case 'en-passant': {
+			// TODO: Change chessboard method.
+			case MoveTypes.EN_PASSANT: {
 				const dir = movedFigure.color === 0 ? 1 : -1;
-				const capturedFigure = originalFigures.find( f => f.x === move.dest.x && f.y === move.dest.y - dir ) as ChessFigure;
-				const figure = FigureFactory.createFigureFromJSON( { ...movedFigure.toJSON(), x: move.dest.x, y: move.dest.y } );
-				const newFigures: ReadonlyArray<ChessFigure> = [ ...originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ), figure ];
+				const capturedFigure = chessboard.board.get( move.dest.x, move.dest.y - dir ) as Pawn;
+				const pawn = new Pawn( move.dest.x, move.dest.y, movedFigure.color );
+				const newFigures = originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ).concat( pawn );
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ move.dest.y * 8 + move.dest.x ] = pawn;
+				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
+				rawBoard[ capturedFigure.y * 8 + capturedFigure.x ] = undefined;
+
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
 			// TODO: enable other figures.
-			case 'promotion-move': {
+			case MoveTypes.PROMOTION: {
 				const queen = new Queen( move.dest.x, move.dest.y, movedFigure.color );
-				const newFigures: ReadonlyArray<ChessFigure> = [ ...originalFigures.filter( f => f !== movedFigure ), queen ];
+				const newFigures = originalFigures.filter( f => f !== movedFigure ).concat( queen );
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ move.dest.y * 8 + move.dest.x ] = queen;
+				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
 			// TODO: enable other figures.
-			case 'promotion-capture': {
-				const capturedFigure = originalFigures.find( f => f.x === move.dest.x && f.y === move.dest.y ) as ChessFigure;
+			case MoveTypes.PROMOTION_CAPTURE: {
+				const capturedFigure = chessboard.board.get( move.dest.x, move.dest.y ) as ChessFigure;
 				const queen = new Queen( move.dest.x, move.dest.y, movedFigure.color );
-				const newFigures: ReadonlyArray<ChessFigure> = [ ...originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ), queen ];
+				const newFigures = originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ).concat( queen );
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ move.dest.y * 8 + move.dest.x ] = queen;
+				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
-			case 'o-o': {
+			case MoveTypes.CASTLE_KINGSIDE: {
 				const row = movedFigure.color === 0 ? 0 : 7;
-				const king = originalFigures.find( f => f.x === 4 && f.y === row ) as ChessFigure;
-				const rook = originalFigures.find( f => f.x === 7 && f.y === row ) as ChessFigure;
+				const king = chessboard.board.get( 4, row ) as King;
+				const rook = chessboard.board.get( 7, row ) as Rook;
 
 				const newKing = new King( 6, row, movedFigure.color );
 				const newRook = new Rook( 5, row, movedFigure.color );
 
-				const newFigures: ReadonlyArray<ChessFigure> = [ ...originalFigures.filter( f => f !== king && f !== rook ), newKing, newRook ];
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ row + 4 ] = undefined;
+				rawBoard[ row + 7 ] = undefined;
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				rawBoard[ row + 6 ] = king;
+				rawBoard[ row + 5 ] = rook;
+
+				const newFigures = originalFigures.filter( f => f !== king && f !== rook ).concat( newKing, newRook );
+
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
-			case 'o-o-o': {
+			case MoveTypes.CASTLE_QUEENSIDE: {
 				const row = movedFigure.color === 0 ? 0 : 7;
-				const king = originalFigures.find( f => f.x === 4 && f.y === row ) as ChessFigure;
-				const rook = originalFigures.find( f => f.x === 0 && f.y === row ) as ChessFigure;
+
+				const king = chessboard.board.get( 4, row ) as King;
+				const rook = chessboard.board.get( 0, row ) as Rook;
 
 				const newKing = new King( 2, row, movedFigure.color );
 				const newRook = new Rook( 3, row, movedFigure.color );
 
-				const newFigures: ReadonlyArray<ChessFigure> = [ ...originalFigures.filter( f => f !== king && f !== rook ), newKing, newRook ];
+				const rawBoard = chessboard.board.rawBoard.slice( 0 );
+				rawBoard[ row + 4 ] = undefined;
+				rawBoard[ row + 0 ] = undefined;
 
-				return Chessboard.fromExistingFigures( newFigures, [ ...chessboard.history.moves, move ] );
+				rawBoard[ row + 2 ] = king;
+				rawBoard[ row + 3 ] = rook;
+
+				const newFigures = originalFigures.filter( f => f !== king && f !== rook ).concat( newKing, newRook );
+
+				return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
 			}
 
 			default:

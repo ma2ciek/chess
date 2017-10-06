@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import Chessboard from '../../src/engine/Chessboard';
 import ChessFigure from '../../src/engine/figures/ChessFigure';
-import { Color } from '../../src/engine/utils';
+import { Color, FigureTypes } from '../../src/engine/utils';
 
 describe( 'Chessboard', () => {
 	it( 'constructor()', () => {
@@ -35,7 +35,7 @@ describe( 'Chessboard', () => {
 			const whiteKing = cb.getFigureFrom( 4, 0 ) as ChessFigure; // E1
 
 			expect( whiteKing.color ).to.equal( Color.White );
-			expect( whiteKing.type ).to.equal( 'king' );
+			expect( whiteKing.type ).to.equal( FigureTypes.KING );
 		} );
 
 		it( 'should have a black king on E8', () => {
@@ -43,7 +43,7 @@ describe( 'Chessboard', () => {
 			const whiteKing = cb.getFigureFrom( 4, 7 ) as ChessFigure; // E8
 
 			expect( whiteKing.color ).to.equal( Color.Black );
-			expect( whiteKing.type ).to.equal( 'king' );
+			expect( whiteKing.type ).to.equal( FigureTypes.KING );
 		} );
 
 		it( 'should be a white to move', () => {

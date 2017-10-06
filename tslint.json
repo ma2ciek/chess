@@ -24,6 +24,7 @@
 		"no-console": [
 			"log"
 		],
-		"variable-name": false
+		"variable-name": false,
+		"no-bitwise": false
 	}
 }

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import Chessboard from '../../../src/engine/Chessboard';
 import King from '../../../src/engine/figures/King';
 import Rook from '../../../src/engine/figures/Rook';
-import { FigureTypes } from '../../../src/engine/utils';
+import { FigureTypes, MoveTypes } from '../../../src/engine/utils';
 
 describe( 'Rook', () => {
 	describe( 'getAvailableMoves case #1', () => {
@@ -16,7 +16,8 @@ describe( 'Rook', () => {
 
 			for ( const m of am ) {
 				expect( m.figure ).to.equal( whiteRook );
-				expect( m.type ).to.equal( 'normal' );
+
+				expect( m.type ).to.equal( MoveTypes.NORMAL );
 			}
 
 			expect( am.map( m => m.dest ) ).to.deep.include( { x: 0, y: 1 } );

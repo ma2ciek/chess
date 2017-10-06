@@ -26,6 +26,7 @@ export default abstract class AIPlayer implements IPlayer {
 			this.constructor.name,
 			counted,
 			Math.round( counted / timeDiff * 1000 ) + ' moves/s',
+			( timeDiff / 1000 ).toFixed( 1 ) + 's',
 			getMoveSymbol( bestMove ),
 		);
 

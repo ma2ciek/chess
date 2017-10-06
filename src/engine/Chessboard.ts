@@ -5,24 +5,34 @@ import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
 import King from './figures/King';
 import MoveController from './MoveController';
-import { FigureTypes, JSONFigure, Move } from './utils';
+import { FigureTypes, JSONFigure, Move, MoveTypes } from './utils';
 
 export default class Chessboard {
     public static createInitialPosition() {
         const figures = FigureFactory.createInitialPosition();
+
         return Chessboard.fromExistingFigures( figures, [] );
     }
 
-    public static fromExistingFigures( figures: ReadonlyArray<ChessFigure>, moves: ReadonlyArray<Move> ) {
-        const board = new BoardHistory( moves );
-        return new Chessboard( figures, board );
+    public static fromExistingFigures( figures: ReadonlyArray<ChessFigure>, historyMoves: ReadonlyArray<Move> ) {
+        const history = new BoardHistory( historyMoves );
+        const board = Board.fromFigures( figures );
+
+        return new Chessboard( figures, board, history );
     }
 
-    public static fromJSON( jsonFigures: ReadonlyArray<JSONFigure>, moves: ReadonlyArray<Move> = [] ) {
-        const figures = FigureFactory.createFromJSON( jsonFigures );
-        const board = new BoardHistory( moves );
+    public static fromExistingFiguresAndBoard( figures: ReadonlyArray<ChessFigure>, board: Board, historyMoves: ReadonlyArray<Move> ) {
+        const history = new BoardHistory( historyMoves );
 
-        return new Chessboard( figures, board );
+        return new Chessboard( figures, board, history );
+    }
+
+    public static fromJSON( jsonFigures: ReadonlyArray<JSONFigure>, historyMoves: ReadonlyArray<Move> = [] ) {
+        const figures = FigureFactory.createFromJSON( jsonFigures );
+        const board = Board.fromFigures( figures );
+        const history = new BoardHistory( historyMoves );
+
+        return new Chessboard( figures, board, history );
     }
 
     // For speed up methods.
@@ -30,10 +40,10 @@ export default class Chessboard {
     private _opponentKing: King;
     private _possibleMoves: ReadonlyArray<Move>;
     private _availableMoves: ReadonlyArray<Move>;
-    private _board: Board;
 
     constructor(
         public readonly figures: ReadonlyArray<ChessFigure>,
+        public readonly board: Board,
         public readonly history: BoardHistory,
     ) { }
 
@@ -42,8 +52,7 @@ export default class Chessboard {
     }
 
     public isEmptyAt( x: number, y: number ) {
-        this.assertBoardExistence();
-        return !this._board.get( x, y );
+        return !this.board.get( x, y );
     }
 
     public getClonedFigures(): ReadonlyArray<JSONFigure> {
@@ -56,8 +65,7 @@ export default class Chessboard {
     }
 
     public getFigureFrom( x: number, y: number ) {
-        this.assertBoardExistence();
-        return this._board.get( x, y );
+        return this.board.get( x, y );
     }
 
     public getLastMove() {
@@ -87,11 +95,14 @@ export default class Chessboard {
         if ( this.getAvailableMoves().length !== 0 ) {
             return false;
         }
+
+        // TODO: Assert whether this approach is correct.
         const emptyMove: Move = {
-            type: 'fake', dest: { x: 0, y: 0 },
+            type: MoveTypes.FAKE,
+            dest: { x: 0, y: 0 },
             figure: this.figures.find( f => f.color === this.turnColor ) as ChessFigure,
         };
-        const cb = new MoveController().applyMove( this, emptyMove );
+        const cb = MoveController.applyMove( this, emptyMove );
 
         const possibleMoves = cb.getPossibleMoves();
         const king = cb.getOpponentKing();
@@ -105,7 +116,7 @@ export default class Chessboard {
             return (
                 possibleMove.dest.x === king.x &&
                 possibleMove.dest.y === king.y &&
-                possibleMove.type === 'capture'
+                possibleMove.type === MoveTypes.CAPTURE
             );
         } );
     }
@@ -134,7 +145,7 @@ export default class Chessboard {
         const lastMoves = this.history.moves.slice( -100 );
 
         return !lastMoves.some( move => {
-            return [ 'capture', 'en-passant', 'promotion-capture' ].includes( move.type );
+            return [ MoveTypes.CAPTURE, MoveTypes.EN_PASSANT, MoveTypes.PROMOTION_CAPTURE ].includes( move.type );
         } );
     }
 
@@ -176,7 +187,7 @@ export default class Chessboard {
         // We virtually move king to the target position and check whether some figure can move to that place.
 
         // TODO: static method.
-        const cb = new MoveController().applyMove( this, move );
+        const cb = MoveController.applyMove( this, move );
 
         // We made a move, so now our king becomes opponent's king.
         const king = cb.getOpponentKing();
@@ -191,7 +202,7 @@ export default class Chessboard {
             return (
                 possibleMove.dest.x === king.x &&
                 possibleMove.dest.y === king.y &&
-                possibleMove.type === 'capture'
+                possibleMove.type === MoveTypes.CAPTURE
             );
         } );
     }
@@ -204,24 +215,17 @@ export default class Chessboard {
             return (
                 possibleMove.dest.x === king.x &&
                 possibleMove.dest.y === king.y &&
-                possibleMove.type === 'capture'
+                possibleMove.type === MoveTypes.CAPTURE
             );
         } );
     }
 
     public getBoardSymbol() {
-        this.assertBoardExistence();
-        return this.history.moves.length + this._board.toString();
+        return this.history.moves.length + this.board.toString();
     }
 
     public get turn() {
         return this.history.moves.length;
-    }
-
-    private assertBoardExistence() {
-        if ( !this._board ) {
-            this._board = new Board( this.figures );
-        }
     }
 
     private getCurrentKing() {
