@@ -11,7 +11,7 @@ export default class Board {
 		return new Board( rawBoard );
 	}
 
-	constructor( public readonly rawBoard: ReadonlyArray<ChessFigure|undefined> ) { }
+	constructor( public readonly rawBoard: ReadonlyArray<ChessFigure | undefined> ) { }
 
 	public get( x: number, y: number ): ChessFigure | undefined {
 		if ( x < 0 || y < 0 || x > 7 || y > 7 ) {

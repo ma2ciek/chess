@@ -4,9 +4,11 @@
 	],
 	"rules": {
 		"quotemark": [
+			true,
 			"single"
 		],
 		"indent": [
+			true,
 			"tabs"
 		],
 		"forin": false,
@@ -15,16 +17,22 @@
 		],
 		"object-literal-sort-keys": false,
 		"max-line-length": [
+			true,
 			150
 		],
-		"no-unused-variable": true,
+		"no-unused-variable": [
+			true
+		],
 		"interface-name": [
 			false
 		],
 		"no-console": [
-			"log"
+			true
 		],
 		"variable-name": false,
-		"no-bitwise": false
+		"no-bitwise": false,
+		"space-within-parens": [
+			false
+		]
 	}
 }
