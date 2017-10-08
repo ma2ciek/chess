@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import Chessboard from '../../src/engine/Chessboard';
 import ChessFigure from '../../src/engine/figures/ChessFigure';
+import MoveController from '../../src/engine/MoveController';
 import { Color, FigureTypes } from '../../src/engine/utils';
 
 describe( 'Chessboard', () => {
@@ -49,6 +50,20 @@ describe( 'Chessboard', () => {
 		it( 'should be a white to move', () => {
 			const cb = Chessboard.createInitialPosition();
 			expect( cb.turnColor ).to.equal( Color.White );
+		} );
+
+		it( 'should create position with 20 start moves available', () => {
+			const cb = Chessboard.createInitialPosition();
+			expect( cb.getAvailableMoves().length ).to.equal( 20 );
+		} );
+
+		it( 'should create position with 20 moves available for every 2 move', () => {
+			const cb = Chessboard.createInitialPosition();
+
+			for ( const m of cb.getAvailableMoves() ) {
+				const m2 = MoveController.applyMove( cb, m );
+				expect( m2.getAvailableMoves().length ).to.equal( 20 );
+			}
 		} );
 	} );
 } );

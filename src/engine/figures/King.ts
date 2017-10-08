@@ -1,6 +1,6 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { FigureTypes, isCorrectPosition, Move, MoveTypes } from '../utils';
+import { Color, FigureTypes, isCorrectPosition, Move, MoveTypes } from '../utils';
 import ChessFigure from './ChessFigure';
 
 export default class King extends ChessFigure {
@@ -36,14 +36,14 @@ export default class King extends ChessFigure {
 			}
 		}
 
-		const row = this.color === 0 ? 0 : 7;
+		const row = this.color === Color.White ? 0 : 7;
 		const myMoves = chessboard.history.getMyMoves();
 		const figureAtKingPosition = chessboard.getFigureFrom( 4, row );
 
 		if (
-			myMoves.some( move => move.figure.type === FigureTypes.KING ) ||
 			!figureAtKingPosition ||
-			figureAtKingPosition.type !== FigureTypes.KING
+			figureAtKingPosition.type !== FigureTypes.KING ||
+			myMoves.some( move => move.figure.type === FigureTypes.KING )
 		) {
 			return moves;
 		}
@@ -51,26 +51,15 @@ export default class King extends ChessFigure {
 		const castleQueenSide = this.castleQueenSide( chessboard );
 		const castleKingSide = this.castleKingSide( chessboard );
 
-		const Moves = [
+		return [
 			...moves,
 			castleQueenSide,
 			castleKingSide,
-		];
-
-		return Moves.filter( move => !!move ) as Move[];
+		].filter( move => !!move ) as Move[];
 	}
 
 	private castleQueenSide( chessboard: Chessboard ): Move | null {
-		const row = this.color === 0 ? 0 : 7;
-
-		const aRookMoved = chessboard.history.moves.some( m => {
-			return (
-				m.figure.type === FigureTypes.ROOK &&
-				m.figure.color === this.color &&
-				m.figure.x === 0 &&
-				m.figure.y === row
-			);
-		} );
+		const row = this.color === Color.White ? 0 : 7;
 
 		const figureAtFirstCol = chessboard.getFigureFrom( 0, row );
 
@@ -78,9 +67,9 @@ export default class King extends ChessFigure {
 			chessboard.isEmptyAt( 1, row ) &&
 			chessboard.isEmptyAt( 2, row ) &&
 			chessboard.isEmptyAt( 3, row ) &&
-			!aRookMoved &&
 			figureAtFirstCol &&
-			figureAtFirstCol.type === FigureTypes.ROOK
+			figureAtFirstCol.type === FigureTypes.ROOK &&
+			!this.isRookMoved( chessboard, row )
 		) {
 			const move: Move = {
 				dest: { x: 2, y: row },
@@ -89,13 +78,14 @@ export default class King extends ChessFigure {
 			};
 
 			const cb = MoveController.applyMove( chessboard, move );
+
 			const pMoves = cb.getPossibleMoves();
 
 			const isUnderCheck = pMoves.some( m => {
-				return (
-					m.dest.x === 2 && m.dest.y === row ||
-					m.dest.x === 3 && m.dest.y === row ||
-					m.dest.x === 4 && m.dest.y === row
+				return ( m.dest.y === row ) && (
+					m.dest.x === 2 ||
+					m.dest.x === 3 ||
+					m.dest.x === 4
 				);
 			} );
 
@@ -109,25 +99,15 @@ export default class King extends ChessFigure {
 
 	private castleKingSide( chessboard: Chessboard ): Move | null {
 		const row = this.color === 0 ? 0 : 7;
-		const history = chessboard.history;
-
-		const hRookMoved = history.moves.some( m => {
-			return (
-				m.figure.type === FigureTypes.ROOK &&
-				m.figure.color === this.color &&
-				m.figure.x === 7 &&
-				m.figure.y === row
-			);
-		} );
 
 		const figureAtLastCol = chessboard.getFigureFrom( 7, row );
 
 		if (
 			chessboard.isEmptyAt( 5, row ) &&
 			chessboard.isEmptyAt( 6, row ) &&
-			!hRookMoved &&
 			figureAtLastCol &&
-			figureAtLastCol.type === FigureTypes.ROOK
+			figureAtLastCol.type === FigureTypes.ROOK &&
+			!this.isRookMoved( chessboard, row )
 		) {
 			const move: Move = {
 				dest: { x: 6, y: row },
@@ -139,10 +119,10 @@ export default class King extends ChessFigure {
 			const pMoves = cb.getPossibleMoves();
 
 			const isUnderCheck = pMoves.some( m => {
-				return (
-					m.dest.x === 4 && m.dest.y === row ||
-					m.dest.x === 5 && m.dest.y === row ||
-					m.dest.x === 6 && m.dest.y === row
+				return ( m.dest.y === row ) && (
+					m.dest.x === 4 ||
+					m.dest.x === 5 ||
+					m.dest.x === 6
 				);
 			} );
 
@@ -152,6 +132,17 @@ export default class King extends ChessFigure {
 		}
 
 		return null;
+	}
+
+	private isRookMoved( chessboard: Chessboard, row: number ) {
+		chessboard.history.moves.some( m => {
+			return (
+				m.figure.type === FigureTypes.ROOK &&
+				m.figure.color === this.color &&
+				m.figure.x === 0 &&
+				m.figure.y === row
+			);
+		} );
 	}
 }
 

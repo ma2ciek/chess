@@ -5,7 +5,7 @@ import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
 import King from './figures/King';
 import MoveController from './MoveController';
-import { FigureTypes, JSONFigure, Move, MoveTypes } from './utils';
+import { Color, FigureTypes, JSONFigure, Move, MoveTypes } from './utils';
 
 export default class Chessboard {
     public static createInitialPosition() {
@@ -77,7 +77,7 @@ export default class Chessboard {
     }
 
     public getTurnDir() {
-        return this.getTurn() === 0 ? 1 : -1;
+        return this.getTurn() === Color.White ? 1 : -1;
     }
 
     public clone() {
@@ -96,13 +96,7 @@ export default class Chessboard {
             return false;
         }
 
-        // TODO: Assert whether this approach is correct.
-        const emptyMove: Move = {
-            type: MoveTypes.FAKE,
-            dest: { x: 0, y: 0 },
-            figure: this.figures.find( f => f.color === this.turnColor ) as ChessFigure,
-        };
-        const cb = MoveController.applyMove( this, emptyMove );
+        const cb = MoveController.applyFakeMove( this );
 
         const possibleMoves = cb.getPossibleMoves();
         const king = cb.getOpponentKing();
