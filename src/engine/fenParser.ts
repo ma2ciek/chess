@@ -1,3 +1,4 @@
+import Chessboard from './Chessboard';
 import Bishop from './figures/Bishop';
 import King from './figures/King';
 import Knight from './figures/Knight';
@@ -97,4 +98,30 @@ export function parse( position: string ): ReadonlyArray<Bishop | Pawn | King | 
 	}
 
 	return figures;
+}
+
+export function stringify( board: Chessboard ) {
+	let output = '';
+
+	for ( let y = 7; y >= 0; y-- ) {
+		let d = 0;
+		for ( let x = 0; x < 8; x++ ) {
+			const f = board.board.rawBoard[ y * 8 + x ];
+			if ( f ) {
+				if ( d ) {
+					output += d;
+					d = 0;
+				}
+				output += f.shortName;
+			} else {
+				d++;
+			}
+		}
+		if ( d ) {
+			output += d;
+		}
+		output += '/';
+	}
+
+	return output;
 }

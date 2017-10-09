@@ -10,11 +10,13 @@ export default class Bishop extends ChessFigure {
 	}
 
 	public getPossibleMoves( chessboard: Chessboard ) {
-		return [
-			...this.getMovesInDirection( chessboard, 1, 1 ),
-			...this.getMovesInDirection( chessboard, -1, -1 ),
-			...this.getMovesInDirection( chessboard, 1, -1 ),
-			...this.getMovesInDirection( chessboard, -1, 1 ),
-		];
+		return this.getMovesInDirections( chessboard, moves );
 	}
 }
+
+const moves: ReadonlyArray<ReadonlyArray<number>> = [
+	[ -1, -1 ],
+	[ -1, 1 ],
+	[ 1, -1 ],
+	[ 1, 1 ],
+];

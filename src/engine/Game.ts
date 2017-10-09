@@ -72,6 +72,11 @@ export default class Game {
 		return this.board;
 	}
 
+	public setBoard( board: Chessboard ) {
+		this.pause();
+		this.board = board;
+	}
+
 	public getActivePlayer() {
 		return this.players[ this.board.getTurn() ];
 	}

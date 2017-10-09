@@ -172,10 +172,6 @@ function estimateBoardValue( board: Chessboard, playerColor: number ) {
 		return -100 * m;
 	}
 
-	if ( board.isCurrentKingChecked() ) {
-		ebv -= 0.1 * m;
-	}
-
 	for ( const f of board.figures ) {
 		if ( f.color === playerColor ) {
 			ebv += figureValueMap[ f.type ];

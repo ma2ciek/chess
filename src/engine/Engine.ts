@@ -8,6 +8,9 @@ export { default as BoardHistory } from './BoardHistory';
 export { default as SimpleAIPlayer } from './ai/SimpleAIPlayer';
 export { Move } from './utils';
 
+import * as _fenParser from './fenParser';
+export const fenParser = _fenParser;
+
 // import AIPlayer from './AIPlayer';
 import A4MovesAIPlayer from './ai/A4MoveAIPlayer';
 import SimpleAIPlayer from './ai/SimpleAIPlayer';

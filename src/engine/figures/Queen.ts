@@ -10,15 +10,17 @@ export default class Queen extends ChessFigure {
 	}
 
 	public getPossibleMoves( chessboard: Chessboard ) {
-		return [
-			...this.getMovesInDirection( chessboard, -1, -1 ),
-			...this.getMovesInDirection( chessboard, -1, 0 ),
-			...this.getMovesInDirection( chessboard, -1, 1 ),
-			...this.getMovesInDirection( chessboard, 0, -1 ),
-			...this.getMovesInDirection( chessboard, 0, 1 ),
-			...this.getMovesInDirection( chessboard, 1, -1 ),
-			...this.getMovesInDirection( chessboard, 1, 0 ),
-			...this.getMovesInDirection( chessboard, 1, 1 ),
-		];
+		return this.getMovesInDirections( chessboard, moves );
 	}
 }
+
+const moves: ReadonlyArray<ReadonlyArray<number>> = [
+	[ -1, -1 ],
+	[ -1, 0 ],
+	[ -1, 1 ],
+	[ 0, -1 ],
+	[ 0, 1 ],
+	[ 1, -1 ],
+	[ 1, 0 ],
+	[ 1, 1 ],
+];

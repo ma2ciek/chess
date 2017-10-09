@@ -120,6 +120,14 @@ body {
 	td {
 		width: 40px;
 	}
+
+	td:nth-child( 2 ) {
+		cursor: pointer;
+	}
+
+	td:nth-child( 3 ) {
+		cursor: pointer;
+	}
 }
 
 .button-section {

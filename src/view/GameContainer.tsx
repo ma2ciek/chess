@@ -3,6 +3,7 @@ import * as Engine from '../engine/Engine';
 import { getColor } from '../engine/utils';
 import Chessboard from './Chessboard';
 import MoveList from './MoveList';
+
 import Storage from './Storage';
 
 interface GamePlayers {
@@ -20,6 +21,7 @@ interface GameContainerState {
 
 export default class GameContainer extends React.Component<{}, GameContainerState> {
 	private game: Engine.Game;
+	private history: string[] = [];
 	private playersStorage = new Storage<Partial<GamePlayers>>( 'game-players' );
 
 	constructor() {
@@ -40,7 +42,15 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		const blackPlayer = new BlackPlayer();
 
 		this.game = new Engine.Game( [ whitePlayer, blackPlayer ] );
-		this.game.changeEmitter.subscribe( () => this.forceUpdate() );
+		this.history[ 0 ] = Engine.fenParser.stringify( this.game.getBoard() );
+
+		this.game.changeEmitter.subscribe( () => {
+			if ( !this.history[ this.game.getBoard().turn ] ) {
+				this.history[ this.game.getBoard().turn ] = Engine.fenParser.stringify( this.game.getBoard() );
+			}
+
+			this.forceUpdate();
+		} );
 
 		this.state = { showInfo: true, players: this.game.getPlayerNames() };
 
@@ -64,7 +74,7 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 			<div className='game-container'>
 				<div className='board-container'>
 					<Chessboard board={ board } activePlayer={ activePlayer } paused={ this.game.paused } />
-					<MoveList history={ board.history } />
+					<MoveList history={ board.history } onClick={ turn => this.setTurn( turn ) } />
 				</div>
 
 				<div className='button-section'>
@@ -141,5 +151,18 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 	private restart() {
 		this.setState( { showInfo: true } );
 		this.game.restart();
+	}
+
+	private setTurn( index: number ) {
+		this.game.pause();
+
+		const position = this.history[ index + 1 ];
+
+		const cbHistory = this.game.getBoard().history.moves.slice( 0, index + 1 );
+
+		const board = Engine.Chessboard.fromPosition( position, cbHistory );
+
+		this.game.setBoard( board );
+		// TODO
 	}
 }

@@ -1,5 +1,6 @@
 import ChessFigure from './figures/ChessFigure';
 
+// TODO: Remove Board class.
 export default class Board {
 	public static fromFigures( figures: ReadonlyArray<ChessFigure> ) {
 		const rawBoard = new Array( 64 );
@@ -18,31 +19,5 @@ export default class Board {
 			return undefined;
 		}
 		return this.rawBoard[ y * 8 + x ];
-	}
-
-	public toString() {
-		let output = '';
-
-		for ( let y = 0; y < 8; y++ ) {
-			let d = 0;
-			for ( let x = 0; x < 8; x++ ) {
-				const f = this.get( x, y );
-				if ( f ) {
-					if ( d ) {
-						output += d;
-						d = 0;
-					}
-					output += f.shortName;
-				} else {
-					d++;
-				}
-			}
-			if ( d ) {
-				output += d;
-			}
-			output += '/';
-		}
-
-		return output;
 	}
 }

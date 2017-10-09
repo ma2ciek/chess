@@ -21,7 +21,7 @@ self.onmessage = e => {
 	for ( const board1move of shuffle( board1moves ) ) {
 		// After my move.
 		const board2 = MoveController.applyMove( board, board1move );
-		const board2moves = board2.getAvailableMoves();
+		const board3s = board2.getAvailableBoards();
 		let worstValueForBoard3 = 1000;
 
 		if ( board2.isCheckMate() ) {
@@ -39,10 +39,14 @@ self.onmessage = e => {
 			continue;
 		}
 
-		for ( const board2move of shuffle( board2moves ) ) {
+		for ( const board3 of shuffle( board3s ) ) {
 			// After my move and opponent's move.
-			const board3 = MoveController.applyMove( board2, board2move );
-			const board3moves = board3.getAvailableMoves();
+
+			if ( bve.includes( board3 ) ) {
+				continue;
+			}
+
+			const board4s = board3.getAvailableBoards();
 
 			// This should be initialized with higher value than the bestValueForBoard2.
 			let bestValueForBoard4 = -1000;
@@ -57,10 +61,13 @@ self.onmessage = e => {
 				continue;
 			}
 
-			for ( const board3move of shuffle( board3moves ) ) {
+			for ( const board4 of shuffle( board4s ) ) {
+				if ( bve.includes( board4 ) ) {
+					continue;
+				}
+
 				// After my move and opponent's move.
-				const board4 = MoveController.applyMove( board3, board3move );
-				const board4moves = board4.getAvailableMoves();
+				const board5s = board4.getAvailableBoards();
 
 				// This should be initialized with higher value than the bestValueForBoard2.
 				let worstValueForBoard5 = 1000;
@@ -75,9 +82,9 @@ self.onmessage = e => {
 					continue;
 				}
 
-				for ( const board4move of shuffle( board4moves ) ) {
+				// No shuffle - speed up the last loop.
+				for ( const board5 of board5s ) {
 					// After my move and opponent's move and my second move.
-					const board5 = MoveController.applyMove( board4, board4move );
 
 					// Now is opponent's turn
 					// TODO: something is wrong with the logic here.
@@ -109,7 +116,7 @@ self.onmessage = e => {
 		bestMoveValue: bestValueForBoard2,
 	}] );
 
-	bve.clear( board.turn );
+	bve.clearAll();
 
 	console.log( Date.now() - d );
 };

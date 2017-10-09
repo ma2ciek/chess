@@ -23,6 +23,13 @@ export default class BoardValueEstimator {
 		this.positionMap[ turn - 2 ] = {};
 	}
 
+	public includes( board: Chessboard ) {
+		const boardSymbol = board.getBoardSymbol();
+		const turn = board.turn;
+
+		return this.positionMap[ turn ] && boardSymbol in this.positionMap[ turn ];
+	}
+
 	public estimateValue( board: Chessboard, playerColor: number ) {
 		const boardSymbol = board.getBoardSymbol();
 		const turn = board.turn;

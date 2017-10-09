@@ -1,6 +1,7 @@
 import { isEqual } from 'lodash';
 import Board from './Board';
 import BoardHistory from './BoardHistory';
+import * as fenParser from './fenParser';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
 import King from './figures/King';
@@ -12,6 +13,12 @@ export default class Chessboard {
 		const figures = FigureFactory.createInitialPosition();
 
 		return Chessboard.fromExistingFigures( figures, [] );
+	}
+
+	public static fromPosition( fenPosition: string, historyMoves: ReadonlyArray<Move> = [] ) {
+		const figures = fenParser.parse( fenPosition );
+
+		return Chessboard.fromExistingFigures( figures, historyMoves );
 	}
 
 	public static fromExistingFigures( figures: ReadonlyArray<ChessFigure>, historyMoves: ReadonlyArray<Move> ) {
@@ -36,15 +43,14 @@ export default class Chessboard {
 	}
 
 	// For speed up methods.
-	private _currentKing: King;
-	private _opponentKing: King;
+	private _opponentKing: King | null = null;
 	private _possibleMoves: ReadonlyArray<Move>;
 	private _availableMoves: ReadonlyArray<Move>;
 
 	constructor(
 		public readonly figures: ReadonlyArray<ChessFigure>,
-		public readonly board: Board,
-		public readonly history: BoardHistory,
+		public readonly board: Board, // TODO: make it a data structure.
+		public readonly history: BoardHistory, // TODO: make it a data structure.
 	) { }
 
 	public get turnColor() {
@@ -53,10 +59,6 @@ export default class Chessboard {
 
 	public isEmptyAt( x: number, y: number ) {
 		return !this.board.get( x, y );
-	}
-
-	public getClonedFigures(): ReadonlyArray<JSONFigure> {
-		return this.figures.map( f => f.toJSON() );
 	}
 
 	public isOpponentAt( x: number, y: number ) {
@@ -148,6 +150,42 @@ export default class Chessboard {
 	}
 
 	/**
+	 * Get new boards from current board's available moves.
+	 */
+	public getAvailableBoards(): ReadonlyArray<Chessboard> {
+		const moves = this.getPossibleMoves();
+		const boards = [];
+
+		for ( const move of moves ) {
+			const cb = MoveController.applyMove( this, move );
+
+			// We made a move, so now our king becomes opponent's king.
+			const king = cb.getOpponentKing();
+			const possibleMoves = cb.getPossibleMoves();
+
+			if ( !king ) {
+				// Because in possible moves we can drop the king.
+				continue;
+			}
+
+			for ( const possibleMove of possibleMoves ) {
+				if (
+					possibleMove.dest.x === king.x &&
+					possibleMove.dest.y === king.y &&
+					possibleMove.type === MoveTypes.CAPTURE
+				) {
+					continue;
+				}
+			}
+
+			boards.push( cb );
+		}
+
+		return boards;
+	}
+
+	/**
+	 * TODO: Remove
 	 * Takes care about check mates, draws, etc.
 	 */
 	public getAvailableMoves(): ReadonlyArray<Move> {
@@ -177,6 +215,9 @@ export default class Chessboard {
 		return this._possibleMoves = moves;
 	}
 
+	/**
+	 * TODO: Remove
+	 */
 	public isCurrentKingCheckedAfterMove( move: Move ): boolean {
 		// We virtually move king to the target position and check whether some figure can move to that place.
 
@@ -201,35 +242,34 @@ export default class Chessboard {
 		} );
 	}
 
-	public isCurrentKingChecked() {
-		const king = this.getCurrentKing();
-		const possibleMoves = this.getPossibleMoves();
-
-		return possibleMoves.some( possibleMove => {
-			return (
-				possibleMove.dest.x === king.x &&
-				possibleMove.dest.y === king.y &&
-				possibleMove.type === MoveTypes.CAPTURE
-			);
-		} );
-	}
-
 	public getBoardSymbol() {
-		return this.history.moves.length + this.board.toString();
+		let output = this.turn.toString();
+
+		for ( let y = 0; y < 8; y++ ) {
+			let d = 0;
+			for ( let x = 0; x < 8; x++ ) {
+				const f = this.board.rawBoard[ y * 8 + x ];
+				if ( f ) {
+					if ( d ) {
+						output += d;
+						d = 0;
+					}
+					output += f.shortName;
+				} else {
+					d++;
+				}
+			}
+			if ( d ) {
+				output += d;
+			}
+			output += '/';
+		}
+
+		return output;
 	}
 
 	public get turn() {
 		return this.history.moves.length;
-	}
-
-	private getCurrentKing() {
-		if ( this._currentKing ) {
-			return this._currentKing;
-		}
-
-		return this._currentKing = this.figures.find( figure => {
-			return figure.type === FigureTypes.KING && figure.color === this.turnColor;
-		} ) as King;
 	}
 
 	private getOpponentKing() {
