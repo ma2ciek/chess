@@ -14,7 +14,7 @@ const entry = {
 
 for ( const workerPath of workers ) {
 	const workerName = path.parse( workerPath ).name;
-	entry[ workerName ] = path.join( __dirname, workerPath );
+	entry[ 'workers/' + workerName ] = path.join( __dirname, workerPath );
 }
 
 module.exports = {
@@ -44,7 +44,9 @@ module.exports = {
 			test: /\.(png|jpeg|ttf)$/,
 			loader: 'file-loader',
 			options: {
-				publicPath: 'public' + path.sep,
+				name: '[hash].[ext]',
+				publicPath: '/public/',
+				useRelativePath: false
 			}
 		} ],
 	},

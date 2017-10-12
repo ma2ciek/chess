@@ -4,7 +4,7 @@ import getMoveSymbol from '../engine/getMoveSymbol';
 
 interface MoveListProps {
 	history: BoardHistory;
-	onClick: ( moveIndex: number ) => void;
+	onClick?: ( moveIndex: number ) => void;
 }
 
 export default class MoveList extends React.Component<MoveListProps> {
@@ -21,7 +21,7 @@ export default class MoveList extends React.Component<MoveListProps> {
 	}
 
 	private getMoveArr() {
-		const { history, onClick } = this.props;
+		const { history, onClick = () => { /**/ } } = this.props;
 
 		const moves = history.moves;
 		const movesArr: JSX.Element[] = [];

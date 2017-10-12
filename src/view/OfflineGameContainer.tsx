@@ -3,7 +3,6 @@ import * as Engine from '../engine/Engine';
 import { getColor } from '../engine/utils';
 import Chessboard from './Chessboard';
 import MoveList from './MoveList';
-
 import Storage from './Storage';
 
 interface GamePlayers {
@@ -11,7 +10,7 @@ interface GamePlayers {
 	black: string;
 }
 
-interface GameContainerState {
+interface OfflineGameContainerState {
 	showInfo: boolean;
 	players: {
 		white: string;
@@ -19,7 +18,7 @@ interface GameContainerState {
 	};
 }
 
-export default class GameContainer extends React.Component<{}, GameContainerState> {
+export default class OfflineGameContainer extends React.Component<{}, OfflineGameContainerState> {
 	private game: Engine.Game;
 	private history: string[] = [];
 	private playersStorage = new Storage<Partial<GamePlayers>>( 'game-players' );

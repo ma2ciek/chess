@@ -2,9 +2,9 @@ import './style.scss';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import GameContainer from './view/GameContainer';
+import Router from './Router';
 
 ReactDOM.render(
-	<GameContainer />,
+	<Router />,
 	document.querySelector( '#root' ),
 );
