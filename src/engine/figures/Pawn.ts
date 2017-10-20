@@ -30,17 +30,9 @@ export default class Pawn extends ChessFigure {
 				}
 			}
 		} else {
-			if ( chessboard.isEmptyAt( this.x, this.y + dir ) ) {
-				moves.push( {
-					dest: { x: this.x, y: this.y + dir },
-					type: MoveTypes.NORMAL,
-					figure: this,
-				} );
-			}
-
 			const lastMove = chessboard.getLastMove();
 
-			if ( lastMove.type === MoveTypes.LONG_MOVE && lastMove.dest.y === this.y ) {
+			if ( lastMove && lastMove.type === MoveTypes.LONG_MOVE && lastMove.dest.y === this.y ) {
 				if ( lastMove.dest.x === this.x - 1 ) {
 					moves.push( {
 						dest: { x: this.x - 1, y: this.y + dir },
@@ -82,6 +74,14 @@ export default class Pawn extends ChessFigure {
 				}
 
 				return moves;
+			}
+
+			if ( chessboard.isEmptyAt( this.x, this.y + dir ) ) {
+				moves.push( {
+					dest: { x: this.x, y: this.y + dir },
+					type: MoveTypes.NORMAL,
+					figure: this,
+				} );
 			}
 		}
 
