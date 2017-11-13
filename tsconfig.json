@@ -1,10 +1,8 @@
 {
     "compilerOptions": {
         "jsx": "react",
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,        
-        "strictNullChecks": true,
+		"strict": true,
+        "noUnusedLocals": true,    
         "target": "es6",
         "moduleResolution": "node",
         "lib": [
@@ -12,6 +10,6 @@
             "es6",
             "es7",
             "dom"
-        ]
+		]
     }
 }

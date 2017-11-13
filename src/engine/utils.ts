@@ -15,7 +15,7 @@ export type Move = Readonly<{
 }>;
 
 // TODO: Convert move types to this enum.
-export enum MoveTypes {
+export const enum MoveTypes {
 	LONG_MOVE,
 	NORMAL,
 	EN_PASSANT,
@@ -28,7 +28,7 @@ export enum MoveTypes {
 }
 
 // TODO: Use this enum everywhere.
-export enum Color {
+export const enum Color {
 	White,
 	Black,
 }
