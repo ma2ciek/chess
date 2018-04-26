@@ -4,18 +4,18 @@
 Install:
 
 ```bash
-npm install
+pnpm install
 ```
 
 
 Compile, run and watch for changes:
 
 ```bash
-npm start
+pnpm start
 ```
 
 Test:
 
 ```bash
-npm test
+pnpm test
 ```
