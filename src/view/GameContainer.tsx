@@ -24,8 +24,8 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 	private history: string[] = [];
 	private playersStorage = new Storage<Partial<GamePlayers>>( 'game-players' );
 
-	constructor() {
-		super();
+	constructor( props: {} ) {
+		super( props );
 
 		const firstPlayerName = Object.keys( Engine.Players )[ 0 ];
 

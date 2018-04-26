@@ -44,8 +44,8 @@ export default class Chessboard {
 
 	// For speed up methods.
 	private _opponentKing: King | null = null;
-	private _possibleMoves: ReadonlyArray<Move>;
-	private _availableMoves: ReadonlyArray<Move>;
+	private _possibleMoves?: ReadonlyArray<Move>;
+	private _availableMoves?: ReadonlyArray<Move>;
 
 	constructor(
 		public readonly figures: ReadonlyArray<ChessFigure>,

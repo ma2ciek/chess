@@ -6,7 +6,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 	protected abstract readonly workerName: string;
 
 	private readonly numberOfThreads = window.navigator.hardwareConcurrency || 4;
-	private workers: ReadonlyArray<Worker>;
+	private workers?: ReadonlyArray<Worker>;
 
 	public destroy() {
 		if ( this.workers ) {
@@ -42,7 +42,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 		const outputs = await Promise.all(
 			moves.map( ( movesForThread, workerIndex ) => {
 				return new Promise<MoveInfo>( res => {
-					const worker = this.workers[ workerIndex ];
+					const worker = this.workers![ workerIndex ];
 
 					worker.postMessage( [
 						board.figures.map( f => f.toJSON() ),

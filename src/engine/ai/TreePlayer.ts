@@ -13,8 +13,8 @@ type MoveNode = Node<{
 }>;
 
 export default class TreePlayer extends AIPlayer {
-	private root: MoveNode;
-	private color: number;
+	private root?: MoveNode;
+	private color?: number;
 
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
 		this.color = board.getTurn();
@@ -27,7 +27,7 @@ export default class TreePlayer extends AIPlayer {
 		let bestMoveValue = 0;
 		let bestMove = null;
 
-		for ( const child of this.root.children ) {
+		for ( const child of this.root!.children ) {
 			if ( child.data.count > maxCount ) {
 				maxCount = child.data.count;
 				bestMoveValue = child.data.value;
@@ -35,7 +35,7 @@ export default class TreePlayer extends AIPlayer {
 			}
 		}
 		return {
-			counted: this.root.data.count,
+			counted: this.root!.data.count,
 			bestMove,
 			bestMoveValue,
 		};
@@ -55,8 +55,6 @@ export default class TreePlayer extends AIPlayer {
 		const { node, board: newBoard } = this.pickNode( board );
 
 		this.handleNewNode( newBoard, node );
-
-		debugger;
 	}
 
 	private handleNewNode( board: Chessboard, node: MoveNode ) {
@@ -65,7 +63,7 @@ export default class TreePlayer extends AIPlayer {
 
 		for ( const move of moves ) {
 			const nextBoard = MoveController.applyMove( board, move );
-			const value = estimateBoardValue( nextBoard, this.color );
+			const value = estimateBoardValue( nextBoard, this.color! );
 
 			node.children.push(
 				new Node(
@@ -98,7 +96,7 @@ export default class TreePlayer extends AIPlayer {
 	}
 
 	private pickNode( board: Chessboard ) {
-		let node = this.root;
+		let node = this.root!;
 		const turn = board.getTurn();
 
 		while ( true ) {
