@@ -1,6 +1,6 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { FigureTypes, Move } from '../utils';
+import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import { figureValueMap } from './BoardValueEstimator';
 import Node from './Node';
@@ -10,100 +10,108 @@ type MoveNode = Node<{
 	value: number
 	count: number
 	move: Move | null;
+	visited: boolean;
 }>;
 
+// TODO: Each move should trigger new instance.
 export default class TreePlayer extends AIPlayer {
-	private root?: MoveNode;
-	private color?: number;
+	// protected methods that can be easily override in tests.
+	protected estimateBoardValue = estimateBoardValue;
+	protected applyFunctionDuringPeriod = applyFunctionDuringPeriod;
+
+	// TODO: Use some salt.
+	protected mathRandom = Math.random;
+
+	protected root?: MoveNode;
+	protected color?: 0 | 1;
 
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
 		this.color = board.getTurn();
 
 		this.createRoot( board );
 
-		applyFunctionDuringPeriod( () => this.applyRandomMoves( board ), 1000 );
+		this.applyFunctionDuringPeriod( () => this.applyRandomMove( board ), 3000 );
 
 		let maxCount = 0;
-		let bestMoveValue = 0;
 		let bestMove = null;
 
 		for ( const child of this.root!.children ) {
 			if ( child.data.count > maxCount ) {
 				maxCount = child.data.count;
-				bestMoveValue = child.data.value;
-				bestMove = child.data.move;
+				bestMove = child;
 			}
 		}
 		return {
 			counted: this.root!.data.count,
-			bestMove,
-			bestMoveValue,
-		};
+			bestMove: bestMove!.data.move,
+			bestMoveValue: bestMove!.data.value,
+			root: JSON.stringify( this.root ),
+		} as any;
 	}
 
-	private createRoot( board: Chessboard ) {
+	protected createRoot( board: Chessboard ) {
 		this.root = new Node( null, {
 			value: 0,
 			count: 0,
 			move: null,
+			visited: true,
 		} );
 
-		this.handleNewNode( board, this.root );
+		this.createSubNodes( board, this.root );
 	}
 
-	private applyRandomMoves( board: Chessboard ) {
-		const { node, board: newBoard } = this.pickNode( board );
+	protected applyRandomMove( board: Chessboard ) {
+		const { node, board: newBoard } = this.pickNotVisitedRandomNode( board );
 
-		this.handleNewNode( newBoard, node );
+		this.applyMove( newBoard, node );
 	}
 
-	private handleNewNode( board: Chessboard, node: MoveNode ) {
+	protected applyMove( board: Chessboard, node: MoveNode ) {
+		// Mark node as visited.
+		node.data.visited = true;
+
+		// Estimate value for given node.
+		const value = this.estimateBoardValue( board, this.color as 0 | 1 );
+
+		// Backward propagation.
+		let newNode: MoveNode | null = node;
+		while ( newNode ) {
+			newNode.data.count++;
+			newNode.data.value += value;
+
+			newNode = newNode.parent;
+		}
+
+		// Create children for the given node.
+		this.createSubNodes( board, node );
+	}
+
+	protected createSubNodes( board: Chessboard, node: MoveNode ) {
 		const moves = board.getAvailableMoves();
-		let valueSum = 0;
 
 		for ( const move of moves ) {
-			const nextBoard = MoveController.applyMove( board, move );
-			const value = estimateBoardValue( nextBoard, this.color! );
-
 			node.children.push(
 				new Node(
 					node,
 					{
-						value,
-						count: 1,
+						value: 0,
+						count: 0,
 						move,
+						visited: false,
 					},
 				),
 			);
-
-			valueSum += value;
-		}
-
-		node.data.value += valueSum;
-		node.data.count += moves.length;
-
-		let currentNode = node as MoveNode | null;
-		while ( true ) {
-			currentNode = ( currentNode as MoveNode ).parent;
-
-			if ( currentNode ) {
-				currentNode.data.value += valueSum;
-				currentNode.data.count += moves.length;
-			} else {
-				break;
-			}
 		}
 	}
 
-	private pickNode( board: Chessboard ) {
+	protected pickNotVisitedRandomNode( board: Chessboard ) {
 		let node = this.root!;
-		const turn = board.getTurn();
 
 		while ( true ) {
-			node = this.pickNodeFromCurrentNode( node, turn );
+			node = this.pickChildFromGivenNode( board, node );
 			board = MoveController.applyMove( board, node.data.move as Move );
 
-			if ( node.children.length === 0 ) {
+			if ( !node.data.visited ) {
 				break;
 			}
 		}
@@ -111,87 +119,63 @@ export default class TreePlayer extends AIPlayer {
 		return { node, board };
 	}
 
-	private pickNodeFromCurrentNode( node: MoveNode, turn: number ) {
-		// TODO: Cache values.
-		const children = node.children;
+	protected pickChildFromGivenNode( board: Chessboard, node: MoveNode ) {
+		// Get always positive values.
+		// Each value represents the chance of hitting the corresponding branch.
+		const values = node.children.map( child => {
+			const midValue = node.data.value / ( node.data.count || 0.5 );
 
-		const isTurnOfMyMove = !!( node.data.move ) && ( node.data.move as Move ).figure.color === turn;
+			return ( midValue + 125 ) / 125;
+		} );
 
-		let valueSum = 0;
+		const sum = getSum( values );
 
-		const arr = [];
-
-		for ( const childNode of children ) {
-			const { value, count } = childNode.data;
-
-			const positiveValue = isTurnOfMyMove ?
-				value / count + 100 :
-				-value / count + 100;
-
-			valueSum += positiveValue;
-
-			arr.push( {
-				positiveValue,
-				node: childNode,
-			} );
-		}
-
-		if ( valueSum === 0 ) {
-			return arr[ 0 ].node;
-		}
-
-		if ( valueSum < 0 || valueSum > arr.length * 200 ) {
-			throw new Error( `Value sum is not correct: ${ valueSum } for arr.length: ${ arr.length }.` );
-		}
-
-		let random = Math.random();
-		for ( const item of arr ) {
-			random -= item.positiveValue / valueSum;
+		let random = this.mathRandom();
+		for ( let i = 0; i < values.length; i++ ) {
+			random -= values[ i ] / sum;
 
 			if ( random <= 0 ) {
-				return item.node;
+				return node.children[ i ];
 			}
 		}
 
-		throw new Error( 'Code should not reach that place.' );
+		throw new Error( 'End of moves - not implemented yet' );
 	}
 }
 
-function estimateBoardValue( board: Chessboard, playerColor: number ) {
-	const m = playerColor === 0 ? 1 : -1;
-	let ebv = 0;
+function getSum( arr: number[] ) {
+	let sum = 0;
 
-	// TODO: optimizations
+	for ( const value of arr ) {
+		sum += value;
+	}
+
+	return sum;
+}
+
+/**
+ * Estimates board value for the given player.
+ *
+ * TODO: Check for isDraw() and isCheckMate() optimizations.
+ */
+function estimateBoardValue( board: Chessboard, playerColor: number ) {
 	if ( board.isDraw() ) {
 		return 0;
 	}
 
 	if ( board.isCheckMate() ) {
-		return -100 * m;
+		return -100;
 	}
 
-	for ( const f of board.figures ) {
-		if ( f.color === playerColor ) {
-			ebv += figureValueMap[ f.type ];
+	let ebv = 0;
+
+	for ( const figure of board.figures ) {
+		if ( figure.color === playerColor ) {
+			ebv += figureValueMap[ figure.type ];
 		} else {
-			ebv -= figureValueMap[ f.type ];
+			ebv -= figureValueMap[ figure.type ];
 		}
 	}
-
-	const lastMove = board.history.getLastMove();
-
-	// TODO: castles instead of moving king
-	if ( lastMove.figure.type === FigureTypes.KING ) {
-		ebv -= 0.3 * m;
-	}
-
-	ebv += board.getPossibleMoves().length / 100 * m;
-
-	// if ( DEVELOPMENT ) {
-	if ( ebv > 100 || ebv < -100 ) {
-		throw new Error( `Estimated board value is not correct: ${ ebv }.` );
-	}
-	// }
 
 	return ebv;
 }

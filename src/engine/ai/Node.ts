@@ -8,4 +8,11 @@ export default class Node<T extends object> {
 		this.data = data;
 		this.children = [];
 	}
+
+	public toJSON(): {} {
+		return {
+			data: this.data,
+			children: this.children.map( c => c.toJSON() ),
+		};
+	}
 }

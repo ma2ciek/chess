@@ -8,7 +8,7 @@ interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
 	selected: boolean;
 }
 
-export default class Field extends React.Component<FieldProps, {}> {
+export default class Field extends React.Component<FieldProps> {
 	public render() {
 		const { x, y, tileSize, highlighted, selected, ...props } = this.props;
 		const odd = ( x + y ) % 2 === 1;

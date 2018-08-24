@@ -26,7 +26,7 @@ export default class BoardHistory {
 	/**
 	 * White equals 0.
 	 */
-	public getTurn() {
-		return this.moves.length % 2;
+	public getTurn(): 0 | 1 {
+		return this.moves.length % 2 as 0 | 1;
 	}
 }

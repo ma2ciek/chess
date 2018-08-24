@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "scripts": {
     "test": "./node_modules/.bin/mocha --require ts-node/register 'test/**/*.ts'",
+    "test:watch": "./node_modules/.bin/mocha --require ts-node/register 'test/**/*.ts' --watch",
     "start": "./node_modules/.bin/webpack-cli --watch --mode development & node server.js",
-    "count-loc": "./node_modules/.bin/cloc src test"
+	"production": "./node_modules/.bin/webpack-cli --watch --mode production & node server.js"
   },
   "engines": {
     "npm": "^4.6.1",

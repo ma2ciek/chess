@@ -74,6 +74,9 @@ export default class Chessboard {
 		return this.history.getLastMove();
 	}
 
+	/**
+	 * White equals 0.
+	 */
 	public getTurn() {
 		return this.history.getTurn();
 	}

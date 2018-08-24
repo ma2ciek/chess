@@ -7,7 +7,7 @@ interface FigureProps extends React.HTMLAttributes<HTMLDivElement> {
 	tileSize: number;
 }
 
-export default class Figure extends React.Component<FigureProps, {}> {
+export default class Figure extends React.Component<FigureProps> {
 	public render() {
 		const { figure, tileSize, ...props } = this.props;
 		const color = figure.color === 0 ? 'white' : 'black';

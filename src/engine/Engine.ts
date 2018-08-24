@@ -15,7 +15,7 @@ export const fenParser = _fenParser;
 import A4MovesAIPlayer from './ai/A4MoveAIPlayer';
 import SimpleAIPlayer from './ai/SimpleAIPlayer';
 import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
-// import TreePlayer from './ai/TreePlayer';
+import TreePlayer from './ai/TreePlayer';
 import HumanPlayer from './HumanPlayer';
 
 import { PlayerConstructor } from './IPlayer';
@@ -29,7 +29,7 @@ export const Players: PlayerConstructorDictionary = {};
 const PlayerConstructors = [
 	HumanPlayer,
 	A4MovesAIPlayer,
-	// TreePlayer,
+	TreePlayer,
 	SimpleAIPlayer,
 	SimpleAIPlayerMultiThread,
 ];
