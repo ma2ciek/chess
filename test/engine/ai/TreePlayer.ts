@@ -22,7 +22,7 @@ describe( 'TreePlayer', () => {
 		expect( treePlayer ).to.be.an( 'object' );
 	} );
 
-	describe.only( '_move', () => {
+	describe( '_move', () => {
 		let treePlayer: FakeTreePlayer;
 
 		beforeEach( () => {

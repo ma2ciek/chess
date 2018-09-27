@@ -135,7 +135,7 @@ export default class King extends ChessFigure {
 	}
 
 	private isRookMoved( chessboard: Chessboard, row: number ) {
-		chessboard.history.moves.some( m => {
+		return chessboard.history.moves.some( m => {
 			return (
 				m.figure.type === FigureTypes.ROOK &&
 				m.figure.color === this.color &&

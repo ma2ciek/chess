@@ -48,7 +48,7 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 
 		return (
 			<div className='chessboard' style={ style }>
-				{ times( 64 ).map( ( figure, index ) => {
+				{ times( 64 ).map( ( _, index ) => {
 					const x = index % 8;
 					const y = Math.floor( index / 8 );
 
