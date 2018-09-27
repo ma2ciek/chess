@@ -26,7 +26,7 @@ export default class TreePlayer extends AIPlayer {
 	protected color?: 0 | 1;
 
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
-		this.color = board.getTurn();
+		this.color = board.turnColor;
 
 		this.createRoot( board );
 

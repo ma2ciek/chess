@@ -3,41 +3,62 @@ import { FigureTypes } from '../utils';
 
 export const figureValueMap: { [ name: number ]: number } = {
 	[ FigureTypes.KING ]: 1000, // Can't be removed from board.
-	[ FigureTypes.QUEEN ] : 9,
+	[ FigureTypes.QUEEN ]: 9,
 	[ FigureTypes.PAWN ]: 1,
 	[ FigureTypes.ROOK ]: 5,
 	[ FigureTypes.BISHOP ]: 3,
 	[ FigureTypes.KNIGHT ]: 3,
 };
 
+interface PositionMap {
+	[ key: string ]: number
+}
+
 export default class BoardValueEstimator {
-	private positionMap: Array<{ [ key: string ]: number }> = [];
+	/**
+	 * A <board position, value> map.
+	 */
+	private positionMaps: { [ key: number ]: PositionMap } = {};
 
 	public clearAll() {
-		this.positionMap = [];
+		this.positionMaps = {};
 	}
 
+	/**
+	 * Clears position maps up to the specified turn.
+	 * 
+	 * @param turn 
+	 */
 	public clear( turn: number ) {
-		this.positionMap[ turn ] = {};
-		this.positionMap[ turn - 1 ] = {};
-		this.positionMap[ turn - 2 ] = {};
+		this.positionMaps[ turn ] = {};
+
+		while ( this.positionMaps[ --turn ] && Object.keys( this.positionMaps[ --turn ] ).length ) {
+			this.positionMaps[ turn ] = {};
+		}
 	}
 
 	public includes( board: Chessboard ) {
-		const boardSymbol = board.getBoardSymbol();
+		const boardSymbol = board.getBoardPositionId();
 		const turn = board.turn;
 
-		return this.positionMap[ turn ] && boardSymbol in this.positionMap[ turn ];
+		return turn in this.positionMaps && boardSymbol in this.positionMaps[ turn ];
 	}
 
-	public estimateValue( board: Chessboard, playerColor: number ) {
-		const boardSymbol = board.getBoardSymbol();
+	/**
+	 * Estimates board value position for the current player.
+	 * 
+	 * @param board
+	 */
+	public estimateValue( board: Chessboard ) {
+		const boardSymbol = board.getBoardPositionId();
 		const turn = board.turn;
+		const playerColor = board.turnColor;
 
-		if ( !this.positionMap[ turn ] ) {
-			this.positionMap[ turn ] = {};
+		if ( !this.positionMaps[ turn ] ) {
+			this.positionMaps[ turn ] = {};
 		}
-		const storedValue = this.positionMap[ turn ][ boardSymbol ];
+
+		const storedValue = this.positionMaps[ turn ][ boardSymbol ];
 
 		if ( storedValue ) {
 			return storedValue;
@@ -46,36 +67,40 @@ export default class BoardValueEstimator {
 		const lastMove = board.history.getLastMove();
 		let sum = 0;
 
-		// TODO: optimization
-		// if ( board.isDraw() ) {
-		// 	return 0;
-		// }
+		// TODO: optimization - draws, checkmates, etc.
 
-		// if ( board.isCheckMate() ) {
-		// 	return -1000;
-		// }
-
-		// if ( board.isCurrentKingChecked() ) {
-		// 	sum -= 0.1;
-		// }
+		let myFigures = 0;
+		let oppFigures = 0;
 
 		for ( const f of board.figures ) {
 			if ( f.color === playerColor ) {
 				sum += figureValueMap[ f.type ];
+				myFigures++;
 			} else {
 				sum -= figureValueMap[ f.type ];
+				oppFigures++;
 			}
 		}
 
-		if ( lastMove.figure.type === FigureTypes.KING && lastMove.figure.color === playerColor ) {
+		// Do not move king and rocks at the start positions
+		if ( lastMove && lastMove.figure.type === FigureTypes.KING ) {
 			sum -= 0.3;
+		}
+
+		// Endgame.
+		if ( oppFigures < 10 ) {
+			// Move opponent king to the side.
+			const king = board.getOpponentKing();
+			const additional = Math.abs( king.x - 4 ) + Math.abs( king.y - 4 );
+
+			sum += additional / ( myFigures + oppFigures );
 		}
 
 		sum += Math.random() / 2 - 0.25;
 
 		sum += board.getPossibleMoves().length / 100;
 
-		this.positionMap[ turn ][ boardSymbol ] = sum;
+		this.positionMaps[ turn ][ boardSymbol ] = sum;
 
 		return sum;
 	}

@@ -53,8 +53,16 @@ export default class Chessboard {
 		public readonly history: BoardHistory, // TODO: make it a data structure.
 	) { }
 
-	public get turnColor() {
-		return this.history.getTurn() % 2;
+	public get turnColor(): 0 | 1 {
+		return this.history.getTurn() % 2 as 0 | 1;
+	}
+
+	public get turn() {
+		return this.history.moves.length;
+	}
+
+	public getTurnDir() {
+		return this.turnColor === Color.White ? 1 : -1;
 	}
 
 	public isEmptyAt( x: number, y: number ) {
@@ -72,21 +80,6 @@ export default class Chessboard {
 
 	public getLastMove() {
 		return this.history.getLastMove();
-	}
-
-	/**
-	 * White equals 0.
-	 */
-	public getTurn() {
-		return this.history.getTurn();
-	}
-
-	public getTurnDir() {
-		return this.getTurn() === Color.White ? 1 : -1;
-	}
-
-	public clone() {
-		throw new Error( 'not implemented' );
 	}
 
 	public isGameEnd() {
@@ -245,19 +238,22 @@ export default class Chessboard {
 		} );
 	}
 
-	public getBoardSymbol() {
+	/**
+	 * Returns a board id for the current position.
+	 */
+	public getBoardPositionId() {
 		let output = this.turn.toString();
 
 		for ( let y = 0; y < 8; y++ ) {
 			let d = 0;
 			for ( let x = 0; x < 8; x++ ) {
-				const f = this.board.rawBoard[ y * 8 + x ];
-				if ( f ) {
+				const figure = this.board.rawBoard[ y * 8 + x ];
+				if ( figure ) {
 					if ( d ) {
 						output += d;
 						d = 0;
 					}
-					output += f.shortName;
+					output += figure.shortName;
 				} else {
 					d++;
 				}
@@ -271,11 +267,7 @@ export default class Chessboard {
 		return output;
 	}
 
-	public get turn() {
-		return this.history.moves.length;
-	}
-
-	private getOpponentKing() {
+	public getOpponentKing() {
 		if ( this._opponentKing ) {
 			return this._opponentKing;
 		}

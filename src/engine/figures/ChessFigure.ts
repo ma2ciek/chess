@@ -8,7 +8,12 @@ abstract class ChessFigure {
 	constructor(
 		public readonly x: number,
 		public readonly y: number,
-		public readonly color: number,
+
+		/**
+		 * White -> 0;
+		 * Black -> 1;
+		 * */
+		public readonly color: 0 | 1,
 	) { }
 
 	public toString() {

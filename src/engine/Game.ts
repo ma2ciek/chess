@@ -78,7 +78,7 @@ export default class Game {
 	}
 
 	public getActivePlayer() {
-		return this.players[ this.board.getTurn() ];
+		return this.players[ this.board.turnColor ];
 	}
 
 	public start() {

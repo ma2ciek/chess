@@ -79,7 +79,7 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 			return;
 		}
 
-		if ( figure.color !== this.props.board.getTurn() ) {
+		if ( figure.color !== this.props.board.turnColor ) {
 			this.handleClickedField( figure.x, figure.y );
 			return;
 		}

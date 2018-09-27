@@ -63,10 +63,7 @@ export default class SimpleAIPlayer extends AIPlayer {
 					// After my move and opponent's move and my second move.
 					const board4 = MoveController.applyMove( board3, board3move );
 
-					// Now is opponent's turn
-					// TODO: something is wrong with the logic here.
-
-					const board4value = this.bve.estimateValue( board4, board.turnColor );
+					const board4value = -this.bve.estimateValue( board4 );
 					bestValueForBoard4 = Math.max( board4value, bestValueForBoard4 );
 					counted++;
 				}

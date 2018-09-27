@@ -89,7 +89,7 @@ self.onmessage = e => {
 					// Now is opponent's turn
 					// TODO: something is wrong with the logic here.
 
-					const board5value = bve.estimateValue( board5, board.turnColor );
+					const board5value = bve.estimateValue( board5 );
 					worstValueForBoard5 = Math.min( board5value, worstValueForBoard5 );
 					counted++;
 				}

@@ -22,7 +22,7 @@ export default abstract class AIPlayer implements IPlayer {
 		const timeDiff = Date.now() - d;
 
 		console.log(
-			board.getTurn() === 0 ? 'White' : 'Black',
+			board.turnColor === 0 ? 'White' : 'Black',
 			this.constructor.name,
 			counted,
 			Math.round( counted / timeDiff * 1000 ) + ' moves/s',

@@ -61,7 +61,7 @@ self.onmessage = e => {
 				// Now is opponent's turn
 				// TODO: something is wrong with the logic here.
 
-				const board4value = bve.estimateValue( board4, board.turnColor );
+				const board4value = bve.estimateValue( board4 );
 				bestValueForBoard4 = Math.max( board4value, bestValueForBoard4 );
 				counted++;
 			}
