@@ -5,14 +5,19 @@ import Knight from './figures/Knight';
 import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
+// import { assert } from './ai/utils';
 
-export function parse( position: string ): ReadonlyArray<Bishop | Pawn | King | Queen | Rook | Knight> {
+type Figures = ReadonlyArray<Bishop | Pawn | King | Queen | Rook | Knight>;
+
+export function parse( fenPosition: string ): { figures: Figures, turnColor: 0 | 1, castling: number[], enPassantMove: { x: number, y: number } | null, halfMoveClock: number, fullMoveNumber: number } {
 	let x = 0;
 	let y = 7;
+	let i = 0;
 	const figures: Array<Bishop | King | Knight | Pawn | Queen | Rook> = [];
 
-	for ( let i = 0; i < position.length; i++ ) {
-		const char = position[ i ];
+	outer:
+	for ( ; i < fenPosition.length; i++ ) {
+		const char = fenPosition[ i ];
 		switch ( char ) {
 			case '/':
 				if ( x !== 8 || y < 0 ) {
@@ -84,6 +89,9 @@ export function parse( position: string ): ReadonlyArray<Bishop | Pawn | King | 
 				figures.push( new Pawn( x, y, 0 ) );
 				break;
 
+			case ' ':
+				break outer;
+
 			default:
 				throw new Error( `Parse error, unexpected char: ${ char }.` );
 		}
@@ -97,7 +105,64 @@ export function parse( position: string ): ReadonlyArray<Bishop | Pawn | King | 
 		x++;
 	}
 
-	return figures;
+	const turnColor: 0 | 1 = fenPosition[ ++i ] === 'w' ? 0 : 1;
+	i++;
+
+	const castling = [ 0, 0 ];
+
+	outer:
+	while ( true ) {
+		const char = fenPosition[ ++i ];
+
+		switch ( char ) {
+			case ' ':
+			case '-':
+				break outer;
+
+			case 'K':
+				castling[ 0 ] |= 1;
+				break;
+
+			case 'Q':
+				castling[ 0 ] |= 2;
+				break;
+
+			case 'k':
+				castling[ 1 ] |= 1;
+				break;
+
+			case 'q':
+				castling[ 1 ] |= 2;
+				break;
+		}
+	}
+
+	i++;
+	let enPassantMove: null | { x: number, y: number } = null;
+	if ( fenPosition[ i ] !== '-' ) {
+		enPassantMove = {
+			x: Number( fenPosition[ i ] ),
+			y: fenPosition[ ++i ].charCodeAt( 0 ) - 97
+		};
+	}
+	i++;
+
+	let text = '';
+	while ( fenPosition[ ++i ] != ' ' ) {
+		text += fenPosition[ i ];
+	}
+
+	const halfMoveClock = Number( text );
+
+	text = '';
+
+	while ( ++i < fenPosition.length ) {
+		text += fenPosition[ i ];
+	}
+
+	const fullMoveNumber = Number( text );
+
+	return { figures, turnColor, castling, enPassantMove, halfMoveClock, fullMoveNumber };
 }
 
 export function stringify( board: Chessboard ) {
@@ -120,7 +185,18 @@ export function stringify( board: Chessboard ) {
 		if ( d ) {
 			output += d;
 		}
-		output += '/';
+
+		if ( y > 0 ) {
+			output += '/';
+		}
+	}
+
+	output += ' ';
+
+	if ( board.turnColor === 0 ) {
+		output += 'w';
+	} else {
+		output += 'b';
 	}
 
 	return output;

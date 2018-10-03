@@ -6,7 +6,7 @@ import King from './figures/King';
 import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
-import { Color, Move, MoveTypes } from './utils';
+import { Color, Move, MoveTypes, FigureTypes } from './utils';
 
 /**
  * TODO: UndoMoveController
@@ -18,10 +18,15 @@ export default class MoveController {
 		const movedFigure = chessboard.board.get( move.figure.x, move.figure.y ) as ChessFigure;
 		const rawBoard = chessboard.board.rawBoard.slice( 0 );
 		let newFigures: ReadonlyArray<ChessFigure>;
+		const castles = chessboard.availableCastles.slice( 0 );
+		let enPassant: null | { x: number, y: number } = null;
 
 		switch ( move.type ) {
-			case MoveTypes.NORMAL:
-			case MoveTypes.LONG_MOVE: {
+			case MoveTypes.LONG_MOVE:
+			case MoveTypes.NORMAL: {
+				if ( MoveTypes.LONG_MOVE )
+					enPassant = { x: move.dest.x, y: ( move.dest.y + move.figure.y ) / 2 };
+
 				const figure = FigureFactory.createFigureFromJSON( {
 					x: move.dest.x,
 					y: move.dest.y,
@@ -31,6 +36,11 @@ export default class MoveController {
 				newFigures = originalFigures.filter( f => f !== movedFigure ).concat( figure );
 				rawBoard[ move.dest.y * 8 + move.dest.x ] = figure;
 				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
+
+				if ( figure.type === FigureTypes.KING ) {
+					castles[ movedFigure.color ] = 0;
+				}
+				// TODO - rook and castling checks.
 
 				break;
 			}
@@ -47,6 +57,11 @@ export default class MoveController {
 
 				rawBoard[ move.dest.y * 8 + move.dest.x ] = figure;
 				rawBoard[ movedFigure.y * 8 + movedFigure.x ] = undefined;
+
+				if ( figure.type === FigureTypes.KING ) {
+					castles[ movedFigure.color ] = 0;
+				}
+				// TODO - rook and castling checks.
 
 				break;
 			}
@@ -128,23 +143,32 @@ export default class MoveController {
 			}
 
 			default:
-				newFigures = originalFigures;
-				console.warn( 'Move type can\'t be handled' );
+				throw new Error( `Move type (${ move.type }) cannot be handled` );
 		}
 
-		return Chessboard.fromExistingFiguresAndBoard( newFigures, new Board( rawBoard ), chessboard.history.moves.concat( move ) );
+		let turnColor = ( chessboard.turnColor + 1 & 1 ) as 0 | 1;
+
+		return new Chessboard(
+			newFigures,
+			new Board( rawBoard ),
+			turnColor,
+			chessboard.halfMoveClock,
+			castles,
+			enPassant
+		);
 	}
 
 	// For easy checkmate checks.
 	public static applyFakeMove( chessboard: Chessboard ) {
-		// TODO: Assert whether this approach is correct.
-		const fakeMove: Move = {
-			type: MoveTypes.FAKE,
-			dest: { x: 0, y: 0 },
-			figure: chessboard.figures.find( f => f.color === chessboard.turnColor ) as ChessFigure,
-		};
 		const originalFigures = chessboard.figures;
 
-		return Chessboard.fromExistingFiguresAndBoard( originalFigures, chessboard.board, chessboard.history.moves.concat( fakeMove ) );
+		return new Chessboard(
+			originalFigures,
+			chessboard.board,
+			( ( chessboard.turnColor + 1 ) % 2 ) as 0 | 1,
+			chessboard.halfMoveClock, // TODO
+			chessboard.availableCastles,
+			null
+		);
 	}
 }

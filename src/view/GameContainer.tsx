@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Engine from '../engine/Engine';
 import { getColor } from '../engine/utils';
 import Chessboard from './Chessboard';
-import MoveList from './MoveList';
 
 import Storage from './Storage';
 
@@ -45,9 +44,9 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		this.history[ 0 ] = Engine.fenParser.stringify( this.game.getBoard() );
 
 		this.game.changeEmitter.subscribe( () => {
-			if ( !this.history[ this.game.getBoard().turn ] ) {
-				this.history[ this.game.getBoard().turn ] = Engine.fenParser.stringify( this.game.getBoard() );
-			}
+			// if ( !this.history[ this.game.getBoard().turn ] ) {
+			// 	this.history[ this.game.getBoard().turn ] = Engine.fenParser.stringify( this.game.getBoard() );
+			// }
 
 			this.forceUpdate();
 		} );
@@ -74,7 +73,7 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 			<div className='game-container'>
 				<div className='board-container'>
 					<Chessboard board={ board } activePlayer={ activePlayer } paused={ this.game.paused } />
-					<MoveList history={ board.history } onClick={ turn => this.setTurn( turn ) } />
+					{/* <MoveList history={ board.history } onClick={ turn => this.setTurn( turn ) } /> */}
 				</div>
 
 				<div className='button-section'>
@@ -153,16 +152,16 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		this.game.restart();
 	}
 
-	private setTurn( index: number ) {
-		this.game.pause();
+	// private setTurn( index: number ) {
+		// this.game.pause();
 
-		const position = this.history[ index + 1 ];
+		// const position = this.history[ index + 1 ];
 
-		const cbHistory = this.game.getBoard().history.moves.slice( 0, index + 1 );
+		// const cbHistory = this.game.getBoard().history.moves.slice( 0, index + 1 );
 
-		const board = Engine.Chessboard.fromPosition( position, cbHistory );
+		// const board = Engine.Chessboard.fromFenPosition( position, cbHistory );
 
-		this.game.setBoard( board );
+		// this.game.setBoard( board );
 		// TODO
-	}
+	// }
 }

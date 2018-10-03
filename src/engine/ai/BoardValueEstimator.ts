@@ -1,5 +1,6 @@
 import Chessboard from '../Chessboard';
 import { FigureTypes } from '../utils';
+import { stringify } from '../fenParser';
 
 export const figureValueMap: { [ name: number ]: number } = {
 	[ FigureTypes.KING ]: 1000, // Can't be removed from board.
@@ -26,32 +27,21 @@ export default class BoardValueEstimator {
 
 	/**
 	 * Clears position maps up to the specified turn.
-	 * 
-	 * @param turn 
+	 *
+	 * @param turn
 	 */
-	public clear( turn: number ) {
-		this.positionMaps[ turn ] = {};
-
-		while ( this.positionMaps[ --turn ] && Object.keys( this.positionMaps[ --turn ] ).length ) {
-			this.positionMaps[ turn ] = {};
-		}
-	}
-
-	public includes( board: Chessboard ) {
-		const boardSymbol = board.getBoardPositionId();
-		const turn = board.turn;
-
-		return turn in this.positionMaps && boardSymbol in this.positionMaps[ turn ];
+	public clear() {
+		this.positionMaps = {};
 	}
 
 	/**
 	 * Estimates board value position for the current player.
-	 * 
+	 *
 	 * @param board
 	 */
 	public estimateValue( board: Chessboard ) {
-		const boardSymbol = board.getBoardPositionId();
-		const turn = board.turn;
+		const boardSymbol = stringify( board );
+		const turn = board.turnColor;
 		const playerColor = board.turnColor;
 
 		if ( !this.positionMaps[ turn ] ) {
@@ -64,7 +54,6 @@ export default class BoardValueEstimator {
 			return storedValue;
 		}
 
-		const lastMove = board.history.getLastMove();
 		let sum = 0;
 
 		// TODO: optimization - draws, checkmates, etc.
@@ -82,15 +71,13 @@ export default class BoardValueEstimator {
 			}
 		}
 
-		// Do not move king and rocks at the start positions
-		if ( lastMove && lastMove.figure.type === FigureTypes.KING ) {
-			sum -= 0.3;
-		}
-
 		// Endgame.
 		if ( oppFigures < 10 ) {
 			// Move opponent king to the side.
 			const king = board.getOpponentKing();
+			if ( !king ) {
+				return 1000;
+			}
 			const additional = Math.abs( king.x - 4 ) + Math.abs( king.y - 4 );
 
 			sum += additional / ( myFigures + oppFigures );

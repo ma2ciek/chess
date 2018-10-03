@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 import Board from './Board';
-import BoardHistory from './BoardHistory';
 import * as fenParser from './fenParser';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
@@ -10,36 +9,45 @@ import { Color, FigureTypes, JSONFigure, Move, MoveTypes } from './utils';
 
 export default class Chessboard {
 	public static createInitialPosition() {
-		const figures = FigureFactory.createInitialPosition();
-
-		return Chessboard.fromExistingFigures( figures, [] );
+		return Chessboard.fromFenPosition( 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' );
 	}
 
-	public static fromPosition( fenPosition: string, historyMoves: ReadonlyArray<Move> = [] ) {
-		const figures = fenParser.parse( fenPosition );
+	public static fromFenPosition( fenPosition: string ) {
+		const {
+			figures,
+			castling,
+			enPassantMove,
+			// fullMoveNumber,
+			halfMoveClock,
+			turnColor
+		} = fenParser.parse( fenPosition );
 
-		return Chessboard.fromExistingFigures( figures, historyMoves );
+		return Chessboard.fromExistingFigures( figures, turnColor, halfMoveClock, castling, enPassantMove );
 	}
 
-	public static fromExistingFigures( figures: ReadonlyArray<ChessFigure>, historyMoves: ReadonlyArray<Move> ) {
-		const history = new BoardHistory( historyMoves );
+	public static fromExistingFigures(
+		figures: ReadonlyArray<ChessFigure>,
+		turnColor: 0 | 1 = 0,
+		halfMoveClock = 0,
+		availableCastles = [ 3, 3 ],
+		enPassantMove: null | { x: number, y: number } = null,
+	) {
 		const board = Board.fromFigures( figures );
 
-		return new Chessboard( figures, board, history );
+		return new Chessboard( figures, board, turnColor, halfMoveClock, availableCastles, enPassantMove );
 	}
 
-	public static fromExistingFiguresAndBoard( figures: ReadonlyArray<ChessFigure>, board: Board, historyMoves: ReadonlyArray<Move> ) {
-		const history = new BoardHistory( historyMoves );
-
-		return new Chessboard( figures, board, history );
-	}
-
-	public static fromJSON( jsonFigures: ReadonlyArray<JSONFigure>, historyMoves: ReadonlyArray<Move> = [] ) {
+	public static fromJSON(
+		jsonFigures: ReadonlyArray<JSONFigure>,
+		turnColor: 0 | 1 = 0,
+		moveWithoutCapture = 0,
+		availableCastles = [ 3, 3 ],
+		enPassantMove: null | { x: number, y: number } = null
+	) {
 		const figures = FigureFactory.createFromJSON( jsonFigures );
 		const board = Board.fromFigures( figures );
-		const history = new BoardHistory( historyMoves );
 
-		return new Chessboard( figures, board, history );
+		return new Chessboard( figures, board, turnColor, moveWithoutCapture, availableCastles, enPassantMove );
 	}
 
 	// For speed up methods.
@@ -49,17 +57,12 @@ export default class Chessboard {
 
 	constructor(
 		public readonly figures: ReadonlyArray<ChessFigure>,
-		public readonly board: Board, // TODO: make it a data structure.
-		public readonly history: BoardHistory, // TODO: make it a data structure.
+		public readonly board: Board, // Make it pure data.
+		public readonly turnColor: 0 | 1,
+		public readonly halfMoveClock: number,
+		public readonly availableCastles: number[], // [ for white, for black ]
+		public readonly enPassantMove: null | { x: number, y: number },
 	) { }
-
-	public get turnColor(): 0 | 1 {
-		return this.history.getTurn() % 2 as 0 | 1;
-	}
-
-	public get turn() {
-		return this.history.moves.length;
-	}
 
 	public getTurnDir() {
 		return this.turnColor === Color.White ? 1 : -1;
@@ -76,69 +79,6 @@ export default class Chessboard {
 
 	public getFigureFrom( x: number, y: number ) {
 		return this.board.get( x, y );
-	}
-
-	public getLastMove() {
-		return this.history.getLastMove();
-	}
-
-	public isGameEnd() {
-		return this.isCheckMate() || this.isDraw();
-	}
-
-	/**
-	 * Is current player check mated?
-	 */
-	public isCheckMate() {
-		if ( this.getAvailableMoves().length !== 0 ) {
-			return false;
-		}
-
-		const cb = MoveController.applyFakeMove( this );
-
-		const possibleMoves = cb.getPossibleMoves();
-		const king = cb.getOpponentKing();
-
-		if ( !king ) {
-			// Because in possible moves we can drop the king.
-			return false;
-		}
-
-		return possibleMoves.some( possibleMove => {
-			return (
-				possibleMove.dest.x === king.x &&
-				possibleMove.dest.y === king.y &&
-				possibleMove.type === MoveTypes.CAPTURE
-			);
-		} );
-	}
-
-	public isDraw() {
-		return this.isNoAvailableMoveDraw() ||
-			this.isThreefoldRepetitionDraw() ||
-			this.isNoCaptureDraw();
-	}
-
-	public isNoAvailableMoveDraw() {
-		return !this.isCheckMate() && this.getAvailableMoves().length === 0;
-	}
-
-	// https://en.wikipedia.org/wiki/Threefold_repetition#The_rule
-	public isThreefoldRepetitionDraw(): boolean {
-		// TODO
-		return false;
-	}
-
-	public isNoCaptureDraw() {
-		if ( this.history.moves.length < 100 ) {
-			return false;
-		}
-
-		const lastMoves = this.history.moves.slice( -100 );
-
-		return !lastMoves.some( move => {
-			return [ MoveTypes.CAPTURE, MoveTypes.EN_PASSANT, MoveTypes.PROMOTION_CAPTURE ].includes( move.type );
-		} );
 	}
 
 	public isCorrectMove( move: Move ): boolean {
@@ -181,7 +121,6 @@ export default class Chessboard {
 	}
 
 	/**
-	 * TODO: Remove
 	 * Takes care about check mates, draws, etc.
 	 */
 	public getAvailableMoves(): ReadonlyArray<Move> {
@@ -204,15 +143,17 @@ export default class Chessboard {
 
 		const moves = [];
 
-		for ( const figure of this.figures.filter( f => f.color === this.turnColor ) ) {
-			moves.push( ...figure.getPossibleMoves( this ) );
+		for ( const figure of this.figures ){
+			if ( figure.color === this.turnColor ) {
+				moves.push( ...figure.getPossibleMoves( this ) );
+			}
 		}
 
 		return this._possibleMoves = moves;
 	}
 
 	/**
-	 * TODO: Remove
+	 * TODO: To expensive
 	 */
 	public isCurrentKingCheckedAfterMove( move: Move ): boolean {
 		// We virtually move king to the target position and check whether some figure can move to that place.
@@ -236,35 +177,6 @@ export default class Chessboard {
 				possibleMove.type === MoveTypes.CAPTURE
 			);
 		} );
-	}
-
-	/**
-	 * Returns a board id for the current position.
-	 */
-	public getBoardPositionId() {
-		let output = this.turn.toString();
-
-		for ( let y = 0; y < 8; y++ ) {
-			let d = 0;
-			for ( let x = 0; x < 8; x++ ) {
-				const figure = this.board.rawBoard[ y * 8 + x ];
-				if ( figure ) {
-					if ( d ) {
-						output += d;
-						d = 0;
-					}
-					output += figure.shortName;
-				} else {
-					d++;
-				}
-			}
-			if ( d ) {
-				output += d;
-			}
-			output += '/';
-		}
-
-		return output;
 	}
 
 	public getOpponentKing() {

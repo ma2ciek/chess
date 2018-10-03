@@ -10,7 +10,7 @@ describe( 'Pawn', () => {
 	describe( 'promotion', () => {
 		it( 'pawn should be able to promote to queen', () => {
 			const whitePawn = new Pawn( 0, 6, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whitePawn ], [] );
+			const cb = Chessboard.fromExistingFigures( [ whitePawn ] );
 
 			const move: Move = {
 				figure: whitePawn.toJSON(),
@@ -31,7 +31,7 @@ describe( 'Pawn', () => {
 
 		it( 'should be available for a pawn', () => {
 			const whitePawn = new Pawn( 0, 6, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whitePawn ], [] );
+			const cb = Chessboard.fromExistingFigures( [ whitePawn ] );
 			const am = whitePawn.getPossibleMoves( cb );
 
 			expect( am.length ).to.equal( 1 );

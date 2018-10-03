@@ -2,6 +2,7 @@ import Chessboard from './Chessboard';
 import Emitter from './Emitter';
 import IPlayer from './IPlayer';
 import MoveController from './MoveController';
+import { isDraw, isCurrentPlayerCheckmated } from './board-utils';
 
 type GameInfo = Readonly<{
 	draw: boolean;
@@ -119,7 +120,7 @@ export default class Game {
 			const turnColor = this.board.turnColor;
 			this.board = MoveController.applyMove( this.board, move );
 
-			if ( this.board.isCheckMate() ) {
+			if ( isCurrentPlayerCheckmated( this.board ) ) {
 				this.info = {
 					win: true,
 					type: 'CHECK_MATE',
@@ -128,8 +129,8 @@ export default class Game {
 				};
 			}
 
-			if ( this.board.isDraw() ) {
-				// TODO: handle other draws.
+			// TODO: handle other draws.
+			if ( isDraw( this.board ) ) {
 				this.info = {
 					win: false,
 					type: 'NO_MOVE_AVAILABLE',

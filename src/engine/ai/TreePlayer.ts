@@ -5,6 +5,7 @@ import AIPlayer, { MoveInfo } from './AIPlayer';
 import { figureValueMap } from './BoardValueEstimator';
 import Node from './Node';
 import { applyFunctionDuringPeriod } from './utils';
+import { isDraw, isCurrentPlayerCheckmated } from '../board-utils';
 
 type MoveNode = Node<{
 	value: number
@@ -159,11 +160,11 @@ function getSum( arr: number[] ) {
  * TODO: Check for isDraw() and isCheckMate() optimizations.
  */
 function estimateBoardValue( board: Chessboard, playerColor: number ) {
-	if ( board.isDraw() ) {
+	if ( isDraw( board ) ) {
 		return 0;
 	}
 
-	if ( board.isCheckMate() ) {
+	if ( isCurrentPlayerCheckmated( board ) ) {
 		return -100;
 	}
 

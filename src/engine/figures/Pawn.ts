@@ -30,16 +30,14 @@ export default class Pawn extends ChessFigure {
 				}
 			}
 		} else {
-			const lastMove = chessboard.getLastMove();
-
-			if ( lastMove && lastMove.type === MoveTypes.LONG_MOVE && lastMove.dest.y === this.y ) {
-				if ( lastMove.dest.x === this.x - 1 ) {
+			if ( chessboard.enPassantMove && chessboard.enPassantMove.y === this.y ) {
+				if ( chessboard.enPassantMove.x === this.x - 1 ) {
 					moves.push( {
 						dest: { x: this.x - 1, y: this.y + dir },
 						type: MoveTypes.EN_PASSANT,
 						figure: this,
 					} );
-				} else if ( lastMove.dest.x === this.x + 1 ) {
+				} else if ( chessboard.enPassantMove.x === this.x + 1 ) {
 					moves.push( {
 						dest: { x: this.x + 1, y: this.y + dir },
 						type: MoveTypes.EN_PASSANT,

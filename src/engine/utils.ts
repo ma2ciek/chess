@@ -38,6 +38,9 @@ export interface Vector {
 	y: number;
 }
 
+export const KING_CASTLE_FLAG = 1;
+export const QUEEN_CASTLE_FLAG = 2;
+
 export enum FigureTypes {
 	PAWN,
 	KNIGHT,

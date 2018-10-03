@@ -64,22 +64,4 @@ describe( 'Chessboard', () => {
 			}
 		} );
 	} );
-
-	describe( 'getBoardPositionId()', () => {
-		it( 'for the initial position', () => {
-			const cb = Chessboard.createInitialPosition();
-
-			const id = cb.getBoardPositionId();
-
-			expect( id ).to.equal( '0RNBQKBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbqkbnr/' );
-		} );
-
-		it( 'for the empty board', () => {
-			const cb = Chessboard.fromJSON( [] );
-
-			const id = cb.getBoardPositionId();
-
-			expect( id ).to.equal( '08/8/8/8/8/8/8/8/' );
-		} );
-	} );
 } );

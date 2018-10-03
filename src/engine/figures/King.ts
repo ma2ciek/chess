@@ -1,6 +1,13 @@
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { Color, FigureTypes, isCorrectPosition, Move, MoveTypes } from '../utils';
+import {
+	Color,
+	FigureTypes,
+	isCorrectPosition,
+	Move, MoveTypes,
+	KING_CASTLE_FLAG,
+	QUEEN_CASTLE_FLAG
+} from '../utils';
 import ChessFigure from './ChessFigure';
 
 export default class King extends ChessFigure {
@@ -37,13 +44,11 @@ export default class King extends ChessFigure {
 		}
 
 		const row = this.color === Color.White ? 0 : 7;
-		const myMoves = chessboard.history.getMyMoves();
 		const figureAtKingPosition = chessboard.getFigureFrom( 4, row );
 
 		if (
 			!figureAtKingPosition ||
-			figureAtKingPosition.type !== FigureTypes.KING ||
-			myMoves.some( move => move.figure.type === FigureTypes.KING )
+			figureAtKingPosition.type !== FigureTypes.KING
 		) {
 			return moves;
 		}
@@ -69,7 +74,7 @@ export default class King extends ChessFigure {
 			chessboard.isEmptyAt( 3, row ) &&
 			figureAtFirstCol &&
 			figureAtFirstCol.type === FigureTypes.ROOK &&
-			!this.isRookMoved( chessboard, row )
+			chessboard.availableCastles[ this.color ] & QUEEN_CASTLE_FLAG
 		) {
 			const move: Move = {
 				dest: { x: 2, y: row },
@@ -107,7 +112,7 @@ export default class King extends ChessFigure {
 			chessboard.isEmptyAt( 6, row ) &&
 			figureAtLastCol &&
 			figureAtLastCol.type === FigureTypes.ROOK &&
-			!this.isRookMoved( chessboard, row )
+			chessboard.availableCastles[ this.color ] & KING_CASTLE_FLAG
 		) {
 			const move: Move = {
 				dest: { x: 6, y: row },
@@ -132,17 +137,6 @@ export default class King extends ChessFigure {
 		}
 
 		return null;
-	}
-
-	private isRookMoved( chessboard: Chessboard, row: number ) {
-		return chessboard.history.moves.some( m => {
-			return (
-				m.figure.type === FigureTypes.ROOK &&
-				m.figure.color === this.color &&
-				m.figure.x === 0 &&
-				m.figure.y === row
-			);
-		} );
 	}
 }
 

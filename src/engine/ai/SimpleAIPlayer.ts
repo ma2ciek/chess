@@ -4,6 +4,7 @@ import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
 import { shuffle } from './utils';
+import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 
 export default class SimpleAIPlayer extends AIPlayer {
 	private bve = new BoardValueEstimator();
@@ -13,26 +14,27 @@ export default class SimpleAIPlayer extends AIPlayer {
 	}
 
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
-		const board1moves = board.getAvailableMoves();
+		const board1moves = board.getPossibleMoves();
 		let bestValueForBoard2 = -Infinity;
 		let bestMove: Move | null = null;
 		let counted = 0;
 
-		this.bve.clear( board.turn );
+		this.bve.clear();
 
 		for ( const board1move of shuffle( board1moves ) ) {
 			// After my move.
 			const board2 = MoveController.applyMove( board, board1move );
-			const board2moves = board2.getAvailableMoves();
+			const board2moves = board2.getPossibleMoves();
 			let worstValueForBoard3 = 1000;
 
-			if ( board2.isCheckMate() ) {
+			// To expensive. It needs to be investigated what we need.
+			if ( isCurrentPlayerCheckmated( board2 ) ) {
 				bestValueForBoard2 = 1000;
 				bestMove = board1move;
 				break;
 			}
 
-			if ( board2.isDraw() ) {
+			if ( isDraw( board2 ) ) {
 				worstValueForBoard3 = 0;
 				if ( bestValueForBoard2 < worstValueForBoard3 ) {
 					bestValueForBoard2 = worstValueForBoard3;
@@ -44,17 +46,17 @@ export default class SimpleAIPlayer extends AIPlayer {
 			for ( const board2move of shuffle( board2moves ) ) {
 				// After my move and opponent's move.
 				const board3 = MoveController.applyMove( board2, board2move );
-				const board3moves = board3.getAvailableMoves();
+				const board3moves = board3.getPossibleMoves();
 
 				// This should be initialized with higher value than the bestValueForBoard2.
 				let bestValueForBoard4 = -1000;
 
-				if ( board3.isCheckMate() ) {
+				if ( isCurrentPlayerCheckmated( board3 ) ) {
 					worstValueForBoard3 = -1000;
 					break;
 				}
 
-				if ( board3.isDraw() ) {
+				if ( isDraw( board3 ) ) {
 					worstValueForBoard3 = 0;
 					continue;
 				}

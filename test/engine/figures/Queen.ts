@@ -8,7 +8,7 @@ describe( 'Queen', () => {
 	describe( 'getPossibleMoves()', () => {
 		it( 'case #1', () => {
 			const whiteQueen = new Queen( 0, 0, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whiteQueen ], [] );
+			const cb = Chessboard.fromExistingFigures( [ whiteQueen ] );
 
 			const am = whiteQueen.getPossibleMoves( cb );
 
@@ -17,7 +17,7 @@ describe( 'Queen', () => {
 
 		it( 'case #2', () => {
 			const whiteQueen = new Queen( 3, 3, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whiteQueen ], [] );
+			const cb = Chessboard.fromExistingFigures( [ whiteQueen ] );
 
 			const am = whiteQueen.getPossibleMoves( cb );
 
@@ -27,7 +27,7 @@ describe( 'Queen', () => {
 		it( 'case #2', () => {
 			const whiteQueen = new Queen( 3, 3, 0 );
 			const whiteKing = new Queen( 3, 4, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whiteQueen, whiteKing ], [] );
+			const cb = Chessboard.fromExistingFigures( [ whiteQueen, whiteKing ] );
 
 			const am = whiteQueen.getPossibleMoves( cb );
 
@@ -37,7 +37,7 @@ describe( 'Queen', () => {
 		it( 'case #3', () => {
 			const whiteQueen = new Queen( 3, 3, 0 );
 			const blackQueen = new Queen( 3, 5, 1 );
-			const cb = Chessboard.fromExistingFigures( [ whiteQueen, blackQueen ], [] );
+			const cb = Chessboard.fromExistingFigures( [ whiteQueen, blackQueen ] );
 
 			const am = whiteQueen.getPossibleMoves( cb );
 

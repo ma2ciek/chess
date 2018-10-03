@@ -29,13 +29,7 @@ export default class FigureFactory {
 		return new correctClass( json.x, json.y, json.color );
 	}
 
-	public static createInitialPosition() {
-		return this.createFromPosition(
-			'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
-		);
-	}
-
-	public static createFromPosition( position: string ) {
-		return parse( position );
+	public static createFromFenPosition( fenPosition: string ) {
+		return parse( fenPosition );
 	}
 }
