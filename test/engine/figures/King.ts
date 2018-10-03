@@ -74,7 +74,6 @@ describe( 'King', () => {
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 			const boardAvailableMoves = cb.getAvailableMoves();
 
-			console.log( possibleMoves );
 			expect( possibleMoves.length ).to.equal( 6 );
 			expect( boardAvailableMoves.length ).to.equal( 15 );
 

@@ -3,6 +3,7 @@ import Emitter from './Emitter';
 import IPlayer from './IPlayer';
 import MoveController from './MoveController';
 import { isDraw, isCurrentPlayerCheckmated, createChessBoardAtInitialPosition } from './board-utils';
+import { Move } from './utils';
 
 type GameInfo = Readonly<{
 	draw: boolean;
@@ -21,6 +22,8 @@ export default class Game {
 		win: false,
 		lastPlayer: -1,
 	};
+
+	public readonly history: Move[] = [];
 
 	constructor(
 		private players: IPlayer[],
@@ -116,6 +119,8 @@ export default class Game {
 				return;
 			}
 
+			this.history.push( move );
+
 			// Save player color before switch.
 			const turnColor = this.board.turnColor;
 			this.board = MoveController.applyMove( this.board, move );
@@ -127,6 +132,8 @@ export default class Game {
 					lastPlayer: turnColor,
 					draw: false,
 				};
+
+				console.log( 'checkmate 1' );
 			}
 
 			// TODO: handle other draws.

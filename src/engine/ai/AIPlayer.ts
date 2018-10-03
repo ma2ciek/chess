@@ -1,7 +1,7 @@
 import Chessboard from '../Chessboard';
 import getMoveSymbol from '../getMoveSymbol';
 import IPlayer from '../IPlayer';
-import { Move } from '../utils';
+import { Move, getColor } from '../utils';
 
 export default abstract class AIPlayer implements IPlayer {
 	public isHuman() {
@@ -22,7 +22,7 @@ export default abstract class AIPlayer implements IPlayer {
 		const timeDiff = Date.now() - d;
 
 		console.log(
-			board.turnColor === 0 ? 'White' : 'Black',
+			getColor( board.turnColor ),
 			this.constructor.name,
 			counted,
 			Math.round( counted / timeDiff * 1000 ) + ' moves/s',

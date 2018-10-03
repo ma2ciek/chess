@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import Chessboard from '../../src/engine/Chessboard';
 import ChessFigure from '../../src/engine/figures/ChessFigure';
 import { Color, FigureTypes } from '../../src/engine/utils';
-import { createChessBoardFromJSON, createChessBoardAtInitialPosition } from '../../src/engine/board-utils';
+import { createChessBoardFromJSON, createChessBoardAtInitialPosition, createChessBoardFromFenPosition, isCurrentPlayerCheckmated } from '../../src/engine/board-utils';
 
 describe( 'Chessboard', () => {
 	it( 'constructor()', () => {
@@ -11,7 +11,7 @@ describe( 'Chessboard', () => {
 		expect( cb ).to.be.an( 'object' );
 	} );
 
-	describe( 'static createInitialPosition()', () => {
+	describe( 'createChessBoardAtInitialPosition()', () => {
 		it( 'should return an initialized chessboard', () => {
 			const cb = createChessBoardAtInitialPosition();
 
@@ -63,6 +63,64 @@ describe( 'Chessboard', () => {
 			for ( const cb2 of cb.getAvailableBoards() ) {
 				expect( cb2.getAvailableMoves().length ).to.equal( 20 );
 			}
+		} );
+	} );
+
+	describe( 'check mates', () => {
+		it( 'case #1', () => {
+			const cb = createChessBoardFromFenPosition(
+				'rnb1k1nr/' +
+				'pppp1ppp/' +
+				'11111111/' +
+				'11b11111/' +
+				'11111111/' +
+				'11111111/' +
+				'PPPPPqPP/' +
+				'RNBQKBNR w - - 0 1' );
+
+			expect( isCurrentPlayerCheckmated( cb ) ).to.be.true;
+		} );
+
+		it( 'case #2', () => {
+			const cb = createChessBoardFromFenPosition(
+				'rnb1kbnr/' +
+				'pppp1ppp/' +
+				'11111111/' +
+				'11111111/' +
+				'11111111/' +
+				'11111111/' +
+				'PPPPPqPP/' +
+				'RNBQKBNR w - - 0 1' );
+
+			expect( isCurrentPlayerCheckmated( cb ) ).to.be.false;
+		} );
+
+		it( 'case #3 - corner, mate for white', () => {
+			const cb = createChessBoardFromFenPosition(
+				'1111111K/' +
+				'111111q1/' +
+				'11111k11/' +
+				'11111111/' +
+				'11111111/' +
+				'11111111/' +
+				'11111111/' +
+				'1111111 w - - 0 1' );
+
+			expect( isCurrentPlayerCheckmated( cb ) ).to.be.true;
+		} );
+
+		it( 'case #4 - corner, mate for black', () => {
+			const cb = createChessBoardFromFenPosition(
+				'1111111k/' +
+				'111111Q1/' +
+				'11111K11/' +
+				'11111111/' +
+				'11111111/' +
+				'11111111/' +
+				'11111111/' +
+				'1111111 b - - 0 1' );
+
+			expect( isCurrentPlayerCheckmated( cb ) ).to.be.true;
 		} );
 	} );
 } );

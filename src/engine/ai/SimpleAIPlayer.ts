@@ -14,7 +14,7 @@ export default class SimpleAIPlayer extends AIPlayer {
 	}
 
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
-		const board1moves = board.getPossibleMoves();
+		const board1moves = board.getAvailableMoves();
 		let bestValueForBoard2 = -Infinity;
 		let bestMove: Move | null = null;
 		let counted = 0;
@@ -51,10 +51,10 @@ export default class SimpleAIPlayer extends AIPlayer {
 				// This should be initialized with higher value than the bestValueForBoard2.
 				let bestValueForBoard4 = -1000;
 
-				if ( isCurrentPlayerCheckmated( board3 ) ) {
-					worstValueForBoard3 = -1000;
-					break;
-				}
+				// if ( isCurrentPlayerCheckmated( board3 ) ) {
+				// 	worstValueForBoard3 = -1000;
+				// 	break;
+				// }
 
 				if ( isDraw( board3 ) ) {
 					worstValueForBoard3 = 0;
