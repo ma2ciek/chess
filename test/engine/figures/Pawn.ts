@@ -1,16 +1,15 @@
 import { expect } from 'chai';
-import Chessboard from '../../../src/engine/Chessboard';
-// import King from '../../../src/engine/figures/King';
 import Pawn from '../../../src/engine/figures/Pawn';
 import Queen from '../../../src/engine/figures/Queen';
 import MoveController from '../../../src/engine/MoveController';
 import { FigureTypes, Move, MoveTypes } from '../../../src/engine/utils';
+import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
 
 describe( 'Pawn', () => {
 	describe( 'promotion', () => {
 		it( 'pawn should be able to promote to queen', () => {
 			const whitePawn = new Pawn( 0, 6, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whitePawn ] );
+			const cb = createChessBoardFromFigures( [ whitePawn ] );
 
 			const move: Move = {
 				figure: whitePawn.toJSON(),
@@ -31,7 +30,7 @@ describe( 'Pawn', () => {
 
 		it( 'should be available for a pawn', () => {
 			const whitePawn = new Pawn( 0, 6, 0 );
-			const cb = Chessboard.fromExistingFigures( [ whitePawn ] );
+			const cb = createChessBoardFromFigures( [ whitePawn ] );
 			const am = whitePawn.getPossibleMoves( cb );
 
 			expect( am.length ).to.equal( 1 );

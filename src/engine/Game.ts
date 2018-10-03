@@ -2,7 +2,7 @@ import Chessboard from './Chessboard';
 import Emitter from './Emitter';
 import IPlayer from './IPlayer';
 import MoveController from './MoveController';
-import { isDraw, isCurrentPlayerCheckmated } from './board-utils';
+import { isDraw, isCurrentPlayerCheckmated, createChessBoardAtInitialPosition } from './board-utils';
 
 type GameInfo = Readonly<{
 	draw: boolean;
@@ -24,11 +24,11 @@ export default class Game {
 
 	constructor(
 		private players: IPlayer[],
-		private board = Chessboard.createInitialPosition(),
+		private board = createChessBoardAtInitialPosition(),
 	) { }
 
 	public restart() {
-		this.board = Chessboard.createInitialPosition();
+		this.board = createChessBoardAtInitialPosition();
 		this.isPaused = true;
 		this.info = {
 			draw: false,

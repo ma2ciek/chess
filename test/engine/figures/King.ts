@@ -1,15 +1,15 @@
 import { expect } from 'chai';
-import Chessboard from '../../../src/engine/Chessboard';
 import King from '../../../src/engine/figures/King';
 import Rook from '../../../src/engine/figures/Rook';
 import { Color, MoveTypes } from '../../../src/engine/utils';
+import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
 
 describe( 'King', () => {
 	describe( 'case #1', () => {
 		it( 'getAvailableMoves()', () => {
 			const whiteKing = new King( 3, 5, Color.White );
 
-			const cb = Chessboard.fromJSON( [ whiteKing ] );
+			const cb = createChessBoardFromFigures( [ whiteKing ] );
 
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 
@@ -28,7 +28,7 @@ describe( 'King', () => {
 		it( 'chessboard getAvailableMoves()', () => {
 			const whiteKing = new King( 3, 5, Color.White );
 			const blackKing = new King( 7, 7, Color.Black );
-			const cb = Chessboard.fromJSON( [ blackKing, whiteKing ] );
+			const cb = createChessBoardFromFigures( [ blackKing, whiteKing ] );
 
 			const possibleMoves = cb.getAvailableMoves();
 
@@ -50,7 +50,7 @@ describe( 'King', () => {
 			const whiteKing = new King( 4, 0, Color.White );
 			const whiteRook = new Rook( 0, 0, Color.White );
 
-			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook ] );
+			const cb = createChessBoardFromFigures( [ whiteKing, whiteRook ] );
 
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 			const boardAvailableMoves = cb.getAvailableMoves();
@@ -69,7 +69,7 @@ describe( 'King', () => {
 			const whiteKing = new King( 4, 0, Color.White );
 			const whiteRook = new Rook( 7, 0, Color.White );
 
-			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook ] );
+			const cb = createChessBoardFromFigures( [ whiteKing, whiteRook ] );
 
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 			const boardAvailableMoves = cb.getAvailableMoves();
@@ -90,7 +90,7 @@ describe( 'King', () => {
 			const whiteRook1 = new Rook( 0, 0, Color.White );
 			const whiteRook2 = new Rook( 7, 0, Color.White );
 
-			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook1, whiteRook2 ] );
+			const cb = createChessBoardFromFigures( [ whiteKing, whiteRook1, whiteRook2 ] );
 
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 			const boardAvailableMoves = cb.getAvailableMoves();
@@ -117,7 +117,7 @@ describe( 'King', () => {
 			const whiteRook = new Rook( 0, 0, Color.White );
 			const blackRook = new Rook( 4, 7, Color.Black );
 
-			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook, blackKing, blackRook ] );
+			const cb = createChessBoardFromFigures( [ whiteKing, whiteRook, blackKing, blackRook ] );
 
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 			const boardAvailableMoves = cb.getAvailableMoves();
@@ -138,7 +138,7 @@ describe( 'King', () => {
 			const whiteRook = new Rook( 0, 0, Color.White );
 			const blackRook = new Rook( 3, 7, Color.Black );
 
-			const cb = Chessboard.fromJSON( [ whiteKing, whiteRook, blackKing, blackRook ] );
+			const cb = createChessBoardFromFigures( [ whiteKing, whiteRook, blackKing, blackRook ] );
 
 			const possibleMoves = whiteKing.getPossibleMoves( cb );
 			const boardAvailableMoves = cb.getAvailableMoves();

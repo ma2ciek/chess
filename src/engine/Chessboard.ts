@@ -1,55 +1,11 @@
 import { isEqual } from 'lodash';
 import Board from './Board';
-import * as fenParser from './fenParser';
-import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
 import King from './figures/King';
 import MoveController from './MoveController';
-import { Color, FigureTypes, JSONFigure, Move, MoveTypes } from './utils';
+import { Color, FigureTypes, Move, MoveTypes } from './utils';
 
 export default class Chessboard {
-	public static createInitialPosition() {
-		return Chessboard.fromFenPosition( 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' );
-	}
-
-	public static fromFenPosition( fenPosition: string ) {
-		const {
-			figures,
-			castling,
-			enPassantMove,
-			// fullMoveNumber,
-			halfMoveClock,
-			turnColor
-		} = fenParser.parse( fenPosition );
-
-		return Chessboard.fromExistingFigures( figures, turnColor, halfMoveClock, castling, enPassantMove );
-	}
-
-	public static fromExistingFigures(
-		figures: ReadonlyArray<ChessFigure>,
-		turnColor: 0 | 1 = 0,
-		halfMoveClock = 0,
-		availableCastles = [ 3, 3 ],
-		enPassantMove: null | { x: number, y: number } = null,
-	) {
-		const board = Board.fromFigures( figures );
-
-		return new Chessboard( figures, board, turnColor, halfMoveClock, availableCastles, enPassantMove );
-	}
-
-	public static fromJSON(
-		jsonFigures: ReadonlyArray<JSONFigure>,
-		turnColor: 0 | 1 = 0,
-		moveWithoutCapture = 0,
-		availableCastles = [ 3, 3 ],
-		enPassantMove: null | { x: number, y: number } = null
-	) {
-		const figures = FigureFactory.createFromJSON( jsonFigures );
-		const board = Board.fromFigures( figures );
-
-		return new Chessboard( figures, board, turnColor, moveWithoutCapture, availableCastles, enPassantMove );
-	}
-
 	// For speed up methods.
 	private _opponentKing: King | null = null;
 	private _possibleMoves?: ReadonlyArray<Move>;

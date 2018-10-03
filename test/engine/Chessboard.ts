@@ -2,24 +2,25 @@ import { expect } from 'chai';
 import Chessboard from '../../src/engine/Chessboard';
 import ChessFigure from '../../src/engine/figures/ChessFigure';
 import { Color, FigureTypes } from '../../src/engine/utils';
+import { createChessBoardFromJSON, createChessBoardAtInitialPosition } from '../../src/engine/board-utils';
 
 describe( 'Chessboard', () => {
 	it( 'constructor()', () => {
-		const cb = Chessboard.fromJSON( [] );
+		const cb = createChessBoardFromJSON( [] );
 
 		expect( cb ).to.be.an( 'object' );
 	} );
 
 	describe( 'static createInitialPosition()', () => {
 		it( 'should return an initialized chessboard', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 
 			expect( cb ).to.be.an( 'object' );
 			expect( cb ).to.be.an.instanceOf( Chessboard );
 		} );
 
 		it( 'should return a chessboard with 16 white and 16 black figures', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 
 			expect( cb.figures ).to.be.an( 'array' );
 
@@ -31,7 +32,7 @@ describe( 'Chessboard', () => {
 		} );
 
 		it( 'should have a white king on E1', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 			const whiteKing = cb.getFigureFrom( 4, 0 ) as ChessFigure; // E1
 
 			expect( whiteKing.color ).to.equal( Color.White );
@@ -39,7 +40,7 @@ describe( 'Chessboard', () => {
 		} );
 
 		it( 'should have a black king on E8', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 			const whiteKing = cb.getFigureFrom( 4, 7 ) as ChessFigure; // E8
 
 			expect( whiteKing.color ).to.equal( Color.Black );
@@ -47,17 +48,17 @@ describe( 'Chessboard', () => {
 		} );
 
 		it( 'should be a white to move', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 			expect( cb.turnColor ).to.equal( Color.White );
 		} );
 
 		it( 'should create position with 20 start moves available', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 			expect( cb.getAvailableMoves().length ).to.equal( 20 );
 		} );
 
 		it( 'should create position with 20 moves available for every 2 move', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 
 			for ( const cb2 of cb.getAvailableBoards() ) {
 				expect( cb2.getAvailableMoves().length ).to.equal( 20 );

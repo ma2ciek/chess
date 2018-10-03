@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import BoardValueEstimator from '../../../src/engine/ai/BoardValueEstimator';
-import { Chessboard } from '../../../src/engine/Engine';
+import { createChessBoardAtInitialPosition } from '../../../src/engine/board-utils';
 
 describe( 'BoardValueEstimator', () => {
 	it( 'constructor()', () => {
@@ -12,7 +12,7 @@ describe( 'BoardValueEstimator', () => {
 	it( 'memoization', () => {
 		const b = new BoardValueEstimator();
 
-		const cb = Chessboard.createInitialPosition();
+		const cb = createChessBoardAtInitialPosition();
 
 		const value = b.estimateValue( cb );
 		const value2 = b.estimateValue( cb );

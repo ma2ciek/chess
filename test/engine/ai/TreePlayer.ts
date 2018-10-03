@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import TreePlayer from '../../../src/engine/ai/TreePlayer';
 import Chessboard from '../../../src/engine/Chessboard';
+import { createChessBoardAtInitialPosition } from '../../../src/engine/board-utils';
 
 class FakeTreePlayer extends TreePlayer {
 	public root = undefined;
@@ -30,7 +31,7 @@ describe( 'TreePlayer', () => {
 		} );
 
 		it( 'case 1', async () => {
-			const chessBoard = Chessboard.createInitialPosition();
+			const chessBoard = createChessBoardAtInitialPosition();
 
 			treePlayer.applyFunctionDuringPeriod = createCall( 1 );
 
@@ -41,7 +42,7 @@ describe( 'TreePlayer', () => {
 		} );
 
 		it( 'case 2', async () => {
-			const chessBoard = Chessboard.createInitialPosition();
+			const chessBoard = createChessBoardAtInitialPosition();
 
 			treePlayer.applyFunctionDuringPeriod = createCall( 2 );
 

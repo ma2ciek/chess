@@ -1,11 +1,11 @@
 import { expect } from 'chai';
-import { Chessboard } from "../../src/engine/Engine";
 import { stringify } from "../../src/engine/fenParser";
+import { createChessBoardAtInitialPosition, createChessBoardFromJSON } from '../../src/engine/board-utils';
 
 describe( 'fenParser', () => {
 	describe( 'stringify()', () => {
 		it( 'should stringify initial position', () => {
-			const cb = Chessboard.createInitialPosition();
+			const cb = createChessBoardAtInitialPosition();
 
 			const id = stringify( cb );
 
@@ -13,7 +13,7 @@ describe( 'fenParser', () => {
 		} );
 
 		it( 'should stringify the empty board', () => {
-			const cb = Chessboard.fromJSON( [] );
+			const cb = createChessBoardFromJSON( [] );
 
 			const id = stringify( cb );
 
@@ -21,7 +21,7 @@ describe( 'fenParser', () => {
 		} );
 
 		it( 'should stringify the board after the first move', () => {
-			const cb = Chessboard.fromJSON( [] );
+			const cb = createChessBoardFromJSON( [] );
 
 
 			const id = stringify( cb );
