@@ -1,6 +1,7 @@
 import Chessboard from './Chessboard';
 import IPlayer from './IPlayer';
 import { Move } from './utils';
+import { isCorrectMove } from './board-utils';
 
 export default class HumanPlayer implements IPlayer {
 	public tryMove?: ( move: Move ) => boolean;
@@ -12,7 +13,7 @@ export default class HumanPlayer implements IPlayer {
 
 		return new Promise<Move>( ( res, rej ) => {
 			this.tryMove = ( move: any ) => {
-				if ( !board.isCorrectMove( move ) ) {
+				if ( !isCorrectMove( board, move ) ) {
 					return false;
 				}
 

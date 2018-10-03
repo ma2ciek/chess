@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Chessboard as ChessboardEngine, ChessFigure, IPlayer, Move } from '../engine/Engine';
 import Field from './Field';
 import Figure from './Figure';
+import { isCorrectMove } from '../engine/board-utils';
 
 interface ChessboardProps {
 	paused: boolean;
@@ -121,6 +122,6 @@ export default class Chessboard extends React.Component<ChessboardProps, Chessbo
 			return [];
 		}
 
-		return lastSelectedFigure.getPossibleMoves( board ).filter( move => board.isCorrectMove( move ) );
+		return lastSelectedFigure.getPossibleMoves( board ).filter( move => isCorrectMove( board, move ) );
 	}
 }

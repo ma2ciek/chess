@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import Chessboard from '../../src/engine/Chessboard';
 import ChessFigure from '../../src/engine/figures/ChessFigure';
 import { Color, FigureTypes } from '../../src/engine/utils';
-import { createChessBoardFromJSON, createChessBoardAtInitialPosition, createChessBoardFromFenPosition, isCurrentPlayerCheckmated } from '../../src/engine/board-utils';
+import { createChessBoardFromJSON, createChessBoardAtInitialPosition, createChessBoardFromFenPosition, isCurrentPlayerCheckmated, getAvailableBoards } from '../../src/engine/board-utils';
 
 describe( 'Chessboard', () => {
 	it( 'constructor()', () => {
@@ -60,7 +60,7 @@ describe( 'Chessboard', () => {
 		it( 'should create position with 20 moves available for every 2 move', () => {
 			const cb = createChessBoardAtInitialPosition();
 
-			for ( const cb2 of cb.getAvailableBoards() ) {
+			for ( const cb2 of getAvailableBoards( cb ) ) {
 				expect( cb2.getAvailableMoves().length ).to.equal( 20 );
 			}
 		} );

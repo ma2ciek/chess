@@ -1,4 +1,3 @@
-import { isEqual } from 'lodash';
 import Board from './Board';
 import ChessFigure from './figures/ChessFigure';
 import King from './figures/King';
@@ -7,9 +6,9 @@ import { Color, FigureTypes, Move, MoveTypes } from './utils';
 
 export default class Chessboard {
 	// For speed up methods.
-	private _opponentKing: King | null = null;
-	private _possibleMoves?: ReadonlyArray<Move>;
-	private _availableMoves?: ReadonlyArray<Move>;
+	// private _opponentKing: King | null = null;
+	// private _possibleMoves?: ReadonlyArray<Move>;
+	// private _availableMoves?: ReadonlyArray<Move>;
 
 	constructor(
 		public readonly figures: ReadonlyArray<ChessFigure>,
@@ -37,65 +36,26 @@ export default class Chessboard {
 		return this.board.get( x, y );
 	}
 
-	public isCorrectMove( move: Move ): boolean {
-		return this.getAvailableMoves().some( avMove => isEqual( move, avMove ) );
-	}
-
-	/**
-	 * Get new boards from current board's available moves.
-	 */
-	public getAvailableBoards(): ReadonlyArray<Chessboard> {
-		const moves = this.getPossibleMoves();
-		const boards = [];
-
-		for ( const move of moves ) {
-			const cb = MoveController.applyMove( this, move );
-
-			// We made a move, so now our king becomes opponent's king.
-			const king = cb.getOpponentKing();
-			const possibleMoves = cb.getPossibleMoves();
-
-			if ( !king ) {
-				// Because in possible moves we can drop the king.
-				continue;
-			}
-
-			for ( const possibleMove of possibleMoves ) {
-				if (
-					possibleMove.dest.x === king.x &&
-					possibleMove.dest.y === king.y &&
-					possibleMove.type === MoveTypes.CAPTURE
-				) {
-					continue;
-				}
-			}
-
-			boards.push( cb );
-		}
-
-		return boards;
-	}
-
 	/**
 	 * Takes care about check mates, draws, etc.
 	 */
 	public getAvailableMoves(): ReadonlyArray<Move> {
-		if ( this._availableMoves ) {
-			return this._availableMoves;
-		}
+		// if ( this._availableMoves ) {
+		// 	return this._availableMoves;
+		// }
 		const moves = this.getPossibleMoves()
 			.filter( move => !this.isCurrentKingCheckedAfterMove( move ) );
 
-		return this._availableMoves = moves;
+		return moves;
 	}
 
 	/**
 	 * Sums all figures possible moves.
 	 */
 	public getPossibleMoves(): ReadonlyArray<Move> {
-		if ( this._possibleMoves ) {
-			return this._possibleMoves;
-		}
+		// if ( this._possibleMoves ) {
+		// 	return this._possibleMoves;
+		// }
 
 		const moves = [];
 
@@ -105,7 +65,7 @@ export default class Chessboard {
 			}
 		}
 
-		return this._possibleMoves = moves;
+		return moves;
 	}
 
 	/**
@@ -136,11 +96,11 @@ export default class Chessboard {
 	}
 
 	public getOpponentKing() {
-		if ( this._opponentKing ) {
-			return this._opponentKing;
-		}
+		// if ( this._opponentKing ) {
+		// 	return this._opponentKing;
+		// }
 
-		return this._opponentKing = this.figures.find( figure => {
+		return this.figures.find( figure => {
 			return figure.type === FigureTypes.KING && figure.color !== this.turnColor;
 		} ) as King;
 	}

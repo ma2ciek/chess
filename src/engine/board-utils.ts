@@ -1,16 +1,17 @@
+import { isEqual } from 'lodash';
 import Chessboard from "./Chessboard";
 import MoveController from "./MoveController";
-import { MoveTypes, JSONFigure } from "./utils";
+import { MoveTypes, JSONFigure, Move } from "./utils";
 import FigureFactory from "./FigureFactory";
 import Board from "./Board";
 import ChessFigure from "./figures/ChessFigure";
 import { fenParser } from "./Engine";
 
-export function isGameEnd( chessBoard: Chessboard ) : boolean {
+export function isGameEnd( chessBoard: Chessboard ): boolean {
 	return isCurrentPlayerCheckmated( chessBoard ) || isDraw( chessBoard );
 }
 
-export function isCurrentPlayerCheckmated( chessBoard: Chessboard ): boolean  {
+export function isCurrentPlayerCheckmated( chessBoard: Chessboard ): boolean {
 	if ( chessBoard.getAvailableMoves().length !== 0 ) {
 		return false;
 	}
@@ -39,7 +40,7 @@ export function isCurrentPlayerCheckmated( chessBoard: Chessboard ): boolean  {
  *
  * The check for the win needs to be done first.
  */
-export function isDraw( chessboard: Chessboard ) : boolean {
+export function isDraw( chessboard: Chessboard ): boolean {
 	return isNoAvailableMoveDraw( chessboard ) ||
 		isThreefoldRepetitionDraw( chessboard ) ||
 		isNoCaptureDraw( chessboard );
@@ -106,3 +107,46 @@ export function createChessBoardFromJSON(
 
 	return new Chessboard( figures, board, turnColor, moveWithoutCapture, availableCastles, enPassantMove );
 }
+
+/**
+ * Get new boards from current board's available moves.
+ */
+export function getAvailableBoards( chessboard: Chessboard ) {
+	const moves = chessboard.getPossibleMoves();
+	const boards = [];
+
+	for ( const move of moves ) {
+		const cb = MoveController.applyMove( chessboard, move );
+
+		// We made a move, so now our king becomes opponent's king.
+		const king = cb.getOpponentKing();
+		const possibleMoves = cb.getPossibleMoves();
+
+		if ( !king ) {
+			// Because in possible moves we can drop the king.
+			continue;
+		}
+
+		for ( const possibleMove of possibleMoves ) {
+			if (
+				possibleMove.dest.x === king.x &&
+				possibleMove.dest.y === king.y &&
+				possibleMove.type === MoveTypes.CAPTURE
+			) {
+				continue;
+			}
+		}
+
+		boards.push( cb );
+	}
+
+	return boards;
+}
+
+/*
+ * Be careful - expensive
+ */
+export function isCorrectMove( board: Chessboard, move: Move ): boolean {
+	return board.getAvailableMoves().some( avMove => isEqual( move, avMove ) );
+}
+

@@ -5,7 +5,7 @@ import Chessboard from './Chessboard';
 
 import Storage from './Storage';
 import { createChessBoardFromFenPosition } from '../engine/board-utils';
-import MoveList from './MoveList';
+// import MoveList from './MoveList';
 
 interface GamePlayers {
 	white: string;
@@ -64,7 +64,6 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 
 	public render() {
 		const { showInfo } = this.state;
-		const game = this.game;
 		const board = this.game.getBoard();
 		const activePlayer = this.game.getActivePlayer();
 		const playerNames = this.game.getPlayerNames();
@@ -76,7 +75,7 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 			<div className='game-container'>
 				<div className='board-container'>
 					<Chessboard board={ board } activePlayer={ activePlayer } paused={ this.game.paused } />
-					<MoveList history={ game.history } onClick={ turn => this.setTurn( turn ) } />
+					{/* <MoveList history={ game.history } onClick={ turn => this.setTurn( turn ) } /> */}
 				</div>
 
 				<div className='button-section'>
@@ -155,7 +154,7 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		this.game.restart();
 	}
 
-	private setTurn( index: number ) {
+	public setTurn( index: number ) {
 		this.game.pause();
 
 		const position = this.history[ index + 1 ];
