@@ -165,13 +165,13 @@ export function parse( fenPosition: string ): { figures: Figures, turnColor: 0 |
 	return { figures, turnColor, castling, enPassantMove, halfMoveClock, fullMoveNumber };
 }
 
-export function stringify( board: Chessboard ) {
+export function stringify( chessBoard: Chessboard ) {
 	let output = '';
 
 	for ( let y = 7; y >= 0; y-- ) {
 		let d = 0;
 		for ( let x = 0; x < 8; x++ ) {
-			const f = board.board.rawBoard[ y * 8 + x ];
+			const f = chessBoard.board[ y * 8 + x ];
 			if ( f ) {
 				if ( d ) {
 					output += d;
@@ -193,7 +193,7 @@ export function stringify( board: Chessboard ) {
 
 	output += ' ';
 
-	if ( board.turnColor === 0 ) {
+	if ( chessBoard.turnColor === 0 ) {
 		output += 'w';
 	} else {
 		output += 'b';

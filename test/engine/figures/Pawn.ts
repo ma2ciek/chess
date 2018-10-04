@@ -12,7 +12,7 @@ describe( 'Pawn', () => {
 			const cb = createChessBoardFromFigures( [ whitePawn ] );
 
 			const move: Move = {
-				figure: whitePawn.toJSON(),
+				figure: whitePawn,
 				dest: {
 					x: 0,
 					y: 7,

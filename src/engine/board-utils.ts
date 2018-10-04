@@ -3,7 +3,6 @@ import Chessboard from "./Chessboard";
 import MoveController from "./MoveController";
 import { MoveTypes, JSONFigure, Move } from "./utils";
 import FigureFactory from "./FigureFactory";
-import Board from "./Board";
 import ChessFigure from "./figures/ChessFigure";
 import { fenParser } from "./Engine";
 
@@ -50,7 +49,19 @@ export function isDraw( chessboard: Chessboard ): boolean {
  * The check for the win needs to be done first.
  */
 export function isNoAvailableMoveDraw( chessboard: Chessboard ): boolean {
-	return chessboard.getAvailableMoves().length === 0;
+	// return chessboard.getAvailableMoves().length === 0;
+
+	for ( const figure of chessboard.figures ) {
+		if ( figure.color === chessboard.turnColor ) {
+			for ( const move of figure.getPossibleMoves( chessboard ) ) {
+				if ( !chessboard.isCurrentKingCheckedAfterMove( move ) ) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
 }
 
 /**
@@ -90,7 +101,7 @@ export function createChessBoardFromFigures(
 	availableCastles = [ 3, 3 ],
 	enPassantMove: null | { x: number, y: number } = null,
 ) {
-	const board = Board.fromFigures( figures );
+	const board = createBoardFromFigures( figures );
 
 	return new Chessboard( figures, board, turnColor, halfMoveClock, availableCastles, enPassantMove );
 }
@@ -103,7 +114,7 @@ export function createChessBoardFromJSON(
 	enPassantMove: null | { x: number, y: number } = null
 ) {
 	const figures = FigureFactory.createFromJSON( jsonFigures );
-	const board = Board.fromFigures( figures );
+	const board = createBoardFromFigures( figures );
 
 	return new Chessboard( figures, board, turnColor, moveWithoutCapture, availableCastles, enPassantMove );
 }
@@ -150,3 +161,12 @@ export function isCorrectMove( board: Chessboard, move: Move ): boolean {
 	return board.getAvailableMoves().some( avMove => isEqual( move, avMove ) );
 }
 
+export function createBoardFromFigures( figures: ReadonlyArray<ChessFigure> ) {
+	const rawBoard: ChessFigure[] = new Array( 64 );
+
+	for ( const figure of figures ) {
+		rawBoard[ figure.y * 8 + figure.x ] = figure;
+	}
+
+	return rawBoard;
+}

@@ -1,4 +1,3 @@
-import Board from './Board';
 import Chessboard from './Chessboard';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
@@ -15,8 +14,8 @@ export default class MoveController {
 	public static applyMove( chessboard: Chessboard, move: Move ) {
 		// TODO: optimization.
 		const originalFigures = chessboard.figures;
-		const movedFigure = chessboard.board.get( move.figure.x, move.figure.y ) as ChessFigure;
-		const rawBoard = chessboard.board.rawBoard.slice( 0 );
+		const movedFigure = chessboard.getFigureFrom( move.figure.x, move.figure.y ) as ChessFigure;
+		const rawBoard = chessboard.board.slice( 0 );
 		let newFigures: ReadonlyArray<ChessFigure>;
 		const castles = chessboard.availableCastles.slice( 0 );
 		let enPassant: null | { x: number, y: number } = null;
@@ -46,7 +45,7 @@ export default class MoveController {
 			}
 
 			case MoveTypes.CAPTURE: {
-				const capturedFigure = chessboard.board.get( move.dest.x, move.dest.y );
+				const capturedFigure = chessboard.getFigureFrom( move.dest.x, move.dest.y );
 				const figure = FigureFactory.createFigureFromJSON( {
 					x: move.dest.x,
 					y: move.dest.y,
@@ -69,7 +68,7 @@ export default class MoveController {
 			// TODO: Change chessboard method.
 			case MoveTypes.EN_PASSANT: {
 				const dir = chessboard.getTurnDir();
-				const capturedFigure = chessboard.board.get( move.dest.x, move.dest.y - dir ) as Pawn;
+				const capturedFigure = chessboard.getFigureFrom( move.dest.x, move.dest.y - dir ) as Pawn;
 				const pawn = new Pawn( move.dest.x, move.dest.y, movedFigure.color );
 				newFigures = originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ).concat( pawn );
 
@@ -93,7 +92,7 @@ export default class MoveController {
 
 			// TODO: enable other figures.
 			case MoveTypes.PROMOTION_CAPTURE: {
-				const capturedFigure = chessboard.board.get( move.dest.x, move.dest.y ) as ChessFigure;
+				const capturedFigure = chessboard.getFigureFrom( move.dest.x, move.dest.y ) as ChessFigure;
 				const queen = new Queen( move.dest.x, move.dest.y, movedFigure.color );
 				newFigures = originalFigures.filter( f => f !== movedFigure && f !== capturedFigure ).concat( queen );
 
@@ -105,8 +104,8 @@ export default class MoveController {
 
 			case MoveTypes.CASTLE_KINGSIDE: {
 				const row = movedFigure.color === Color.White ? 0 : 7;
-				const king = chessboard.board.get( 4, row ) as King;
-				const rook = chessboard.board.get( 7, row ) as Rook;
+				const king = chessboard.getFigureFrom( 4, row ) as King;
+				const rook = chessboard.getFigureFrom( 7, row ) as Rook;
 
 				const newKing = new King( 6, row, movedFigure.color );
 				const newRook = new Rook( 5, row, movedFigure.color );
@@ -125,8 +124,8 @@ export default class MoveController {
 			case MoveTypes.CASTLE_QUEENSIDE: {
 				const row = movedFigure.color === Color.White ? 0 : 7;
 
-				const king = chessboard.board.get( 4, row ) as King;
-				const rook = chessboard.board.get( 0, row ) as Rook;
+				const king = chessboard.getFigureFrom( 4, row ) as King;
+				const rook = chessboard.getFigureFrom( 0, row ) as Rook;
 
 				const newKing = new King( 2, row, movedFigure.color );
 				const newRook = new Rook( 3, row, movedFigure.color );
@@ -150,7 +149,7 @@ export default class MoveController {
 
 		return new Chessboard(
 			newFigures,
-			new Board( rawBoard ),
+			rawBoard,
 			turnColor,
 			chessboard.halfMoveClock,
 			castles,

@@ -55,7 +55,7 @@ export default class Pawn extends ChessFigure {
 					} );
 				}
 
-				if ( chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
+				if ( this.x < 7 && chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
 					moves.push( {
 						dest: { x: this.x + 1, y: this.y + dir },
 						type: MoveTypes.PROMOTION_CAPTURE,
@@ -63,7 +63,7 @@ export default class Pawn extends ChessFigure {
 					} );
 				}
 
-				if ( chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
+				if ( this.x > 0 && chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
 					moves.push( {
 						dest: { x: this.x - 1, y: this.y + dir },
 						type: MoveTypes.PROMOTION_CAPTURE,
@@ -83,20 +83,22 @@ export default class Pawn extends ChessFigure {
 			}
 		}
 
-		if ( chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
-			moves.push( {
-				dest: { x: this.x + 1, y: this.y + dir },
-				type: MoveTypes.CAPTURE,
-				figure: this,
-			} );
-		}
+		if ( !this.isPromotionMove( dir ) ) {
+			if ( this.x < 7 && chessboard.isOpponentAt( this.x + 1, this.y + dir ) ) {
+				moves.push( {
+					dest: { x: this.x + 1, y: this.y + dir },
+					type: MoveTypes.CAPTURE,
+					figure: this,
+				} );
+			}
 
-		if ( chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
-			moves.push( {
-				dest: { x: this.x - 1, y: this.y + dir },
-				type: MoveTypes.CAPTURE,
-				figure: this,
-			} );
+			if ( this.x > 0 && chessboard.isOpponentAt( this.x - 1, this.y + dir ) ) {
+				moves.push( {
+					dest: { x: this.x - 1, y: this.y + dir },
+					type: MoveTypes.CAPTURE,
+					figure: this,
+				} );
+			}
 		}
 
 		return moves;

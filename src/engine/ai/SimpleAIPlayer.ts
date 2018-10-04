@@ -3,7 +3,7 @@ import MoveController from '../MoveController';
 import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
-import { shuffle } from './utils';
+// import { shuffle } from './utils';
 import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 
 export default class SimpleAIPlayer extends AIPlayer {
@@ -13,15 +13,19 @@ export default class SimpleAIPlayer extends AIPlayer {
 		this.bve.clearAll();
 	}
 
-	protected async _move( board: Chessboard ): Promise<MoveInfo> {
-		const board1moves = board.getAvailableMoves();
+	/**
+	 *
+	 * @param board
+	 * @param initialMoves
+	 */
+	public async _move( board: Chessboard, initialMoves = board.getAvailableMoves() ): Promise<MoveInfo> {
 		let bestValueForBoard2 = -Infinity;
 		let bestMove: Move | null = null;
 		let counted = 0;
 
 		this.bve.clear();
 
-		for ( const board1move of shuffle( board1moves ) ) {
+		for ( const board1move of initialMoves ) {
 			// After my move.
 			const board2 = MoveController.applyMove( board, board1move );
 			const board2moves = board2.getPossibleMoves();
@@ -43,7 +47,7 @@ export default class SimpleAIPlayer extends AIPlayer {
 				continue;
 			}
 
-			for ( const board2move of shuffle( board2moves ) ) {
+			for ( const board2move of board2moves ) {
 				// After my move and opponent's move.
 				const board3 = MoveController.applyMove( board2, board2move );
 				const board3moves = board3.getPossibleMoves();
@@ -61,7 +65,7 @@ export default class SimpleAIPlayer extends AIPlayer {
 					continue;
 				}
 
-				for ( const board3move of shuffle( board3moves ) ) {
+				for ( const board3move of board3moves ) {
 					// After my move and opponent's move and my second move.
 					const board4 = MoveController.applyMove( board3, board3move );
 

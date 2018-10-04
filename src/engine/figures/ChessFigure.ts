@@ -1,5 +1,5 @@
 import Chessboard from '../Chessboard';
-import { FigureTypes, JSONFigure, Move, MoveTypes } from '../utils';
+import { FigureTypes, Move, MoveTypes, JSONFigure } from '../utils';
 
 abstract class ChessFigure {
 	public readonly abstract type: FigureTypes;
@@ -16,22 +16,7 @@ abstract class ChessFigure {
 		public readonly color: 0 | 1,
 	) { }
 
-	public toString() {
-		const humanColor = this.color === 0 ? 'White' : 'Black';
-
-		return humanColor + ' ' + this.type + ', ' + this.getHumanPosition();
-	}
-
 	public abstract getPossibleMoves( chessboard: Chessboard ): Move[];
-
-	// TODO: Move.
-	public getHumanPosition() {
-		const charCodeA = 'A'.charCodeAt( 0 );
-		const humanX = String.fromCharCode( charCodeA + this.x );
-		const humanY = ( this.y + 1 ).toString();
-
-		return humanX + humanY;
-	}
 
 	public toJSON(): JSONFigure {
 		return { x: this.x, y: this.y, type: this.type, color: this.color };
@@ -61,7 +46,7 @@ abstract class ChessFigure {
 				break;
 			}
 
-			const f = chessboard.board.rawBoard[ y * 8 + x ];
+			const f = chessboard.getFigureFrom( x, y );
 
 			if ( f ) {
 				// Opponent found.

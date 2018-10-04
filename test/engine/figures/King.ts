@@ -3,6 +3,7 @@ import King from '../../../src/engine/figures/King';
 import Rook from '../../../src/engine/figures/Rook';
 import { Color, MoveTypes } from '../../../src/engine/utils';
 import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
+import Pawn from '../../../src/engine/figures/Pawn';
 
 describe( 'King', () => {
 	describe( 'case #1', () => {
@@ -43,6 +44,40 @@ describe( 'King', () => {
 			expect( possibleMoves.map( m => m.dest ) ).to.deep.include( { x: 4, y: 5 } );
 			expect( possibleMoves.map( m => m.dest ) ).to.deep.include( { x: 4, y: 6 } );
 		} );
+	} );
+
+	it( 'king and pawn promotion', () => {
+		const whiteKing = new King( 4, 0, Color.White );
+		const blackPawn = new Pawn( 4, 1, Color.Black );
+
+		const blackKing = new King( 4, 7, Color.Black );
+
+		const cb = createChessBoardFromFigures( [ whiteKing, blackPawn, blackKing ] );
+
+		const possibleMoves = whiteKing.getPossibleMoves( cb );
+		const boardAvailableMoves = cb.getAvailableMoves();
+
+		expect( possibleMoves.length ).to.equal( 5 );
+
+		// King can't be moved to the pawn promotion move.
+		expect( boardAvailableMoves.length ).to.equal( 3 );
+	} );
+
+	it( 'king and opposite pawn', () => {
+		const whiteKing = new King( 4, 1, Color.White );
+		const blackPawn = new Pawn( 4, 2, Color.Black );
+
+		const blackKing = new King( 4, 7, Color.Black );
+
+		const cb = createChessBoardFromFigures( [ whiteKing, blackPawn, blackKing ] );
+
+		const possibleMoves = whiteKing.getPossibleMoves( cb );
+		const boardAvailableMoves = cb.getAvailableMoves();
+
+		expect( possibleMoves.length ).to.equal( 8 );
+
+		// King can't be moved to the pawn promotion move.
+		expect( boardAvailableMoves.length ).to.equal( 6 );
 	} );
 
 	describe( 'castles', () => {

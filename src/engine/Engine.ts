@@ -5,6 +5,7 @@ export { default as Game } from './Game';
 export { default as HumanPlayer } from './HumanPlayer';
 export { default as ChessFigure } from './figures/ChessFigure';
 export { default as SimpleAIPlayer } from './ai/SimpleAIPlayer';
+export { default as RandomAIPlayer } from './ai/RandomAIPlayer';
 export { Move } from './utils';
 
 import * as _fenParser from './fenParser';
@@ -13,7 +14,8 @@ export const fenParser = _fenParser;
 // import AIPlayer from './AIPlayer';
 // import A4MovesAIPlayer from './ai/A4MoveAIPlayer';
 import SimpleAIPlayer from './ai/SimpleAIPlayer';
-// import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
+import RandomAIPlayer from './ai/RandomAIPlayer';
+import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
 // import TreePlayer from './ai/TreePlayer';
 import HumanPlayer from './HumanPlayer';
 
@@ -30,7 +32,8 @@ const PlayerConstructors = [
 	// A4MovesAIPlayer,
 	// TreePlayer,
 	SimpleAIPlayer,
-	// SimpleAIPlayerMultiThread,
+	RandomAIPlayer,
+	SimpleAIPlayerMultiThread,
 ];
 
 for ( const Player of PlayerConstructors ) {

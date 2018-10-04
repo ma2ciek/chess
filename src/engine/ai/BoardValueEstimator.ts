@@ -1,6 +1,7 @@
 import Chessboard from '../Chessboard';
 import { FigureTypes } from '../utils';
-import { stringify } from '../fenParser';
+// import King from '../figures/King';
+// import { stringify } from '../fenParser';
 
 export const figureValueMap: { [ name: number ]: number } = {
 	[ FigureTypes.KING ]: 1000, // Can't be removed from board.
@@ -19,10 +20,10 @@ export default class BoardValueEstimator {
 	/**
 	 * A <board position, value> map.
 	 */
-	private positionMaps: { [ key: number ]: PositionMap } = {};
+	private positionMaps: PositionMap[] = [];
 
 	public clearAll() {
-		this.positionMaps = {};
+		this.positionMaps = [];
 	}
 
 	/**
@@ -31,7 +32,7 @@ export default class BoardValueEstimator {
 	 * @param turn
 	 */
 	public clear() {
-		this.positionMaps = {};
+		this.positionMaps = [];
 	}
 
 	/**
@@ -40,19 +41,19 @@ export default class BoardValueEstimator {
 	 * @param board
 	 */
 	public estimateValue( board: Chessboard ) {
-		const boardSymbol = stringify( board );
-		const turn = board.turnColor;
+		// const boardSymbol = stringify( board );
+		const turnColor = board.turnColor;
 		const playerColor = board.turnColor;
 
-		if ( !this.positionMaps[ turn ] ) {
-			this.positionMaps[ turn ] = {};
+		if ( !this.positionMaps[ turnColor ] ) {
+			this.positionMaps[ turnColor ] = {};
 		}
 
-		const storedValue = this.positionMaps[ turn ][ boardSymbol ];
+		// const storedValue = this.positionMaps[ turnColor ][ boardSymbol ];
 
-		if ( storedValue ) {
-			return storedValue;
-		}
+		// if ( storedValue ) {
+		// 	return storedValue;
+		// }
 
 		let sum = 0;
 
@@ -64,6 +65,8 @@ export default class BoardValueEstimator {
 		for ( const f of board.figures ) {
 			if ( f.color === playerColor ) {
 				sum += figureValueMap[ f.type ];
+				// It's slow
+				// sum += f.getPossibleMoves( board ).length / 100;
 				myFigures++;
 			} else {
 				sum -= figureValueMap[ f.type ];
@@ -85,9 +88,7 @@ export default class BoardValueEstimator {
 
 		sum += Math.random() / 2 - 0.25;
 
-		sum += board.getPossibleMoves().length / 100;
-
-		this.positionMaps[ turn ][ boardSymbol ] = sum;
+		// this.positionMaps[ turnColor ][ boardSymbol ] = sum;
 
 		return sum;
 	}

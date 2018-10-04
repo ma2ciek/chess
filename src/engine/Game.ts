@@ -134,10 +134,7 @@ export default class Game {
 				};
 
 				console.log( 'checkmate 1' );
-			}
-
-			// TODO: handle other draws.
-			if ( isDraw( this.board ) ) {
+			} else if ( isDraw( this.board ) ) {
 				this.info = {
 					win: false,
 					type: 'NO_MOVE_AVAILABLE',
