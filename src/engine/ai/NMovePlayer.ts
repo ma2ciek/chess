@@ -26,6 +26,7 @@ export default class NMovePlayer extends AIPlayer {
 		}
 
 		if ( moveInfo && moveInfo.bestMove ) {
+			// tslint:disable-next-line:no-console
 			console.log(
 				`Deep: ${ maxDeep }`,
 				getMoveSymbol( moveInfo.bestMove ),

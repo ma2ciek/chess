@@ -22,6 +22,7 @@ export default abstract class AIPlayer implements IPlayer {
 
 		const timeDiff = Date.now() - d;
 
+		// tslint:disable-next-line:no-console
 		console.log(
 			getColor( board.turnColor ),
 			this.constructor.name,

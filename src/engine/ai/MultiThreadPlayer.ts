@@ -51,7 +51,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 				return new Promise<MoveInfo>( res => {
 					const worker = this.workers![ workerIndex ];
 
-					const moves: ParsedMove[] = movesForThread.map( move => ( {
+					const mangledMoves: MangledMove[] = movesForThread.map( move => ( {
 						figureId: board.figures.findIndex( f => {
 							return (
 								f.x === move.figure.x &&
@@ -64,7 +64,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 
 					worker.postMessage( [
 						minifiedFigures,
-						moves,
+						mangledMoves,
 					] );
 
 					worker.onmessage = e => {
@@ -101,13 +101,13 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 	}
 }
 
-export interface ParsedMove {
+export interface MangledMove {
 	figureId: number;
 	dest: Vector;
 	type: MoveTypes;
 }
 
-export function parseData( data: [ number[], ParsedMove[] ] ) {
+export function parseData( data: [ number[], MangledMove[] ] ) {
 	const figures = toFigures( data[ 0 ] );
 	const moves = toMoves( data[ 1 ], figures );
 
@@ -126,7 +126,7 @@ export function toFigures( figures: number[] ): JSONFigure[] {
 	} ) );
 }
 
-export function toMoves( moves: ParsedMove[], figures: JSONFigure[] ): Move[] {
+export function toMoves( moves: MangledMove[], figures: JSONFigure[] ): Move[] {
 	return moves.map( move => ( {
 		figure: figures[ move.figureId ],
 		dest: move.dest,
