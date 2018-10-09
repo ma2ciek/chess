@@ -25,8 +25,8 @@ export function applyFunctionDuringPeriod( fn: () => void, time: number ) {
 export function assert( condition: boolean, message?: string ) {
 	if ( !condition ) {
 		message = message || 'Assertion failed';
-		throw new AssertionError( message )
+		throw new AssertionError( message );
 	}
 }
 
-export class AssertionError extends Error {};
+export class AssertionError extends Error {}

@@ -1,5 +1,5 @@
 import Chessboard from '../Chessboard';
-import { Move, Vector, MoveTypes, JSONFigure } from '../utils';
+import { JSONFigure, Move, MoveTypes, Vector } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 
 export default abstract class MultiThreadPlayer extends AIPlayer {
@@ -43,7 +43,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 			f.color | // 0. bit
 			( f.x << 1 ) | // 1-3 bits
 			( f.y << 4 ) | // 4-6 bits
-			( f.type << 7 ) // 7-9 bits
+			( f.type << 7 ), // 7-9 bits
 		);
 
 		const outputs = await Promise.all(
@@ -59,7 +59,7 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 							);
 						} ),
 						dest: move.dest,
-						type: move.type
+						type: move.type,
 					} ) );
 
 					worker.postMessage( [
@@ -123,13 +123,13 @@ export function toFigures( figures: number[] ): JSONFigure[] {
 		x: ( figure >> 1 ) & 7,
 		y: ( figure >> 4 ) & 7,
 		type: ( figure >> 7 ) & 7,
-	} ) )
+	} ) );
 }
 
 export function toMoves( moves: ParsedMove[], figures: JSONFigure[] ): Move[] {
 	return moves.map( move => ( {
 		figure: figures[ move.figureId ],
 		dest: move.dest,
-		type: move.type
-	} ) )
+		type: move.type,
+	} ) );
 }

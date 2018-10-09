@@ -4,9 +4,9 @@ import {
 	Color,
 	FigureTypes,
 	isCorrectPosition,
-	Move, MoveTypes,
-	KING_CASTLE_FLAG,
-	QUEEN_CASTLE_FLAG
+	KING_CASTLE_FLAG, Move,
+	MoveTypes,
+	QUEEN_CASTLE_FLAG,
 } from '../utils';
 import ChessFigure from './ChessFigure';
 

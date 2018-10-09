@@ -1,7 +1,7 @@
 import Chessboard from '../Chessboard';
 import getMoveSymbol from '../getMoveSymbol';
 import IPlayer from '../IPlayer';
-import { Move, getColor } from '../utils';
+import { getColor, Move } from '../utils';
 
 export default abstract class AIPlayer implements IPlayer {
 	public isHuman() {
@@ -17,7 +17,6 @@ export default abstract class AIPlayer implements IPlayer {
 		const { bestMove, counted } = await this._move( board );
 
 		if ( !bestMove ) {
-			debugger;
 			throw new Error( 'Can not find any move for this position' );
 		}
 

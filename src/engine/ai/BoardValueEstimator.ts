@@ -11,7 +11,7 @@ export const figureValueMap: { [ name: number ]: number } = {
 };
 
 interface PositionMap {
-	[ key: string ]: number
+	[ key: string ]: number;
 }
 
 export default class BoardValueEstimator {

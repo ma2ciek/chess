@@ -5,15 +5,23 @@ import Knight from './figures/Knight';
 import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
-// import { assert } from './ai/utils';
 
-type Figures = ReadonlyArray<Bishop | Pawn | King | Queen | Rook | Knight>;
+interface ParsedData {
+	figures: Figure[];
+	turnColor: 0 | 1;
+	castling: number[];
+	enPassantMove: { x: number, y: number } | null;
+	halfMoveClock: number;
+	fullMoveNumber: number;
+}
 
-export function parse( fenPosition: string ): { figures: Figures, turnColor: 0 | 1, castling: number[], enPassantMove: { x: number, y: number } | null, halfMoveClock: number, fullMoveNumber: number } {
+type Figure = Bishop | Pawn | King | Queen | Rook | Knight;
+
+export function parse( fenPosition: string ): ParsedData {
 	let x = 0;
 	let y = 7;
 	let i = 0;
-	const figures: Array<Bishop | King | Knight | Pawn | Queen | Rook> = [];
+	const figures: Figure[] = [];
 
 	outer:
 	for ( ; i < fenPosition.length; i++ ) {
@@ -142,13 +150,13 @@ export function parse( fenPosition: string ): { figures: Figures, turnColor: 0 |
 	if ( fenPosition[ i ] !== '-' ) {
 		enPassantMove = {
 			x: Number( fenPosition[ i ] ),
-			y: fenPosition[ ++i ].charCodeAt( 0 ) - 97
+			y: fenPosition[ ++i ].charCodeAt( 0 ) - 97,
 		};
 	}
 	i++;
 
 	let text = '';
-	while ( fenPosition[ ++i ] != ' ' ) {
+	while ( fenPosition[ ++i ] !== ' ' ) {
 		text += fenPosition[ i ];
 	}
 

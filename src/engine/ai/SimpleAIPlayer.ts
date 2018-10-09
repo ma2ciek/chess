@@ -1,9 +1,9 @@
+import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
 import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
-import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 
 export default class SimpleAIPlayer extends AIPlayer {
 	private bve = new BoardValueEstimator();
@@ -12,11 +12,6 @@ export default class SimpleAIPlayer extends AIPlayer {
 		this.bve.clearAll();
 	}
 
-	/**
-	 *
-	 * @param board
-	 * @param initialMoves
-	 */
 	public async _move( board: Chessboard, initialMoves = board.getAvailableMoves() ): Promise<MoveInfo> {
 		let bestValueForBoard2 = -Infinity;
 		let bestMove: Move | null = null;

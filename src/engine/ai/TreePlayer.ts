@@ -1,3 +1,4 @@
+import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
 import { Move } from '../utils';
@@ -5,7 +6,6 @@ import AIPlayer, { MoveInfo } from './AIPlayer';
 import { figureValueMap } from './BoardValueEstimator';
 import Node from './Node';
 import { applyFunctionDuringPeriod } from './utils';
-import { isDraw, isCurrentPlayerCheckmated } from '../board-utils';
 
 type MoveNode = Node<{
 	value: number

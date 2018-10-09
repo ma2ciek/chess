@@ -1,6 +1,6 @@
 import { createChessBoardFromJSON } from '../board-utils';
-import NMovePlayer from './NMovePlayer';
 import { parseData } from './MultiThreadPlayer';
+import NMovePlayer from './NMovePlayer';
 
 const player = new NMovePlayer();
 
@@ -10,10 +10,9 @@ self.onmessage = e => {
 
 	player._move( board, moves ).then( result => {
 		( self as any ).postMessage( [
-			result
+			result,
 		] );
 	} );
 
 	player.destroy();
 };
-

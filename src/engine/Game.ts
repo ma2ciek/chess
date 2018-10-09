@@ -1,8 +1,8 @@
+import { createChessBoardAtInitialPosition, isCurrentPlayerCheckmated, isDraw } from './board-utils';
 import Chessboard from './Chessboard';
 import Emitter from './Emitter';
 import IPlayer from './IPlayer';
 import MoveController from './MoveController';
-import { isDraw, isCurrentPlayerCheckmated, createChessBoardAtInitialPosition } from './board-utils';
 import { Move } from './utils';
 
 type GameInfo = Readonly<{
@@ -14,6 +14,7 @@ type GameInfo = Readonly<{
 
 export default class Game {
 	public readonly changeEmitter = new Emitter();
+	public readonly history: Move[] = [];
 
 	private isPaused = true;
 	private info: GameInfo = {
@@ -22,8 +23,6 @@ export default class Game {
 		win: false,
 		lastPlayer: -1,
 	};
-
-	public readonly history: Move[] = [];
 
 	constructor(
 		private players: IPlayer[],

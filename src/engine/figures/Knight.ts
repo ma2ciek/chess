@@ -3,7 +3,7 @@ import { FigureTypes, isCorrectPosition, Move, MoveTypes } from '../utils';
 import ChessFigure from './ChessFigure';
 
 export default class Knight extends ChessFigure {
-	public readonly type= FigureTypes.KNIGHT;
+	public readonly type = FigureTypes.KNIGHT;
 
 	public get shortName() {
 		return this.color ? 'n' : 'N';

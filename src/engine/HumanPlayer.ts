@@ -1,7 +1,7 @@
+import { isCorrectMove } from './board-utils';
 import Chessboard from './Chessboard';
 import IPlayer from './IPlayer';
 import { Move } from './utils';
-import { isCorrectMove } from './board-utils';
 
 export default class HumanPlayer implements IPlayer {
 	public tryMove?: ( move: Move ) => boolean;

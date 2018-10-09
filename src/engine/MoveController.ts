@@ -5,7 +5,7 @@ import King from './figures/King';
 import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
-import { Color, Move, MoveTypes, FigureTypes } from './utils';
+import { Color, FigureTypes, Move, MoveTypes } from './utils';
 
 /**
  * TODO: UndoMoveController
@@ -23,8 +23,9 @@ export default class MoveController {
 		switch ( move.type ) {
 			case MoveTypes.LONG_MOVE:
 			case MoveTypes.NORMAL: {
-				if ( MoveTypes.LONG_MOVE )
+				if ( MoveTypes.LONG_MOVE ) {
 					enPassant = { x: move.dest.x, y: ( move.dest.y + move.figure.y ) / 2 };
+				}
 
 				const figure = FigureFactory.createFigureFromJSON( {
 					x: move.dest.x,
@@ -145,7 +146,7 @@ export default class MoveController {
 				throw new Error( `Move type (${ move.type }) cannot be handled` );
 		}
 
-		let turnColor = ( chessboard.turnColor + 1 & 1 ) as 0 | 1;
+		const turnColor = ( chessboard.turnColor + 1 & 1 ) as 0 | 1;
 
 		return new Chessboard(
 			newFigures,
@@ -153,7 +154,7 @@ export default class MoveController {
 			turnColor,
 			chessboard.halfMoveClock,
 			castles,
-			enPassant
+			enPassant,
 		);
 	}
 
@@ -167,7 +168,7 @@ export default class MoveController {
 			( ( chessboard.turnColor + 1 ) % 2 ) as 0 | 1,
 			chessboard.halfMoveClock, // TODO
 			chessboard.availableCastles,
-			null
+			null,
 		);
 	}
 }

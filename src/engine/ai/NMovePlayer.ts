@@ -1,9 +1,9 @@
 import Chessboard from '../Chessboard';
+import getMoveSymbol from '../getMoveSymbol';
 import MoveController from '../MoveController';
 import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
-import getMoveSymbol from '../getMoveSymbol';
 
 export default class NMovePlayer extends AIPlayer {
 	private bve = new BoardValueEstimator();
@@ -30,7 +30,7 @@ export default class NMovePlayer extends AIPlayer {
 				`Deep: ${ maxDeep }`,
 				getMoveSymbol( moveInfo.bestMove ),
 				moveInfo.bestMoveValue,
-				moveInfo.counted
+				moveInfo.counted,
 			);
 		}
 
@@ -144,16 +144,16 @@ export default class NMovePlayer extends AIPlayer {
 		return {
 			bestMove: tree[ 0 ].bestMove,
 			bestMoveValue: tree[ 0 ].bestMoveValue,
-			counted: tree[ 0 ].counter
-		}
+			counted: tree[ 0 ].counter,
+		};
 	}
 }
 
 interface TreeLevel {
-	bestMoveValue: number,
-	bestMove: null | Move,
-	counter: number,
+	bestMoveValue: number;
+	bestMove: null | Move;
+	counter: number;
 	nextMoves: ReadonlyArray<Move>;
-	moveIndex: number,
+	moveIndex: number;
 	board: Chessboard;
 }

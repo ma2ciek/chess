@@ -1,6 +1,6 @@
 import { createChessBoardFromJSON } from '../board-utils';
-import SimpleAIPlayer from './SimpleAIPlayer';
 import { parseData } from './MultiThreadPlayer';
+import SimpleAIPlayer from './SimpleAIPlayer';
 
 const player = new SimpleAIPlayer();
 
@@ -10,10 +10,9 @@ self.onmessage = e => {
 
 	player._move( board, moves ).then( result => {
 		( self as any ).postMessage( [
-			result
+			result,
 		] );
 	} );
 
 	player.destroy();
 };
-

@@ -11,11 +11,11 @@ export { Move } from './utils';
 import * as _fenParser from './fenParser';
 export const fenParser = _fenParser;
 
-import SimpleAIPlayer from './ai/SimpleAIPlayer';
-import RandomAIPlayer from './ai/RandomAIPlayer';
-import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
-import NMovePlayerMultiThread from './ai/NMovePlayerMultiThread';
 import NMovePlayer from './ai/NMovePlayer';
+import NMovePlayerMultiThread from './ai/NMovePlayerMultiThread';
+import RandomAIPlayer from './ai/RandomAIPlayer';
+import SimpleAIPlayer from './ai/SimpleAIPlayer';
+import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
 import HumanPlayer from './HumanPlayer';
 
 import { PlayerConstructor } from './IPlayer';

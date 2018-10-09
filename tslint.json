@@ -20,9 +20,6 @@
 			true,
 			150
 		],
-		"no-unused-variable": [
-			true
-		],
 		"interface-name": [
 			false
 		],
@@ -33,6 +30,6 @@
 		"no-bitwise": false,
 		"space-within-parens": [
 			false
-		]
+    ]
 	}
 }

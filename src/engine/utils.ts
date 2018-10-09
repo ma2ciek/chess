@@ -1,4 +1,4 @@
-import ChessFigure from "./figures/ChessFigure";
+import ChessFigure from './figures/ChessFigure';
 
 export function isCorrectPosition( x: number, y: number ) {
 	return x >= 0 && y >= 0 && x < 8 && y < 8;
@@ -60,10 +60,10 @@ export function figureToString( figure: ChessFigure ) {
 
 export function getHumanPosition( figure: ChessFigure ) {
 	const charCodeA = 'A'.charCodeAt( 0 );
-		const humanX = String.fromCharCode( charCodeA + figure.x );
-		const humanY = ( figure.y + 1 ).toString();
+	const humanX = String.fromCharCode( charCodeA + figure.x );
+	const humanY = ( figure.y + 1 ).toString();
 
-		return humanX + humanY;
+	return humanX + humanY;
 }
 
 // TODO: change x and y to position's index.
