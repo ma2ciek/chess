@@ -3,7 +3,6 @@ import MoveController from '../MoveController';
 import { Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
-// import { shuffle } from './utils';
 import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 
 export default class SimpleAIPlayer extends AIPlayer {

@@ -37,6 +37,7 @@ export default class BoardValueEstimator {
 
 	/**
 	 * Estimates board value position for the current player.
+	 * Storing positions makes sense only for the single thread AI.
 	 *
 	 * @param board
 	 */

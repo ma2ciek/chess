@@ -133,7 +133,6 @@ export default class Game {
 					draw: false,
 				};
 
-				console.log( 'checkmate 1' );
 			} else if ( isDraw( this.board ) ) {
 				this.info = {
 					win: false,

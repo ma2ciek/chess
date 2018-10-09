@@ -9,7 +9,9 @@ export default abstract class AIPlayer implements IPlayer {
 	}
 
 	public async move( board: Chessboard ): Promise<Move> {
+		// Make it async.
 		await wait( 0 );
+
 		const d = Date.now();
 
 		const { bestMove, counted } = await this._move( board );
@@ -33,6 +35,10 @@ export default abstract class AIPlayer implements IPlayer {
 		return bestMove;
 	}
 
+	/**
+	 * Method that needs to be provided by each class extending the base AIPlayer class.
+	 * It needs to find the best move for the current position.
+	 */
 	protected abstract _move( board: Chessboard ): Promise<MoveInfo>;
 }
 
@@ -40,6 +46,7 @@ export type MoveInfo = Readonly<{
 	bestMove: Move | null;
 	counted: number;
 	bestMoveValue: number;
+	additionalInfo?: any;
 }>;
 
 function wait( ms: number ) {

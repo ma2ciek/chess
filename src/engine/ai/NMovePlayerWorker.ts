@@ -1,8 +1,8 @@
 import { createChessBoardFromJSON } from '../board-utils';
-import SimpleAIPlayer from './SimpleAIPlayer';
+import NMovePlayer from './NMovePlayer';
 import { parseData } from './MultiThreadPlayer';
 
-const player = new SimpleAIPlayer();
+const player = new NMovePlayer();
 
 self.onmessage = e => {
 	const { figures, moves } = parseData( e.data );

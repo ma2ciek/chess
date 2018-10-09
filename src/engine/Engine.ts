@@ -11,12 +11,11 @@ export { Move } from './utils';
 import * as _fenParser from './fenParser';
 export const fenParser = _fenParser;
 
-// import AIPlayer from './AIPlayer';
-// import A4MovesAIPlayer from './ai/A4MoveAIPlayer';
 import SimpleAIPlayer from './ai/SimpleAIPlayer';
 import RandomAIPlayer from './ai/RandomAIPlayer';
 import SimpleAIPlayerMultiThread from './ai/SimpleAIPlayerMultiThread';
-// import TreePlayer from './ai/TreePlayer';
+import NMovePlayerMultiThread from './ai/NMovePlayerMultiThread';
+import NMovePlayer from './ai/NMovePlayer';
 import HumanPlayer from './HumanPlayer';
 
 import { PlayerConstructor } from './IPlayer';
@@ -29,8 +28,8 @@ export const Players: PlayerConstructorDictionary = {};
 
 const PlayerConstructors = [
 	HumanPlayer,
-	// A4MovesAIPlayer,
-	// TreePlayer,
+	NMovePlayerMultiThread,
+	NMovePlayer,
 	SimpleAIPlayer,
 	RandomAIPlayer,
 	SimpleAIPlayerMultiThread,
