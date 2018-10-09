@@ -1,7 +1,5 @@
 import Chessboard from '../Chessboard';
 import { FigureTypes } from '../utils';
-// import King from '../figures/King';
-// import { stringify } from '../fenParser';
 
 export const figureValueMap: { [ name: number ]: number } = {
 	[ FigureTypes.KING ]: 1000, // Can't be removed from board.
@@ -42,19 +40,12 @@ export default class BoardValueEstimator {
 	 * @param board
 	 */
 	public estimateValue( board: Chessboard ) {
-		// const boardSymbol = stringify( board );
 		const turnColor = board.turnColor;
 		const playerColor = board.turnColor;
 
 		if ( !this.positionMaps[ turnColor ] ) {
 			this.positionMaps[ turnColor ] = {};
 		}
-
-		// const storedValue = this.positionMaps[ turnColor ][ boardSymbol ];
-
-		// if ( storedValue ) {
-		// 	return storedValue;
-		// }
 
 		let sum = 0;
 
@@ -88,8 +79,6 @@ export default class BoardValueEstimator {
 		}
 
 		sum += Math.random() / 2 - 0.25;
-
-		// this.positionMaps[ turnColor ][ boardSymbol ] = sum;
 
 		return sum;
 	}
