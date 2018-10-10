@@ -1,8 +1,14 @@
 import { expect } from 'chai';
+import {
+	createChessBoardAtInitialPosition,
+	createChessBoardFromFenPosition,
+	createChessBoardFromJSON,
+	getAvailableBoards,
+	isCurrentPlayerCheckmated,
+} from '../../src/engine/board-utils';
 import Chessboard from '../../src/engine/Chessboard';
 import ChessFigure from '../../src/engine/figures/ChessFigure';
 import { Color, FigureTypes } from '../../src/engine/utils';
-import { createChessBoardFromJSON, createChessBoardAtInitialPosition, createChessBoardFromFenPosition, isCurrentPlayerCheckmated, getAvailableBoards } from '../../src/engine/board-utils';
 
 describe( 'Chessboard', () => {
 	it( 'constructor()', () => {

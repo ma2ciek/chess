@@ -23,7 +23,7 @@ export default class MoveController {
 		switch ( move.type ) {
 			case MoveTypes.LONG_MOVE:
 			case MoveTypes.NORMAL: {
-				if ( MoveTypes.LONG_MOVE ) {
+				if ( move.type === MoveTypes.LONG_MOVE ) {
 					enPassant = { x: move.dest.x, y: ( move.dest.y + move.figure.y ) / 2 };
 				}
 

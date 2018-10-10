@@ -1,9 +1,9 @@
 import { expect } from 'chai';
+import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
 import King from '../../../src/engine/figures/King';
+import Pawn from '../../../src/engine/figures/Pawn';
 import Rook from '../../../src/engine/figures/Rook';
 import { Color, MoveTypes } from '../../../src/engine/utils';
-import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
-import Pawn from '../../../src/engine/figures/Pawn';
 
 describe( 'King', () => {
 	describe( 'case #1', () => {
