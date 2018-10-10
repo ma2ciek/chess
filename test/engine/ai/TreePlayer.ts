@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import TreePlayer from '../../../src/engine/ai/TreePlayer';
-import Chessboard from '../../../src/engine/Chessboard';
 import { createChessBoardAtInitialPosition } from '../../../src/engine/board-utils';
+import Chessboard from '../../../src/engine/Chessboard';
 
 class FakeTreePlayer extends TreePlayer {
 	public root = undefined;

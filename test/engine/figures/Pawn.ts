@@ -1,10 +1,48 @@
 import { expect } from 'chai';
 import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
 import Pawn from '../../../src/engine/figures/Pawn';
+import Rook from '../../../src/engine/figures/Rook';
 import MoveController from '../../../src/engine/MoveController';
 import { FigureTypes, Move, MoveTypes } from '../../../src/engine/utils';
 
 describe( 'Pawn', () => {
+	describe( 'move', () => {
+		it( 'should be able to move if the next field is empty', () => {
+			const whitePawn = new Pawn( 0, 4, 0 );
+			const cb = createChessBoardFromFigures( [ whitePawn ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 1 );
+			expect( am[ 0 ].type ).to.equal( MoveTypes.NORMAL );
+			expect( am[ 0 ].dest ).to.deep.equal( { x: 0, y: 5 } );
+			expect( am[ 0 ].figure.type ).to.equal( FigureTypes.PAWN );
+		} );
+
+		it( 'should not be able to move if the next field is not empty', () => {
+			const whitePawn = new Pawn( 0, 4, 0 );
+			const whitePawn2 = new Pawn( 0, 5, 0 );
+			const cb = createChessBoardFromFigures( [ whitePawn, whitePawn2 ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 0 );
+		} );
+	} );
+
+	describe( 'capture', () => {
+		it( 'should be able to capture if an opponents figure is on the diagonal', () => {
+			const whitePawn = new Pawn( 0, 4, 0 );
+			const blackRook1 = new Rook( 1, 5, 1 );
+			const blackRook2 = new Rook( 0, 5, 1 );
+			const cb = createChessBoardFromFigures( [ whitePawn, blackRook1, blackRook2 ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 1 );
+			expect( am[ 0 ].type ).to.equal( MoveTypes.CAPTURE );
+			expect( am[ 0 ].dest ).to.deep.equal( { x: 1, y: 5 } );
+			expect( am[ 0 ].figure.type ).to.equal( FigureTypes.PAWN );
+		} );
+	});
+
 	describe( 'promotion', () => {
 		it( 'pawn should be able to promote to queen', () => {
 			const whitePawn = new Pawn( 0, 6, 0 );
@@ -25,13 +63,59 @@ describe( 'Pawn', () => {
 			expect( queen.type ).to.equal( FigureTypes.QUEEN );
 		} );
 
-		it( 'should be available for a pawn', () => {
+		it( 'should be available if the next field is empty', () => {
 			const whitePawn = new Pawn( 0, 6, 0 );
 			const cb = createChessBoardFromFigures( [ whitePawn ] );
 			const am = whitePawn.getPossibleMoves( cb );
 
 			expect( am.length ).to.equal( 1 );
 			expect( am[ 0 ].type ).to.equal( MoveTypes.PROMOTION );
+			expect( am[ 0 ].dest ).to.deep.equal( { x: 0, y: 7 } );
+			expect( am[ 0 ].figure.type ).to.equal( FigureTypes.PAWN );
+		} );
+
+		it( 'should not be able available if the next field is not empty', () => {
+			const whitePawn = new Pawn( 0, 6, 0 );
+			const blackRook = new Rook( 0, 7, 1 );
+			const cb = createChessBoardFromFigures( [ whitePawn, blackRook ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 0 );
+		} );
+
+		it( 'should not be able available if the next field is not empty #2', () => {
+			const whitePawn = new Pawn( 0, 6, 0 );
+			const whiteRook = new Rook( 0, 7, 1 );
+			const cb = createChessBoardFromFigures( [ whitePawn, whiteRook ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 0 );
+		} );
+
+		it( 'should be able to capture opponent in the promotion move', () => {
+			const whitePawn = new Pawn( 1, 6, 0 );
+			const blackRook1 = new Rook( 1, 7, 1 );
+			const blackRook2 = new Rook( 2, 7, 1 );
+			const cb = createChessBoardFromFigures( [ whitePawn, blackRook1, blackRook2 ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 1 );
+
+			expect( am[ 0 ].type ).to.equal( MoveTypes.PROMOTION_CAPTURE );
+			expect( am[ 0 ].dest ).to.deep.equal( { x: 2, y: 7 } );
+			expect( am[ 0 ].figure.type ).to.equal( FigureTypes.PAWN );
+		} );
+
+		it( 'should be able to capture opponent in the promotion move #2', () => {
+			const whitePawn = new Pawn( 1, 6, 0 );
+			const blackRook1 = new Rook( 0, 7, 1 );
+			const blackRook2 = new Rook( 1, 7, 1 );
+			const cb = createChessBoardFromFigures( [ whitePawn, blackRook1, blackRook2 ] );
+			const am = whitePawn.getPossibleMoves( cb );
+
+			expect( am.length ).to.equal( 1 );
+
+			expect( am[ 0 ].type ).to.equal( MoveTypes.PROMOTION_CAPTURE );
 			expect( am[ 0 ].dest ).to.deep.equal( { x: 0, y: 7 } );
 			expect( am[ 0 ].figure.type ).to.equal( FigureTypes.PAWN );
 		} );

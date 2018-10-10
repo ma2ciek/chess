@@ -30,6 +30,7 @@
 		"no-bitwise": false,
 		"space-within-parens": [
 			false
-    ]
+    ],
+    "no-unused-expression": false
 	}
 }

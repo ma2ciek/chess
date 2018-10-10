@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { stringify } from "../../src/engine/fenParser";
 import { createChessBoardAtInitialPosition, createChessBoardFromJSON } from '../../src/engine/board-utils';
+import { stringify } from '../../src/engine/fenParser';
 
 describe( 'fenParser', () => {
 	describe( 'stringify()', () => {
@@ -22,7 +22,6 @@ describe( 'fenParser', () => {
 
 		it( 'should stringify the board after the first move', () => {
 			const cb = createChessBoardFromJSON( [] );
-
 
 			const id = stringify( cb );
 

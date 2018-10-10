@@ -1,7 +1,7 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import BoardValueEstimator from '../../../src/engine/ai/BoardValueEstimator';
 import { createChessBoardAtInitialPosition } from '../../../src/engine/board-utils';
-import * as sinon from 'sinon';
 
 describe( 'BoardValueEstimator', () => {
 	afterEach( () => {
@@ -17,7 +17,7 @@ describe( 'BoardValueEstimator', () => {
 	it( 'should not memoize and add randomness', () => {
 		sinon.stub( Math, 'random' )
 			.onFirstCall().returns( 0 )
-			.onSecondCall().returns( 1 )
+			.onSecondCall().returns( 1 );
 
 		const b = new BoardValueEstimator();
 
@@ -30,7 +30,7 @@ describe( 'BoardValueEstimator', () => {
 	} );
 
 	it( 'should return the same value without randomness', () => {
-		sinon.stub( Math, 'random' ).returns( 0 )
+		sinon.stub( Math, 'random' ).returns( 0 );
 
 		const b = new BoardValueEstimator();
 

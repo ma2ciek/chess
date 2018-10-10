@@ -1,8 +1,8 @@
 import { expect } from 'chai';
+import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
 import King from '../../../src/engine/figures/King';
 import Rook from '../../../src/engine/figures/Rook';
 import { FigureTypes, MoveTypes } from '../../../src/engine/utils';
-import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
 
 describe( 'Rook', () => {
 	describe( 'getAvailableMoves case #1', () => {

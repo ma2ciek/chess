@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import Queen from '../../../src/engine/figures/Queen';
 import { createChessBoardFromFigures } from '../../../src/engine/board-utils';
+import Queen from '../../../src/engine/figures/Queen';
 
 describe( 'Queen', () => {
 	describe( 'getPossibleMoves()', () => {
