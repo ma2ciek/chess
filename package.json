@@ -29,6 +29,7 @@
     "file-loader": "^2.0.0",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
+    "husky": "^1.1.1",
     "lodash": "^4.17.10",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.0",
@@ -58,16 +59,9 @@
     ],
     "all": true
   },
-  "lint-staged": {
-    "**/*.ts": "tslint"
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run lint && npm test"
     }
-  },
-  "devDependencies": {
-    "husky": "^1.1.1",
-    "lint-staged": "^7.3.0"
   }
 }
