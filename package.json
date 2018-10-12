@@ -7,8 +7,8 @@
     "test:watch": "mocha --require ts-node/register 'test/**/*.ts' --watch",
     "start": "npm run build:production && npm run server",
     "server": "node server.js",
-    "build": "webpack --watch --mode development",
-    "build:production": "webpack --mode production",
+    "build": "./node_modules/.bin/webpack --watch --mode development",
+    "build:production": "./node_modules/.bin/webpack --mode production",
     "lint": "tslint src/**/*.ts && tslint test/**/*.ts"
   },
   "engines": {
