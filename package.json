@@ -5,9 +5,10 @@
     "test": "mocha --require ts-node/register 'test/**/*.ts' --reporter dot",
     "coverage": "c8 mocha --require ts-node/register 'test/**/*.ts'",
     "test:watch": "mocha --require ts-node/register 'test/**/*.ts' --watch",
-    "start": "node server.js",
+    "start": "npm run build:production && npm run server",
+    "server": "node server.js",
     "build": "webpack-cli --watch --mode development",
-    "production": "webpack-cli --watch --mode production & node server.js",
+    "build:production": "webpack-cli --mode production",
     "lint": "tslint src/**/*.ts && tslint test/**/*.ts"
   },
   "engines": {
@@ -28,7 +29,7 @@
     "chai": "^4.1.2",
     "cloc": "^2.3.3",
     "css-loader": "^1.0.0",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "file-loader": "^2.0.0",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
