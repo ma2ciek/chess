@@ -113,7 +113,7 @@ export function createChessBoardFromJSON(
 	availableCastles = [ 3, 3 ],
 	enPassantMove: null | { x: number, y: number } = null,
 ) {
-	const figures = FigureFactory.createFromJSON( jsonFigures );
+	const figures = FigureFactory.createFiguresFromJSON( jsonFigures );
 	const board = createBoardFromFigures( figures );
 
 	return new Chessboard( figures, board, turnColor, moveWithoutCapture, availableCastles, enPassantMove );
