@@ -7,8 +7,8 @@
     "test:watch": "mocha --require ts-node/register 'test/**/*.ts' --watch",
     "start": "npm run build:production && npm run server",
     "server": "node server.js",
-    "build": "./node_modules/.bin/webpack --watch --mode development",
-    "build:production": "./node_modules/.bin/webpack --mode production",
+    "build": "webpack --watch --mode development",
+    "build:production": "webpack --mode production",
     "lint": "tslint src/**/*.ts && tslint test/**/*.ts"
   },
   "engines": {
@@ -16,9 +16,6 @@
     "node": ">6.10.0"
   },
   "dependencies": {
-    "lodash": "^4.17.10"
-  },
-  "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/lodash": "^4.14.116",
     "@types/mocha": "^5.2.5",
@@ -34,6 +31,7 @@
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
     "husky": "^1.1.1",
+    "lodash": "^4.17.10",
     "mocha": "^5.2.0",
     "node-sass": "^4.9.0",
     "react": "^16.4.2",
