@@ -48,8 +48,8 @@ export default class Game {
 	public getPlayerNames() {
 		// TODO: Constructor name -> class property.
 		return {
-			white: this.players[ 0 ].constructor.name,
-			black: this.players[ 1 ].constructor.name,
+			white: this.players[ 0 ].name,
+			black: this.players[ 1 ].name,
 		};
 	}
 

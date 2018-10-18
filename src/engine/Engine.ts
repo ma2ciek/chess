@@ -36,5 +36,6 @@ const PlayerConstructors = [
 ];
 
 for ( const Player of PlayerConstructors ) {
-	Players[ Player.name ] = Player;
+	// TODO - name should be public static member.
+	Players[ new Player().name ] = Player;
 }

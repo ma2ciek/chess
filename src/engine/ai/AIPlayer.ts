@@ -4,6 +4,8 @@ import IPlayer from '../IPlayer';
 import { getColor, Move } from '../utils';
 
 export default abstract class AIPlayer implements IPlayer {
+	public readonly abstract name: string;
+
 	public isHuman() {
 		return false;
 	}
@@ -25,7 +27,7 @@ export default abstract class AIPlayer implements IPlayer {
 		// tslint:disable-next-line:no-console
 		console.log(
 			getColor( board.turnColor ),
-			this.constructor.name,
+			this.name,
 			counted,
 			Math.round( counted / timeDiff * 1000 ) + ' moves/s',
 			( timeDiff / 1000 ).toFixed( 1 ) + 's',

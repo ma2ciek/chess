@@ -1,15 +1,15 @@
 {
-    "compilerOptions": {
-        "jsx": "react",
-		"strict": true,
-        "noUnusedLocals": true,    
-        "target": "es6",
-        "moduleResolution": "node",
-        "lib": [
-            "es5",
-            "es6",
-            "es7",
-            "dom"
-		]
-    }
+  "compilerOptions": {
+    "jsx": "react",
+    "strict": true,
+    "noUnusedLocals": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "lib": [
+      "es5",
+      "es6",
+      "es7",
+      "dom"
+    ]
+  }
 }

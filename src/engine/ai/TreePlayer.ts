@@ -14,8 +14,12 @@ type MoveNode = Node<{
 	visited: boolean;
 }>;
 
-// TODO: Each move should trigger new instance.
-export default class TreePlayer extends AIPlayer {
+/**
+ * Monte carlo tree search.
+ */
+export default class MCTSPlayer extends AIPlayer {
+	public readonly name = 'AI: MCTS Player';
+
 	// protected methods that can be easily override in tests.
 	protected estimateBoardValue = estimateBoardValue;
 	protected applyFunctionDuringPeriod = applyFunctionDuringPeriod;

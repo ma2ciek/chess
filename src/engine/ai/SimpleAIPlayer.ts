@@ -6,6 +6,8 @@ import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
 
 export default class SimpleAIPlayer extends AIPlayer {
+	public readonly name = 'AI: Simple Player';
+
 	private bve = new BoardValueEstimator();
 
 	public destroy() {

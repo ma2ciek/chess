@@ -5,7 +5,9 @@ import AIPlayer, { MoveInfo } from './AIPlayer';
 export default abstract class MultiThreadPlayer extends AIPlayer {
 	protected abstract readonly workerName: string;
 
-	private readonly numberOfThreads = window.navigator.hardwareConcurrency || 4;
+	private readonly numberOfThreads = typeof navigator !== 'undefined' ?
+		navigator.hardwareConcurrency || 4 :
+		1;
 	private workers?: ReadonlyArray<Worker>;
 
 	public destroy() {

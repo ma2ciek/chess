@@ -4,6 +4,8 @@ import BoardValueEstimator from './BoardValueEstimator';
 import { shuffle } from './utils';
 
 export default class RandomAIPlayer extends AIPlayer {
+	public readonly name = 'AI: Random Player';
+
 	private bve = new BoardValueEstimator();
 
 	public destroy() {

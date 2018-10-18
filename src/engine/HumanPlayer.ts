@@ -4,6 +4,8 @@ import IPlayer from './IPlayer';
 import { Move } from './utils';
 
 export default class HumanPlayer implements IPlayer {
+	public readonly name = 'Human';
+
 	public tryMove?: ( move: Move ) => boolean;
 	private myTurn = false;
 

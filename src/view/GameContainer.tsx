@@ -1,10 +1,9 @@
 import * as React from 'react';
+import { createChessBoardFromFenPosition } from '../engine/board-utils';
 import * as Engine from '../engine/Engine';
 import { getColor } from '../engine/utils';
 import Chessboard from './Chessboard';
-
 import Storage from './Storage';
-import { createChessBoardFromFenPosition } from '../engine/board-utils';
 // import MoveList from './MoveList';
 
 interface GamePlayers {
@@ -125,6 +124,16 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 		);
 	}
 
+	public setTurn( index: number ) {
+		this.game.pause();
+
+		const position = this.history[ index + 1 ];
+
+		const board = createChessBoardFromFenPosition( position );
+
+		this.game.setBoard( board );
+	}
+
 	private setWhitePlayer( playerName: string ) {
 		const Player = Engine.Players[ playerName ];
 		const whitePlayer = new Player();
@@ -152,15 +161,5 @@ export default class GameContainer extends React.Component<{}, GameContainerStat
 	private restart() {
 		this.setState( { showInfo: true } );
 		this.game.restart();
-	}
-
-	public setTurn( index: number ) {
-		this.game.pause();
-
-		const position = this.history[ index + 1 ];
-
-		const board = createChessBoardFromFenPosition( position );
-
-		this.game.setBoard( board );
 	}
 }
