@@ -6,7 +6,7 @@ import AIPlayer, { MoveInfo } from './AIPlayer';
 import BoardValueEstimator from './BoardValueEstimator';
 
 export default class NMovePlayer extends AIPlayer {
-	public readonly name = 'AI: N-Move Player';
+	public static readonly playerName = 'AI: N-Move Player';
 
 	private bve = new BoardValueEstimator();
 

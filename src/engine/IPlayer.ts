@@ -2,11 +2,11 @@ import Chessboard from './Chessboard';
 import { Move } from './utils';
 
 export interface PlayerConstructor {
+	playerName: string;
 	new(): IPlayer;
 }
 
 interface IPlayer {
-	readonly name: string;
 	destroy?(): Promise<void> | void;
 	isHuman(): boolean;
 	move( board: Chessboard ): Promise<Move>;

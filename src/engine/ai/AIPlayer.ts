@@ -1,10 +1,10 @@
 import Chessboard from '../Chessboard';
 import getMoveSymbol from '../getMoveSymbol';
-import IPlayer from '../IPlayer';
+import IPlayer, { PlayerConstructor } from '../IPlayer';
 import { getColor, Move } from '../utils';
 
 export default abstract class AIPlayer implements IPlayer {
-	public readonly abstract name: string;
+	public static readonly playerName: string;
 
 	public isHuman() {
 		return false;
@@ -27,7 +27,7 @@ export default abstract class AIPlayer implements IPlayer {
 		// tslint:disable-next-line:no-console
 		console.log(
 			getColor( board.turnColor ),
-			this.name,
+			( this.constructor as PlayerConstructor ).playerName,
 			counted,
 			Math.round( counted / timeDiff * 1000 ) + ' moves/s',
 			( timeDiff / 1000 ).toFixed( 1 ) + 's',

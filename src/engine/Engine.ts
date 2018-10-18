@@ -26,7 +26,7 @@ export interface PlayerConstructorDictionary {
 
 export const Players: PlayerConstructorDictionary = {};
 
-const PlayerConstructors = [
+const PlayerConstructors: PlayerConstructor[] = [
 	HumanPlayer,
 	NMovePlayerMultiThread,
 	NMovePlayer,
@@ -37,5 +37,5 @@ const PlayerConstructors = [
 
 for ( const Player of PlayerConstructors ) {
 	// TODO - name should be public static member.
-	Players[ new Player().name ] = Player;
+	Players[ Player.playerName ] = Player;
 }
