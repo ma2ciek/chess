@@ -1,5 +1,5 @@
 import Chessboard from '../Chessboard';
-import { FigureTypes, JSONFigure, Move, MoveTypes } from '../utils';
+import { Color, FigureTypes, JSONFigure, Move, MoveTypes } from '../utils';
 
 abstract class ChessFigure {
 	public readonly abstract type: FigureTypes;
@@ -13,7 +13,7 @@ abstract class ChessFigure {
 		 * White -> 0;
 		 * Black -> 1;
 		 */
-		public readonly color: 0 | 1,
+		public readonly color: Color,
 	) { }
 
 	public abstract getPossibleMoves( chessboard: Chessboard ): Move[];

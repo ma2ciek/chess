@@ -1,7 +1,7 @@
 import { isCurrentPlayerCheckmated, isDraw } from '../board-utils';
 import Chessboard from '../Chessboard';
 import MoveController from '../MoveController';
-import { Move } from '../utils';
+import { Color, Move } from '../utils';
 import AIPlayer, { MoveInfo } from './AIPlayer';
 import { figureValueMap } from './BoardValueEstimator';
 import Node from './Node';
@@ -28,7 +28,7 @@ export default class MCTSPlayer extends AIPlayer {
 	protected mathRandom = Math.random;
 
 	protected root?: MoveNode;
-	protected color?: 0 | 1;
+	protected color?: Color;
 
 	protected async _move( board: Chessboard ): Promise<MoveInfo> {
 		this.color = board.turnColor;
@@ -76,7 +76,7 @@ export default class MCTSPlayer extends AIPlayer {
 		node.data.visited = true;
 
 		// Estimate value for given node.
-		const value = this.estimateBoardValue( board, this.color as 0 | 1 );
+		const value = this.estimateBoardValue( board, this.color as Color );
 
 		// Backward propagation.
 		let newNode: MoveNode | null = node;

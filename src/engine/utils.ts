@@ -4,10 +4,6 @@ export function isCorrectPosition( x: number, y: number ) {
 	return x >= 0 && y >= 0 && x < 8 && y < 8;
 }
 
-export function getColor( color: Color ) {
-	return color === 0 ? 'White' : 'Black';
-}
-
 export type Move = Readonly<{
 	figure: JSONFigure;
 	dest: Vector; // TODO: change vector to position's index.
@@ -53,9 +49,11 @@ export enum FigureTypes {
 }
 
 export function figureToString( figure: ChessFigure ) {
-	const humanColor = figure.color === 0 ? 'White' : 'Black';
+	return getColor( figure.color ) + ' ' + figure.type + ', ' + getHumanPosition( figure );
+}
 
-	return humanColor + ' ' + figure.type + ', ' + getHumanPosition( figure );
+export function getColor( color: Color ) {
+	return color === Color.White ? 'White' : 'Black';
 }
 
 export function getHumanPosition( figure: ChessFigure ) {
@@ -66,7 +64,6 @@ export function getHumanPosition( figure: ChessFigure ) {
 	return humanX + humanY;
 }
 
-// TODO: change x and y to position's index.
 export type JSONFigure = Readonly<{
 	x: number;
 	y: number;
