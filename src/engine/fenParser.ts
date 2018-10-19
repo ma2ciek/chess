@@ -5,10 +5,11 @@ import Knight from './figures/Knight';
 import Pawn from './figures/Pawn';
 import Queen from './figures/Queen';
 import Rook from './figures/Rook';
+import { Color } from './utils';
 
 interface ParsedData {
 	figures: Figure[];
-	turnColor: 0 | 1;
+	turnColor: Color;
 	castling: number[];
 	enPassantMove: { x: number, y: number } | null;
 	halfMoveClock: number;
@@ -113,7 +114,7 @@ export function parse( fenPosition: string ): ParsedData {
 		x++;
 	}
 
-	const turnColor: 0 | 1 = fenPosition[ ++i ] === 'w' ? 0 : 1;
+	const turnColor: Color = fenPosition[ ++i ] === 'w' ? Color.White : Color.Black;
 	i++;
 
 	const castling = [ 0, 0 ];
@@ -201,7 +202,7 @@ export function stringify( chessBoard: Chessboard ) {
 
 	output += ' ';
 
-	if ( chessBoard.turnColor === 0 ) {
+	if ( chessBoard.turnColor === Color.White ) {
 		output += 'w';
 	} else {
 		output += 'b';

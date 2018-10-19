@@ -4,7 +4,7 @@ import { fenParser } from './Engine';
 import FigureFactory from './FigureFactory';
 import ChessFigure from './figures/ChessFigure';
 import MoveController from './MoveController';
-import { JSONFigure, Move, MoveTypes } from './utils';
+import { Color, JSONFigure, Move, MoveTypes } from './utils';
 
 export function isGameEnd( chessBoard: Chessboard ): boolean {
 	return isCurrentPlayerCheckmated( chessBoard ) || isDraw( chessBoard );
@@ -96,7 +96,7 @@ export function createChessBoardFromFenPosition( fenPosition: string ) {
 
 export function createChessBoardFromFigures(
 	figures: ReadonlyArray<ChessFigure>,
-	turnColor: 0 | 1 = 0,
+	turnColor: Color = Color.White,
 	halfMoveClock = 0,
 	availableCastles = [ 3, 3 ],
 	enPassantMove: null | { x: number, y: number } = null,
@@ -108,7 +108,7 @@ export function createChessBoardFromFigures(
 
 export function createChessBoardFromJSON(
 	jsonFigures: ReadonlyArray<JSONFigure>,
-	turnColor: 0 | 1 = 0,
+	turnColor: Color = Color.White,
 	moveWithoutCapture = 0,
 	availableCastles = [ 3, 3 ],
 	enPassantMove: null | { x: number, y: number } = null,

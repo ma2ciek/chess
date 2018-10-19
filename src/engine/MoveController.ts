@@ -146,7 +146,7 @@ export default class MoveController {
 				throw new Error( `Move type (${ move.type }) cannot be handled` );
 		}
 
-		const turnColor = ( chessboard.turnColor + 1 & 1 ) as 0 | 1;
+		const turnColor = ( chessboard.turnColor + 1 & 1 ) as Color;
 
 		return new Chessboard(
 			newFigures,
@@ -165,7 +165,7 @@ export default class MoveController {
 		return new Chessboard(
 			originalFigures,
 			chessboard.board,
-			( ( chessboard.turnColor + 1 ) % 2 ) as 0 | 1,
+			( ( chessboard.turnColor + 1 ) & 1 ) as Color,
 			chessboard.halfMoveClock, // TODO
 			chessboard.availableCastles,
 			null,

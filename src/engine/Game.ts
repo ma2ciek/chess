@@ -3,13 +3,13 @@ import Chessboard from './Chessboard';
 import Emitter from './Emitter';
 import IPlayer, { PlayerConstructor } from './IPlayer';
 import MoveController from './MoveController';
-import { Move } from './utils';
+import { Color, Move } from './utils';
 
 type GameInfo = Readonly<{
 	draw: boolean;
 	type: '' | 'CHECK_MATE' | 'NO_MOVE_AVAILABLE';
 	win: boolean;
-	lastPlayer: number; // -1 - none | 0 - white | 1 - black.
+	lastPlayer: -1 | Color; // -1 - none | 0 - white | 1 - black.
 }>;
 
 export default class Game {
