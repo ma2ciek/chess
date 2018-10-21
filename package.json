@@ -3,13 +3,14 @@
   "version": "0.0.1",
   "scripts": {
     "test": "mocha --require ts-node/register 'test/**/*.ts' --reporter dot",
-    "coverage": "c8 mocha --require ts-node/register 'test/**/*.ts'",
+    "coverage": "c8 --reporter=html --reporter=text mocha --require ts-node/register 'test/**/*.ts'",
     "test:watch": "mocha --require ts-node/register 'test/**/*.ts' --watch",
     "start": "npm run build:production && npm run server",
     "server": "node server.js",
     "build": "webpack --watch --mode development",
     "build:production": "webpack --mode production",
-    "lint": "tslint src/**/*.ts && tslint test/**/*.ts"
+    "lint": "tslint src/**/*.ts && tslint test/**/*.ts",
+    "coverage-report": "c8 report --reporter=text-lcov | coveralls"
   },
   "engines": {
     "npm": ">4.6.0",
@@ -51,5 +52,8 @@
     "hooks": {
       "pre-commit": "npm run lint && npm test"
     }
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2"
   }
 }
