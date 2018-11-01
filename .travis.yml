@@ -10,4 +10,4 @@ install:
   - pnpm install
 
 script:
-  - pnpm lint && pnpm coverage && pnpm coverage-report
+  - pnpm run lint && pnpm run coverage && pnpm run coverage-report
