@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "test": "mocha --require ts-node/register 'test/**/*.ts' --reporter dot",
-    "coverage": "c8 --reporter=html --reporter=text mocha --require ts-node/register 'test/**/*.ts'",
+    "coverage": "mkdir ./coverage && c8 --reporter=html --reporter=text mocha --require ts-node/register 'test/**/*.ts'",
     "test:watch": "mocha --require ts-node/register 'test/**/*.ts' --watch",
     "start": "npm run build:production && npm run server",
     "server": "node server.js",
@@ -13,8 +13,8 @@
     "coverage-report": "c8 report --reporter=text-lcov | coveralls"
   },
   "engines": {
-    "npm": ">4.6.0",
-    "node": ">6.10.0"
+    "npm": ">6.4.0",
+    "node": ">10.10.0"
   },
   "dependencies": {
     "@types/chai": "^4.1.4",

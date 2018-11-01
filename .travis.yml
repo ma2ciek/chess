@@ -1,0 +1,13 @@
+language: node_js
+
+node_js:
+  - "10.11.0"
+
+before_install:
+  - npm i -g pnpm
+
+install:
+  - pnpm install
+
+script:
+  - pnpm run lint && pnpm run coverage && pnpm run coverage-report
