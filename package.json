@@ -13,8 +13,8 @@
     "coverage-report": "c8 report --reporter=text-lcov | coveralls"
   },
   "engines": {
-    "npm": ">6.4.0",
-    "node": ">10.10.0"
+    "npm": ">4.6.0",
+    "node": ">6.10.0"
   },
   "dependencies": {
     "@types/chai": "^4.1.4",
