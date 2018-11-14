@@ -12,7 +12,7 @@ interface ParsedData {
 	turnColor: Color;
 	castling: number[];
 	enPassantMove: { x: number, y: number } | null;
-	halfMoveClock: number;
+	moveClock: number;
 	fullMoveNumber: number;
 }
 
@@ -161,7 +161,7 @@ export function parse( fenPosition: string ): ParsedData {
 		text += fenPosition[ i ];
 	}
 
-	const halfMoveClock = Number( text );
+	const moveClock = Number( text );
 
 	text = '';
 
@@ -171,7 +171,7 @@ export function parse( fenPosition: string ): ParsedData {
 
 	const fullMoveNumber = Number( text );
 
-	return { figures, turnColor, castling, enPassantMove, halfMoveClock, fullMoveNumber };
+	return { figures, turnColor, castling, enPassantMove, moveClock, fullMoveNumber };
 }
 
 export function stringify( chessBoard: Chessboard ) {

@@ -6,7 +6,7 @@ import ChessFigure from './figures/ChessFigure';
 import MoveController from './MoveController';
 import { Color, JSONFigure, Move, MoveTypes } from './utils';
 
-export function isGameEnd( chessBoard: Chessboard ): boolean {
+export function isGameOver( chessBoard: Chessboard ): boolean {
 	return isCurrentPlayerCheckmated( chessBoard ) || isDraw( chessBoard );
 }
 
@@ -73,8 +73,11 @@ export function isThreefoldRepetitionDraw( chessboard: Chessboard ): boolean {
 	return false;
 }
 
+/**
+ * TODO: it should actually be a draw-like move, it doesn't implies a draw.
+ */
 export function isNoCaptureDraw( chessboard: Chessboard ) {
-	return chessboard.halfMoveClock > 100;
+	return chessboard.moveClock > 100;
 }
 
 export function createChessBoardAtInitialPosition() {
@@ -86,24 +89,23 @@ export function createChessBoardFromFenPosition( fenPosition: string ) {
 		figures,
 		castling,
 		enPassantMove,
-		// fullMoveNumber,
-		halfMoveClock,
+		moveClock,
 		turnColor,
 	} = fenParser.parse( fenPosition );
 
-	return createChessBoardFromFigures( figures, turnColor, halfMoveClock, castling, enPassantMove );
+	return createChessBoardFromFigures( figures, turnColor, moveClock, castling, enPassantMove );
 }
 
 export function createChessBoardFromFigures(
 	figures: ReadonlyArray<ChessFigure>,
 	turnColor: Color = Color.White,
-	halfMoveClock = 0,
+	moveClock = 0,
 	availableCastles = [ 3, 3 ],
 	enPassantMove: null | { x: number, y: number } = null,
 ) {
 	const board = createBoardFromFigures( figures );
 
-	return new Chessboard( figures, board, turnColor, halfMoveClock, availableCastles, enPassantMove );
+	return new Chessboard( figures, board, turnColor, moveClock, availableCastles, enPassantMove );
 }
 
 export function createChessBoardFromJSON(

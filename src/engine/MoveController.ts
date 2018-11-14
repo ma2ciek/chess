@@ -148,11 +148,19 @@ export default class MoveController {
 
 		const turnColor = ( chessboard.turnColor + 1 & 1 ) as Color;
 
+		let moveClock = chessboard.moveClock;
+
+		if ( move.type === MoveTypes.NORMAL && movedFigure.type !== FigureTypes.PAWN ) {
+			moveClock = 0;
+		} else {
+			moveClock++;
+		}
+
 		return new Chessboard(
 			newFigures,
 			rawBoard,
 			turnColor,
-			chessboard.halfMoveClock,
+			moveClock,
 			castles,
 			enPassant,
 		);
@@ -166,7 +174,7 @@ export default class MoveController {
 			originalFigures,
 			chessboard.board,
 			( ( chessboard.turnColor + 1 ) & 1 ) as Color,
-			chessboard.halfMoveClock, // TODO
+			chessboard.moveClock,
 			chessboard.availableCastles,
 			null,
 		);
