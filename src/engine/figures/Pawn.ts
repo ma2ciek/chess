@@ -30,7 +30,7 @@ export default class Pawn extends ChessFigure {
 				}
 			}
 		} else {
-			if ( chessboard.enPassantMove && chessboard.enPassantMove.y === this.y ) {
+			if ( chessboard.enPassantMove && chessboard.enPassantMove.y === this.y + dir ) {
 				if ( chessboard.enPassantMove.x === this.x - 1 ) {
 					moves.push( {
 						dest: { x: this.x - 1, y: this.y + dir },

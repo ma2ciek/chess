@@ -58,7 +58,7 @@ export default class BoardValueEstimator {
 			if ( f.color === playerColor ) {
 				sum += figureValueMap[ f.type ];
 				// It's slow
-				// sum += f.getPossibleMoves( board ).length / 100;
+				sum += f.getPossibleMoves( board ).length / 100;
 				myFigures++;
 			} else {
 				sum -= figureValueMap[ f.type ];

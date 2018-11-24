@@ -46,7 +46,7 @@ export function isDraw( chessboard: Chessboard ): boolean {
 }
 
 /**
- * The check for the win needs to be done first.
+ * The check for the checkmate needs to be done first.
  */
 export function isNoAvailableMoveDraw( chessboard: Chessboard ): boolean {
 	// return chessboard.getAvailableMoves().length === 0;
