@@ -13,7 +13,7 @@ export default class Chessboard {
 		public readonly figures: ReadonlyArray<ChessFigure>,
 		public readonly board: ReadonlyArray<ChessFigure | undefined>, // Two dim array
 		public readonly turnColor: Color,
-		public readonly halfMoveClock: number,
+		public readonly moveClock: number,
 		public readonly availableCastles: number[], // [ for white, for black ]
 		public readonly enPassantMove: null | { x: number, y: number },
 	) { }
