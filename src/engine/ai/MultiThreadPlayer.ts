@@ -23,6 +23,11 @@ export default abstract class MultiThreadPlayer extends AIPlayer {
 		}
 
 		const board1moves = board.getAvailableMoves();
+
+		if ( board1moves.length === 1 ) {
+			return { bestMove: board1moves[ 0 ], bestMoveValue: 1000, counted: 1 };
+		}
+
 		const movesPerThread = board1moves.length / this.numberOfThreads;
 		const moves: Move[][] = [];
 
