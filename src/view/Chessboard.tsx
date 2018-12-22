@@ -1,9 +1,9 @@
 import { times } from 'lodash';
 import * as React from 'react';
+import { isCorrectMove } from '../engine/board-utils';
 import { Chessboard as ChessboardEngine, ChessFigure, IPlayer, Move } from '../engine/Engine';
 import Field from './Field';
 import Figure from './Figure';
-import { isCorrectMove } from '../engine/board-utils';
 
 interface ChessboardProps {
 	paused: boolean;
