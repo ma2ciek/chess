@@ -11,6 +11,7 @@ export { Move } from './utils';
 import * as _fenParser from './fenParser';
 export const fenParser = _fenParser;
 
+import MCTSPlayer from './ai/MCTSPlayer';
 import NMovePlayer from './ai/NMovePlayer';
 import NMovePlayerMultiThread from './ai/NMovePlayerMultiThread';
 import RandomAIPlayer from './ai/RandomAIPlayer';
@@ -28,6 +29,7 @@ export const Players: PlayerConstructorDictionary = {};
 
 const PlayerConstructors: PlayerConstructor[] = [
 	HumanPlayer,
+	MCTSPlayer,
 	NMovePlayerMultiThread,
 	NMovePlayer,
 	SimpleAIPlayer,

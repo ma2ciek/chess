@@ -15,17 +15,14 @@ type MoveNode = Node<{
 }>;
 
 /**
- * Monte carlo tree search.
+ * AI Player that uses Monte carlo tree search.
  */
 export default class MCTSPlayer extends AIPlayer {
-	public static readonly playerName  = 'AI: MCTS Player';
+	public static readonly playerName = 'AI: MCTS Player';
 
 	// protected methods that can be easily override in tests.
 	protected estimateBoardValue = estimateBoardValue;
 	protected applyFunctionDuringPeriod = applyFunctionDuringPeriod;
-
-	// TODO: Use some salt.
-	protected mathRandom = Math.random;
 
 	protected root?: MoveNode;
 	protected color?: Color;
@@ -113,7 +110,12 @@ export default class MCTSPlayer extends AIPlayer {
 		let node = this.root!;
 
 		while ( true ) {
-			node = this.pickChildFromGivenNode( board, node );
+			if ( !node.children.length ) {
+				// Mate or a draw - TODO
+				return { node, board };
+			}
+
+			node = pickChildFromGivenNode( node );
 			board = MoveController.applyMove( board, node.data.move as Move );
 
 			if ( !node.data.visited ) {
@@ -123,29 +125,29 @@ export default class MCTSPlayer extends AIPlayer {
 
 		return { node, board };
 	}
+}
 
-	protected pickChildFromGivenNode( board: Chessboard, node: MoveNode ) {
-		// Get always positive values.
-		// Each value represents the chance of hitting the corresponding branch.
-		const values = node.children.map( child => {
-			const midValue = node.data.value / ( node.data.count || 0.5 );
+function pickChildFromGivenNode( node: MoveNode ) {
+	// Get always positive values.
+	// Each value represents the chance of hitting the corresponding branch.
+	const values = node.children.map( child => {
+		const midValue = child.data.value / ( child.data.count || 0.5 );
 
-			return ( midValue + 125 ) / 125;
-		} );
+		return ( midValue + 125 ) / 125;
+	} );
 
-		const sum = getSum( values );
+	const sum = getSum( values );
 
-		let random = this.mathRandom();
-		for ( let i = 0; i < values.length; i++ ) {
-			random -= values[ i ] / sum;
+	let random = Math.random();
+	for ( let i = 0; i < values.length; i++ ) {
+		random -= values[ i ] / sum;
 
-			if ( random <= 0 ) {
-				return node.children[ i ];
-			}
+		if ( random <= 0 ) {
+			return node.children[ i ];
 		}
-
-		throw new Error( 'End of moves - not implemented yet' );
 	}
+
+	throw new Error( 'End of moves - not implemented yet' );
 }
 
 function getSum( arr: number[] ) {
