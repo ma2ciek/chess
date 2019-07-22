@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import TreePlayer from '../../../src/engine/ai/TreePlayer';
+import MCTSPlayer from '../../../src/engine/ai/MCTSPlayer';
 import { createChessBoardAtInitialPosition } from '../../../src/engine/board-utils';
 import Chessboard from '../../../src/engine/Chessboard';
 
-class FakeTreePlayer extends TreePlayer {
+class FakeMCTSPlayer extends MCTSPlayer {
 	public root = undefined;
 	public mathRandom = () => 0;
 
@@ -16,26 +16,26 @@ class FakeTreePlayer extends TreePlayer {
 	}
 }
 
-describe( 'TreePlayer', () => {
+describe( 'MCTSPlayer', () => {
 	it( 'constructor', () => {
-		const treePlayer = new FakeTreePlayer();
+		const mctsPlayer = new FakeMCTSPlayer();
 
-		expect( treePlayer ).to.be.an( 'object' );
+		expect( mctsPlayer ).to.be.an( 'object' );
 	} );
 
 	describe( '_move', () => {
-		let treePlayer: FakeTreePlayer;
+		let mctsPlayer: FakeMCTSPlayer;
 
 		beforeEach( () => {
-			treePlayer = new FakeTreePlayer();
+			mctsPlayer = new FakeMCTSPlayer();
 		} );
 
 		it( 'case 1', async () => {
 			const chessBoard = createChessBoardAtInitialPosition();
 
-			treePlayer.applyFunctionDuringPeriod = createCall( 1 );
+			mctsPlayer.applyFunctionDuringPeriod = createCall( 1 );
 
-			const result = await treePlayer._move( chessBoard );
+			const result = await mctsPlayer._move( chessBoard );
 
 			// 1 start moves.
 			expect( result.counted ).to.equal( 1 );
@@ -44,9 +44,9 @@ describe( 'TreePlayer', () => {
 		it( 'case 2', async () => {
 			const chessBoard = createChessBoardAtInitialPosition();
 
-			treePlayer.applyFunctionDuringPeriod = createCall( 2 );
+			mctsPlayer.applyFunctionDuringPeriod = createCall( 2 );
 
-			const result = await treePlayer._move( chessBoard );
+			const result = await mctsPlayer._move( chessBoard );
 
 			// 2 start moves.
 			expect( result.counted ).to.equal( 2 );
